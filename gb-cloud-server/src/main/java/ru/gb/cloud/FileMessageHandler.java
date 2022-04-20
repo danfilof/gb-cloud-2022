@@ -16,7 +16,7 @@ public class FileMessageHandler implements Runnable{
         is = new DataInputStream(socket.getInputStream());
         os = new DataOutputStream(socket.getOutputStream());
         System.out.println("Client accepted");
-        dir = new File("files");
+        dir = new File("ServerFiles");
         String[] files = dir.list();
         os.writeUTF("#list#");
         os.writeLong(files.length);

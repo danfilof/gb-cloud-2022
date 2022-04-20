@@ -1,20 +1,22 @@
 package ru.gb.cloud.controllers;
 
-import javafx.application.Platform;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import ru.gb.cloud.network.Net;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
-
     private Net net;
     public ListView<String> view;
+    public ListView<String> clientView;
     public TextField input;
+
+    private File local_dir;
 
     private void readListFiles() {
         try {
@@ -29,12 +31,24 @@ public class MainController implements Initializable {
         }
     }
 
+    private void readLocalFiles() {
+        try {
+            clientView.getItems().clear();
+            local_dir = new File("LocalFiles");
+            String[] files = local_dir.list();
+            clientView.getItems().addAll(files);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void read() {
         try {
             while (true) {
                 String command = net.readUtf();
                 if (command.equals("#list#")) {
                     readListFiles();
+                    readLocalFiles();
                 }
             }
         } catch (Exception e) {

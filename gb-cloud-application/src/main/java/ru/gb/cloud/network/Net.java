@@ -23,7 +23,7 @@ public class Net {
     }
 
     public Long readLong() throws IOException {
-        return  is.readLong();
+        return is.readLong();
     }
 
     public String readUtf() throws IOException {
