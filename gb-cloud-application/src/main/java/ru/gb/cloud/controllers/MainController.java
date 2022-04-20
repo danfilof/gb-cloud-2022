@@ -5,6 +5,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import ru.gb.cloud.network.Net;
 
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -55,6 +56,7 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
     }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -64,6 +66,15 @@ public class MainController implements Initializable {
             readThread.start();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void selectFile(javafx.scene.input.MouseEvent mouseEvent) {
+        if (mouseEvent.getClickCount() == 2) {
+            final String selectedFile = clientView.getSelectionModel().getSelectedItem();
+            input.setText(selectedFile);
+            input.requestFocus();
+            input.selectEnd();
         }
     }
 }
