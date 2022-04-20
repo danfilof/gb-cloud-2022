@@ -28,7 +28,11 @@ public class FileMessageHandler implements Runnable{
     public void run() {
         try {
             while (true) {
-                String uft = is.readUTF();
+                String received = is.readUTF();
+                System.out.println(received);
+                if (received.equals("#AddFile#")) {
+
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

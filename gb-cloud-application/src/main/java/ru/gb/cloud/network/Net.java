@@ -9,6 +9,11 @@ public class Net {
 
     private final Socket socket;
     private final DataInputStream is;
+
+    public DataOutputStream getOs() {
+        return os;
+    }
+
     private final DataOutputStream os;
 
     private final String host;

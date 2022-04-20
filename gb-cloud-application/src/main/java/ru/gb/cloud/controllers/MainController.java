@@ -1,6 +1,8 @@
 package ru.gb.cloud.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import ru.gb.cloud.network.Net;
@@ -12,11 +14,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
+    public Button sendButton;
     private Net net;
     public ListView<String> view;
     public ListView<String> clientView;
     public TextField input;
-
     private File local_dir;
 
     private void readListFiles() {
@@ -68,13 +70,30 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
     }
-
     public void selectFile(javafx.scene.input.MouseEvent mouseEvent) {
         if (mouseEvent.getClickCount() == 2) {
             final String selectedFile = clientView.getSelectionModel().getSelectedItem();
             input.setText(selectedFile);
             input.requestFocus();
             input.selectEnd();
+        }
+    }
+
+    public void sendFile(String file) {
+        try {
+            net.getOs().writeUTF("#addFile#");
+            net.getOs().writeUTF(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onClickSendButton(ActionEvent actionEvent) {
+        String file = input.getText();
+        if (file != null && !file.isEmpty()) {
+            sendFile(file);
+            input.clear();
+            input.requestFocus();
         }
     }
 }
