@@ -10,6 +10,7 @@ import java.nio.channels.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -67,6 +68,9 @@ public class Terminal {
         if (message.equals("cat")) {
             channel.write(ByteBuffer.wrap(getCatResultString().getBytes(StandardCharsets.UTF_8)));
         }
+        if (message.equals("mkdir")) {
+            channel.write(ByteBuffer.wrap(mkdirCommand().getBytes(StandardCharsets.UTF_8)));
+        }
 
         channel.write(ByteBuffer.wrap("-> ".getBytes(StandardCharsets.UTF_8)));
     }
@@ -94,11 +98,28 @@ public class Terminal {
                 buff.clear();
             }
             catStr = new String(out.toByteArray(), StandardCharsets.UTF_8);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         return catStr;
+    }
+
+    private String mkdirCommand() throws IOException {
+        String fileName = "ServerFiles/mkdir_test_dir";
+        String status = null;
+
+        Path path = Paths.get(fileName);
+
+        if (!Files.exists(path)) {
+
+            Files.createDirectory(path);
+            status = "Directory created";
+            System.out.println(status);
+        } else {
+            status = "Directory already exists";
+            System.out.println(status);
+        }
+        return status;
     }
 
 
