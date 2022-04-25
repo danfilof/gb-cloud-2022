@@ -1,6 +1,9 @@
 package ru.gb.cloud.nio;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
@@ -59,13 +62,12 @@ public class Terminal {
         String message = readMessageFromChannel(channel).trim();
         System.out.println("Received: " + message);
         if (message.equals("ls")) {
-            channel.write(ByteBuffer.wrap(
-                    getLsResultString().getBytes(StandardCharsets.UTF_8)
-                )
-            );
-        } else {
-            channel.write(ByteBuffer.wrap("Unknown command\n\r".getBytes(StandardCharsets.UTF_8)));
+            channel.write(ByteBuffer.wrap(getLsResultString().getBytes(StandardCharsets.UTF_8)));
         }
+        if (message.equals("cat")) {
+            channel.write(ByteBuffer.wrap(getCatResultString().getBytes(StandardCharsets.UTF_8)));
+        }
+
         channel.write(ByteBuffer.wrap("-> ".getBytes(StandardCharsets.UTF_8)));
     }
 
@@ -74,6 +76,31 @@ public class Terminal {
                 .toString()).collect(Collectors
                 .joining("\n\r")) + "\n\r";
     }
+
+    private String getCatResultString() throws IOException {
+        String catStr = null;
+        try {
+            RandomAccessFile reader = new RandomAccessFile("ServerFiles/commands_file.txt", "r");
+            FileChannel channel = reader.getChannel();
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            int bufferSize = 256;
+            if (bufferSize > channel.size()) {
+                bufferSize = (int) channel.size();
+            }
+            ByteBuffer buff = ByteBuffer.allocate(bufferSize);
+
+            while (channel.read(buff) > 0) {
+                out.write(buff.array(), 0, buff.position());
+                buff.clear();
+            }
+            catStr = new String(out.toByteArray(), StandardCharsets.UTF_8);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return catStr;
+    }
+
 
     private String readMessageFromChannel(SocketChannel channel) throws IOException {
         StringBuilder sb = new StringBuilder();
@@ -106,5 +133,4 @@ public class Terminal {
     public static void main(String[] args) throws IOException {
         new Terminal();
     }
-
 }
