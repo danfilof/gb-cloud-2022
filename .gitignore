@@ -1,2 +1,5 @@
 .idea
+gb-cloud-server/target
+gb-cloud-core/target
+gb-cloud-application/target
 gb-cloud.iml

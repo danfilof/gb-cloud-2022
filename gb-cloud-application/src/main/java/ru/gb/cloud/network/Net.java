@@ -8,6 +8,11 @@ import java.net.Socket;
 public class Net {
 
     private final Socket socket;
+
+    public DataInputStream getIs() {
+        return is;
+    }
+
     private final DataInputStream is;
 
     public DataOutputStream getOs() {

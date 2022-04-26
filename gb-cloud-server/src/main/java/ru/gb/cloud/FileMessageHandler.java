@@ -1,12 +1,7 @@
 package ru.gb.cloud;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
 
 public class FileMessageHandler implements Runnable{
 
@@ -33,18 +28,11 @@ public class FileMessageHandler implements Runnable{
     public void run() {
         try {
             while (true) {
-                String received = is.readUTF();
-                System.out.println(received);
-                if (received.equals("#addFile#")) {
-                    String fileName = is.readUTF();
-                    System.out.println("FileName: " + fileName);
-                    addFile(fileName);
-                    String[] files = dir.list();
-                    os.writeUTF("#list#");
-                    os.writeLong(files.length);
-                    for (String file : files) {
-                        os.writeUTF(file);
-                    }
+                String command = is.readUTF();
+                if (command.equals("#addFile#")) {
+                    readFile();
+                    sendStatusOk();
+                    reload();
                 }
             }
         } catch (Exception e) {
@@ -52,13 +40,33 @@ public class FileMessageHandler implements Runnable{
         }
     }
 
-    private void addFile(String fileName) throws IOException {
-        try {
-            Path path = Paths.get("ServerFiles");
-            Path newFile = Files.createFile(path.resolve(fileName));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    private void sendStatusOk() throws IOException {
+        os.writeUTF("#status#");
+        os.writeUTF("OK");
+        os.flush();
+    }
 
+    private void readFile() throws IOException {
+        String fileName = is.readUTF();
+        File file = dir.toPath().resolve(fileName).toFile();
+        long size = is.readLong();
+
+        byte[] buffer = new byte[256];
+
+        try (OutputStream fos = new FileOutputStream(file)){
+            for (int i = 0; i < (size + 255) / 256; i++) {
+                int readCount = is.read(buffer);
+                fos.write(buffer, 0, readCount);
+            }
+        }
+    }
+
+    private void reload() throws Exception{
+        String[] files = dir.list();
+        os.writeUTF("#list#");
+        os.writeLong(files.length);
+        for (String file : files) {
+            os.writeUTF(file);
+        }
     }
 }
