@@ -1,9 +1,6 @@
 package ru.gb.cloud.nio;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
@@ -71,6 +68,9 @@ public class Terminal {
         if (message.equals("mkdir")) {
             channel.write(ByteBuffer.wrap(mkdirCommand().getBytes(StandardCharsets.UTF_8)));
         }
+        if (message.equals("touch")) {
+            channel.write(ByteBuffer.wrap(getTouchCommand().getBytes(StandardCharsets.UTF_8)));
+        }
 
         channel.write(ByteBuffer.wrap("-> ".getBytes(StandardCharsets.UTF_8)));
     }
@@ -120,6 +120,14 @@ public class Terminal {
             System.out.println(status);
         }
         return status;
+    }
+
+    private String getTouchCommand() throws IOException {
+        String touchStr = null;
+        File yourFile = new File("ServerFiles/Touch.txt");
+        yourFile.createNewFile(); // if file already exists will do nothing
+        FileOutputStream oFile = new FileOutputStream(yourFile, false);
+        return  touchStr = "File created or already exists";
     }
 
 
