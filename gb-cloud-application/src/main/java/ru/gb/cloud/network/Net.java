@@ -1,7 +1,9 @@
 package ru.gb.cloud.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
+import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
+import ru.gb.cloud.model.AbstractMessage;
+
 import java.io.IOException;
 import java.net.Socket;
 
@@ -9,17 +11,17 @@ public class Net {
 
     private final Socket socket;
 
-    public DataInputStream getIs() {
+    public ObjectDecoderInputStream getIs() {
         return is;
     }
 
-    private final DataInputStream is;
+    private final ObjectDecoderInputStream is;
 
-    public DataOutputStream getOs() {
+    public ObjectEncoderOutputStream getOs() {
         return os;
     }
 
-    private final DataOutputStream os;
+    private final ObjectEncoderOutputStream os;
 
     private final String host;
     private final int port;
@@ -28,15 +30,15 @@ public class Net {
         this.host = host;
         this.port = port;
         socket = new Socket(host, port);
-        is = new DataInputStream(socket.getInputStream());
-        os = new DataOutputStream(socket.getOutputStream());
+        os = new ObjectEncoderOutputStream(socket.getOutputStream());
+        is = new ObjectDecoderInputStream(socket.getInputStream());
     }
 
-    public Long readLong() throws IOException {
-        return is.readLong();
+    public AbstractMessage read() throws Exception {
+        return (AbstractMessage) is.readObject();
     }
 
-    public String readUtf() throws IOException {
-        return is.readUTF();
+    public void write(AbstractMessage message) throws IOException {
+        os.writeObject(message);
     }
 }
