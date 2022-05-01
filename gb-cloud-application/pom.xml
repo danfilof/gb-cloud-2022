@@ -37,6 +37,11 @@
                 <version>17.0.2</version>
                 <type>pom</type>
             </dependency>
+        <dependency>
+            <groupId>ru.gb.cloud</groupId>
+            <artifactId>gb-cloud-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
 
     </dependencies>
