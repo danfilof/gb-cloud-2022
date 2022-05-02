@@ -4,8 +4,9 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane prefHeight="673.0" prefWidth="1031.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.gb.cloud.controllers.MainController">
-    <ListView fx:id="serverView" layoutX="607.0" layoutY="42.0" prefHeight="618.0" prefWidth="410.0" />
-   <ListView fx:id="clientView" layoutX="14.0" layoutY="45.0" prefHeight="618.0" prefWidth="410.0" />
-   <Button onAction="#upload" layoutX="448.0" layoutY="207.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="135.0" text="Upload" />
-   <Button onAction="#download" layoutX="448.0" layoutY="373.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="135.0" text="Download" />
+    <ListView fx:id="serverView" layoutX="607.0" layoutY="87.0" prefHeight="468.0" prefWidth="410.0" />
+   <ListView fx:id="clientView" layoutX="14.0" layoutY="87.0" prefHeight="468.0" prefWidth="410.0" />
+   <Button layoutX="448.0" layoutY="112.0" mnemonicParsing="false" onAction="#upload" prefHeight="61.0" prefWidth="135.0" text="Upload" />
+   <Button layoutX="448.0" layoutY="233.0" mnemonicParsing="false" onAction="#download" prefHeight="61.0" prefWidth="135.0" text="Download" />
+   <Button layoutX="448.0" layoutY="451.0" mnemonicParsing="false" onAction="#delete" prefHeight="61.0" prefWidth="135.0" text="Delete" />
 </AnchorPane>

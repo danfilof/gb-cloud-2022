@@ -18,7 +18,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.FileHandler;
 
 @Slf4j
 public class MainController implements Initializable {
@@ -28,10 +27,12 @@ public class MainController implements Initializable {
    private Path clientDir;
 
    // folder where the "download_command.txt" is
-   private final Path downloadDir = Path.of("Download command file");
+   private final Path cmdFiles = Path.of("cmd files");
 
    // exact path of "download_command.txt"
-   private final Path fileDownDir = Path.of("Download command file/command_download.txt");
+   private final Path fileDownDir = Path.of("cmd files/command_download.txt");
+
+   private final Path fileDelete = Path.of("cmd files/command_delete.txt");
 
     private void read() {
         try {
@@ -82,7 +83,7 @@ public class MainController implements Initializable {
         // writes the name of the file to be downloaded into the "command_download.txt"
         Files.writeString(fileDownDir, fileName, StandardCharsets.UTF_8);
         // sends the "command_download.txt" as a FileMessage
-        net.write(new FileMessage(downloadDir.resolve("command_download.txt")));
+        net.write(new FileMessage(cmdFiles.resolve("command_download.txt")));
         //clears the "command_download.txt" file for a further usage
         BufferedWriter writer = Files.newBufferedWriter(Paths.get(String.valueOf(fileDownDir)));
         writer.write("");
@@ -94,4 +95,12 @@ public class MainController implements Initializable {
         clientView.getItems().addAll(getClientFiles());
     }
 
+    public void delete(ActionEvent actionEvent) throws IOException {
+        String fileToDelete = serverView.getSelectionModel().getSelectedItem();
+        Files.writeString(fileDelete, fileToDelete, StandardCharsets.UTF_8);
+        net.write(new FileMessage(cmdFiles.resolve("command_delete.txt")));
+        BufferedWriter writer = Files.newBufferedWriter(Paths.get(String.valueOf(fileDelete)));
+        writer.write("");
+        writer.flush();
+    }
 }
