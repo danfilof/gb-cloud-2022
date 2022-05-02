@@ -2,11 +2,13 @@ package ru.gb.cloud.network;
 
 import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
 import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
+import lombok.extern.slf4j.Slf4j;
 import ru.gb.cloud.model.AbstractMessage;
 
 import java.io.IOException;
 import java.net.Socket;
 
+@Slf4j
 public class Net {
 
     private final Socket socket;
@@ -41,4 +43,9 @@ public class Net {
     public void write(AbstractMessage message) throws IOException {
         os.writeObject(message);
     }
+
+    public void download() throws IOException {
+        os.writeChars("#download");
+    }
+
 }

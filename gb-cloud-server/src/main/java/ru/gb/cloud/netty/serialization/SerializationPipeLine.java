@@ -8,6 +8,7 @@ import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import ru.gb.cloud.controllers.LocalFileHandler;
 
 public class SerializationPipeLine extends ChannelInitializer<SocketChannel> {
     @Override
@@ -15,7 +16,8 @@ public class SerializationPipeLine extends ChannelInitializer<SocketChannel> {
         socketChannel.pipeline().addLast(
                 new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
                 new ObjectEncoder(),
-                new FileHandler()
+                new FileHandler(),
+                new LocalFileHandler()
 
         );
     }

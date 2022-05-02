@@ -17,7 +17,6 @@ public class FileMessage extends AbstractMessage{
     public FileMessage(Path path) throws IOException {
         name = path.getFileName().toString();
         bytes = Files.readAllBytes(path);
-
     }
 
     @Override
