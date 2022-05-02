@@ -4,8 +4,8 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane prefHeight="673.0" prefWidth="1031.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.gb.cloud.controllers.MainController">
-    <ListView fx:id="view" layoutX="607.0" layoutY="42.0" prefHeight="618.0" prefWidth="410.0" />
-    <TextField fx:id="input" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="624.0" prefHeight="38.0" prefWidth="326.0" />
-   <ListView fx:id="clientView" layoutX="14.0" layoutY="45.0" onMouseClicked="#selectFile" prefHeight="579.0" prefWidth="410.0" />
-   <Button fx:id="sendButton" layoutX="341.0" layoutY="624.0" mnemonicParsing="false" onAction="#onClickSendButton" prefHeight="38.0" prefWidth="83.0" text="Send " />
+    <ListView fx:id="serverView" layoutX="607.0" layoutY="42.0" prefHeight="618.0" prefWidth="410.0" />
+   <ListView fx:id="clientView" layoutX="14.0" layoutY="45.0" prefHeight="618.0" prefWidth="410.0" />
+   <Button onAction="#upload" layoutX="448.0" layoutY="207.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="135.0" text="Upload" />
+   <Button onAction="#download" layoutX="448.0" layoutY="373.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="135.0" text="Download" />
 </AnchorPane>
