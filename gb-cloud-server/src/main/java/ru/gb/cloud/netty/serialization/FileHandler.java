@@ -37,6 +37,15 @@ public class FileHandler extends SimpleChannelInboundHandler<AbstractMessage> {
                 String fileName = new String(encoded, StandardCharsets.UTF_8);
                 ctx.write(new FileMessage(serverDir.resolve(fileName)));
             }
+
+            if (((FileMessage) msg).getName().equals("command_delete.txt")) {
+                Files.write(serverDir.resolve(file.getName()), file.getBytes());
+                byte[] encoded = Files.readAllBytes(Paths.get("ServerFiles/command_delete.txt"));
+                String deleteFile = new String(encoded, StandardCharsets.UTF_8);
+                Path toDelete = Path.of("ServerFiles", deleteFile);
+                Files.deleteIfExists(toDelete);
+                ctx.writeAndFlush(new ListMessage(serverDir));
+            }
             Files.write(serverDir.resolve(file.getName()), file.getBytes());
             ctx.writeAndFlush(new ListMessage(serverDir));
         }
