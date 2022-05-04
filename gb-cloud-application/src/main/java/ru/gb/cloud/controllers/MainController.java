@@ -1,15 +1,19 @@
 package ru.gb.cloud.controllers;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import lombok.extern.slf4j.Slf4j;
 import ru.gb.cloud.model.AbstractMessage;
 import ru.gb.cloud.model.FileMessage;
 import ru.gb.cloud.model.ListMessage;
 import ru.gb.cloud.network.Net;
 
-import java.io.BufferedWriter;
+import java.io.BufferedWriter;;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -26,6 +30,21 @@ public class MainController implements Initializable {
     private Net net;
    private Path clientDir;
 
+   @FXML
+   private Button deleteButton;
+
+   @FXML
+   private Button downloadButton;
+
+   @FXML
+   private Button uploadButton;
+
+   @FXML
+    private TextField loginField;
+    @FXML
+    private PasswordField passwordField;
+
+
    // folder where the "download_command.txt" is
    private final Path cmdFiles = Path.of("cmd files");
 
@@ -33,6 +52,8 @@ public class MainController implements Initializable {
    private final Path fileDownDir = Path.of("cmd files/command_download.txt");
 
    private final Path fileDelete = Path.of("cmd files/command_delete.txt");
+
+   private final Path authDataDir = Path.of("cmd files/command_auth.txt");
 
     private void read() {
         try {
@@ -43,11 +64,29 @@ public class MainController implements Initializable {
                     serverView.getItems().addAll(lm.getFiles());
                 }
                 if (message instanceof FileMessage file) {
-                    // if the message is FileMessage, download ther file and reload the list
+                    // if the message is FileMessage, download the file
                     Files.write(clientDir.resolve(file.getName()), file.getBytes());
+                    // decode the file and get the status
+                    byte[] encodedAuth = Files.readAllBytes(Paths.get("LocalFiles/command_auth.txt"));
+                    String status = new String(encodedAuth, StandardCharsets.UTF_8);
+
+                    // if status OK make all visible
+                    if (status.equals("%OK")) {
+                        serverView.setVisible(true);
+                        clientView.setVisible(true);
+                        deleteButton.setVisible(true);
+                        downloadButton.setVisible(true);
+                        uploadButton.setVisible(true);
+                    }
+
+                    if (message.equals("%WrongData")){
+                        System.out.println("Wrong login or password");
+                    }
+                    
                     clientView.getItems().clear();
                     clientView.getItems().addAll(getClientFiles());
                 }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -100,6 +139,18 @@ public class MainController implements Initializable {
         Files.writeString(fileDelete, fileToDelete, StandardCharsets.UTF_8);
         net.write(new FileMessage(cmdFiles.resolve("command_delete.txt")));
         BufferedWriter writer = Files.newBufferedWriter(Paths.get(String.valueOf(fileDelete)));
+        writer.write("");
+        writer.flush();
+    }
+
+    public void btnAuthClick(ActionEvent actionEvent) throws IOException {
+        String login = loginField.getText();
+        String password = passwordField.getText();
+        String authData = login + "#" + password;
+        System.out.println("Authdata from controller: " + authData);
+        Files.writeString(authDataDir, authData, StandardCharsets.UTF_8);
+        net.write(new FileMessage(cmdFiles.resolve("command_auth.txt")));
+        BufferedWriter writer = Files.newBufferedWriter(Paths.get(String.valueOf(authData)));
         writer.write("");
         writer.flush();
     }

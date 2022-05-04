@@ -6,29 +6,34 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="673.0" prefWidth="1031.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.gb.cloud.controllers.MainController">
-    <ListView fx:id="serverView" layoutX="607.0" layoutY="87.0" prefHeight="468.0" prefWidth="410.0">
+   <HBox fx:id="loginBox" VBox.vgrow="ALWAYS">
+      <TextField fx:id="loginField" promptText="Login"/>
+      <PasswordField fx:id="passwordField" promptText="Password"/>
+      <Button fx:id="AuthButton" text = "Auth" defaultButton="true" onAction="#btnAuthClick"/>
+   </HBox>
+    <ListView fx:id="serverView" visible="false" layoutX="607.0" layoutY="87.0" prefHeight="468.0" prefWidth="410.0">
       <cursor>
-         <Cursor fx:constant="OPEN_HAND" />
+         <Cursor fx:constant="HAND" />
       </cursor></ListView>
-   <ListView fx:id="clientView" layoutX="14.0" layoutY="87.0" prefHeight="468.0" prefWidth="410.0">
+   <ListView fx:id="clientView" visible="false" layoutX="14.0" layoutY="87.0" prefHeight="468.0" prefWidth="410.0">
       <cursor>
-         <Cursor fx:constant="OPEN_HAND" />
+         <Cursor fx:constant="HAND" />
       </cursor></ListView>
-   <Button layoutX="448.0" layoutY="112.0" mnemonicParsing="false" onAction="#upload" prefHeight="61.0" prefWidth="135.0" text="Upload" textFill="#04f500b5">
+   <Button fx:id="uploadButton" layoutX="448.0" visible="false" layoutY="112.0"  mnemonicParsing="false" onAction="#upload" prefHeight="61.0" prefWidth="135.0" text="Upload" textFill="#04f500b5">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
       <font>
          <Font size="16.0" />
       </font></Button>
-   <Button layoutX="448.0" layoutY="233.0" mnemonicParsing="false" onAction="#download" prefHeight="61.0" prefWidth="135.0" text="Download" textFill="#038ef2">
+   <Button fx:id="downloadButton" layoutX="448.0" visible="false" layoutY="233.0" mnemonicParsing="false" onAction="#download" prefHeight="61.0" prefWidth="135.0" text="Download" textFill="#038ef2">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
       <font>
          <Font size="16.0" />
       </font></Button>
-   <Button layoutX="448.0" layoutY="451.0" mnemonicParsing="false" onAction="#delete" prefHeight="61.0" prefWidth="135.0" text="Delete" textFill="#d11111d8">
+   <Button fx:id="deleteButton" layoutX="448.0" visible="false" layoutY="451.0" mnemonicParsing="false" onAction="#delete" prefHeight="61.0" prefWidth="135.0" text="Delete" textFill="#d11111d8">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
