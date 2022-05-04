@@ -23,7 +23,9 @@ public class FileHandler extends SimpleChannelInboundHandler<AbstractMessage> {
 
     private final Path serverDir = Path.of("ServerFiles");
 
-    private final Path auth = Path.of("ServerFiles/command_auth.txt");
+    private final Path auth = Path.of("ServerFiles/cmd/command_auth.txt");
+
+    private final Path cmd = Path.of("ServerFiles/cmd");
 
 
 
@@ -41,33 +43,25 @@ public class FileHandler extends SimpleChannelInboundHandler<AbstractMessage> {
             // the handler receives the file, which has name "command_download.txt". Inside of the file there is a name of the file that should be downloaded
             if (((FileMessage) msg).getName().equals("command_download.txt")) {
                 // download the file
-                Files.write(serverDir.resolve(file.getName()), file.getBytes());
+                Files.write(cmd.resolve(file.getName()), file.getBytes());
                 // read the contents into byte array
-                byte[] encodedDownload = Files.readAllBytes(Paths.get("ServerFiles/command_download.txt"));
+                byte[] encodedDownload = Files.readAllBytes(Paths.get("ServerFiles/cmd/command_download.txt"));
                 // write bytearray into string and send the file with a given fileName as a string from bytearray
                 String fileName = new String(encodedDownload, StandardCharsets.UTF_8);
                 ctx.write(new FileMessage(serverDir.resolve(fileName)));
-                // path of the file which contained the fileName
-                Path deleteCmdDownload = Path.of("ServerFiles", "command_download.txt");
-                // delete the file
-                Files.deleteIfExists(deleteCmdDownload);
                 ctx.writeAndFlush(new ListMessage(serverDir));
             }
 
             if (((FileMessage) msg).getName().equals("command_delete.txt")) {
                 //download the file
-                Files.write(serverDir.resolve(file.getName()), file.getBytes());
+                Files.write(cmd.resolve(file.getName()), file.getBytes());
                 // read the content into byte array
-                byte[] encodedDelete = Files.readAllBytes(Paths.get("ServerFiles/command_delete.txt"));
+                byte[] encodedDelete = Files.readAllBytes(Paths.get("ServerFiles/cmd/command_delete.txt"));
                 // get a fileName from the file
                 String deleteFile = new String(encodedDelete, StandardCharsets.UTF_8);
                 // delete the selected file
                 Path toDelete = Path.of("ServerFiles", deleteFile);
                 Files.deleteIfExists(toDelete);
-                // Path of the file which contained the fileName
-                Path deleteCmdDelete = Path.of("ServerFiles", "command_delete.txt");
-                // delete the file
-                Files.deleteIfExists(deleteCmdDelete);
                 ctx.writeAndFlush(new ListMessage(serverDir));
 
 
@@ -75,9 +69,9 @@ public class FileHandler extends SimpleChannelInboundHandler<AbstractMessage> {
 
                 if (((FileMessage) msg).getName().equals("command_auth.txt")) {
                     //download the file
-                    Files.write(serverDir.resolve(file.getName()), file.getBytes());
+                    Files.write(cmd.resolve(file.getName()), file.getBytes());
                     // read the content into byte array
-                    byte[] encodedAuth = Files.readAllBytes(Paths.get("ServerFiles/command_auth.txt"));
+                    byte[] encodedAuth = Files.readAllBytes(Paths.get("ServerFiles/cmd/command_auth.txt"));
                     // get a login and password from the file
                     String authData = new String(encodedAuth, StandardCharsets.UTF_8);
                     // split the message and get the data
@@ -92,10 +86,10 @@ public class FileHandler extends SimpleChannelInboundHandler<AbstractMessage> {
 
                     // send a file with a status written in
                     Files.writeString(auth,status, StandardCharsets.UTF_8);
-                    ctx.write(new FileMessage(serverDir.resolve("command_auth.txt")));
+                    ctx.write(new FileMessage(cmd.resolve("command_auth.txt")));
                 }
 
-            Files.write(serverDir.resolve(file.getName()), file.getBytes());
+           Files.write(serverDir.resolve(file.getName()), file.getBytes());
             ctx.writeAndFlush(new ListMessage(serverDir));
         }
     }
