@@ -123,7 +123,7 @@ public class MainController implements Initializable {
         Files.writeString(fileDownDir, fileName, StandardCharsets.UTF_8);
         // sends the "command_download.txt" as a FileMessage
         net.write(new FileMessage(cmdFiles.resolve("command_download.txt")));
-        //clears the "command_download.txt" file for a further usage
+        // clears the "command_download.txt" file for a further usage
         BufferedWriter writer = Files.newBufferedWriter(Paths.get(String.valueOf(fileDownDir)));
         writer.write("");
         writer.flush();
@@ -135,9 +135,13 @@ public class MainController implements Initializable {
     }
 
     public void delete(ActionEvent actionEvent) throws IOException {
+        // get name of the folder to be deleted
         String fileToDelete = serverView.getSelectionModel().getSelectedItem();
+        // write the name into the file
         Files.writeString(fileDelete, fileToDelete, StandardCharsets.UTF_8);
+        // send the file
         net.write(new FileMessage(cmdFiles.resolve("command_delete.txt")));
+        // clear the local file
         BufferedWriter writer = Files.newBufferedWriter(Paths.get(String.valueOf(fileDelete)));
         writer.write("");
         writer.flush();
@@ -147,9 +151,11 @@ public class MainController implements Initializable {
         String login = loginField.getText();
         String password = passwordField.getText();
         String authData = login + "#" + password;
-        System.out.println("Authdata from controller: " + authData);
+        // write data into the file
         Files.writeString(authDataDir, authData, StandardCharsets.UTF_8);
+        // send the file
         net.write(new FileMessage(cmdFiles.resolve("command_auth.txt")));
+        // clear the file
         BufferedWriter writer = Files.newBufferedWriter(Paths.get(String.valueOf(authData)));
         writer.write("");
         writer.flush();
