@@ -7,6 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import ru.gb.cloud.model.AbstractMessage;
 import ru.gb.cloud.model.FileMessage;
@@ -44,6 +46,12 @@ public class MainController implements Initializable {
     @FXML
     private PasswordField passwordField;
 
+    @FXML
+    private HBox loginBox;
+
+    @FXML
+    private HBox cloudBox;
+
 
    // folder where the "download_command.txt" is
    private final Path cmdFiles = Path.of("cmd files");
@@ -72,11 +80,8 @@ public class MainController implements Initializable {
 
                     // if status OK make all visible
                     if (status.equals("%OK")) {
-                        serverView.setVisible(true);
-                        clientView.setVisible(true);
-                        deleteButton.setVisible(true);
-                        downloadButton.setVisible(true);
-                        uploadButton.setVisible(true);
+                        loginBox.setVisible(false);
+                        cloudBox.setVisible(true);
                     }
 
                     if (message.equals("%WrongData")){
