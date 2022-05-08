@@ -8,9 +8,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import ru.gb.cloud.model.AbstractMessage;
+import ru.gb.cloud.model.DownloadMessage;
 import ru.gb.cloud.model.FileMessage;
 import ru.gb.cloud.model.ListMessage;
 import ru.gb.cloud.network.Net;
@@ -42,15 +42,14 @@ public class MainController implements Initializable {
    private Button uploadButton;
 
    @FXML
+   private Button AuthButton;
+
+   @FXML
     private TextField loginField;
     @FXML
     private PasswordField passwordField;
 
-    @FXML
-    private HBox loginBox;
-
-    @FXML
-    private HBox cloudBox;
+    @FXML HBox loginBox;
 
 
    // folder where the "download_command.txt" is
@@ -80,8 +79,12 @@ public class MainController implements Initializable {
 
                     // if status OK make all visible
                     if (status.equals("%OK")) {
-                        loginBox.setVisible(false);
-                        cloudBox.setVisible(true);
+                       loginBox.setVisible(false);
+                       clientView.setVisible(true);
+                       serverView.setVisible(true);
+                       deleteButton.setVisible(true);
+                       uploadButton.setVisible(true);
+                       downloadButton.setVisible(true);
                     }
 
                     if (message.equals("%WrongData")){
@@ -123,15 +126,17 @@ public class MainController implements Initializable {
 
     public void download(ActionEvent actionEvent) throws Exception {
         // choosing a fileName with a click in jfx
-        String fileName = serverView.getSelectionModel().getSelectedItem();
+        String downloadFile = serverView.getSelectionModel().getSelectedItem();
+        System.out.println("selectedFileDownload: " + downloadFile);
         // writes the name of the file to be downloaded into the "command_download.txt"
-        Files.writeString(fileDownDir, fileName, StandardCharsets.UTF_8);
+       // Files.writeString(fileDownDir, downloadFile, StandardCharsets.UTF_8);
         // sends the "command_download.txt" as a FileMessage
-        net.write(new FileMessage(cmdFiles.resolve("command_download.txt")));
+       // net.write(new FileMessage(cmdFiles.resolve("command_download.txt")));
         // clears the "command_download.txt" file for a further usage
-        BufferedWriter writer = Files.newBufferedWriter(Paths.get(String.valueOf(fileDownDir)));
-        writer.write("");
-        writer.flush();
+        //BufferedWriter writer = Files.newBufferedWriter(Paths.get(String.valueOf(fileDownDir)));
+        //writer.write("");
+       // writer.flush();
+        net.write(new DownloadMessage(downloadFile));
     }
 
     public void reloadList() throws IOException {
@@ -156,6 +161,7 @@ public class MainController implements Initializable {
         String login = loginField.getText();
         String password = passwordField.getText();
         String authData = login + "#" + password;
+        System.out.println(authData);
         // write data into the file
         Files.writeString(authDataDir, authData, StandardCharsets.UTF_8);
         // send the file

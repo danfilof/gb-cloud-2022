@@ -2,7 +2,10 @@ package ru.gb.cloud.model;
 
 public enum MessageType {
     FILE("file"),
-    LIST("list");
+    LIST("list"),
+    DOWNLOAD("download");
+
+
 
     private final String name;
 
