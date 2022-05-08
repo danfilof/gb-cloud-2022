@@ -3,7 +3,9 @@ package ru.gb.cloud.model;
 public enum MessageType {
     FILE("file"),
     LIST("list"),
-    DOWNLOAD("download");
+    DOWNLOAD("download"),
+    DELETE("delete"),
+    AUTH("auth");
 
 
 

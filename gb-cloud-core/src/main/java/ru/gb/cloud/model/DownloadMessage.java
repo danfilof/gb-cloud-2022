@@ -11,7 +11,7 @@ public class DownloadMessage extends AbstractMessage{
     private final String downloadFileName;
 
     public DownloadMessage(String downloadFile) {
-       downloadFileName = String.valueOf(downloadFile.chars());
+       downloadFileName = downloadFile;
     }
 
     @Override

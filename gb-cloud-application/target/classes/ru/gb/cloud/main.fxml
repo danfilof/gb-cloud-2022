@@ -7,7 +7,7 @@
 
 <AnchorPane prefHeight="673.0" prefWidth="1031.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.gb.cloud.controllers.MainController">
 
-   <HBox fx:id="loginBox" VBox.vgrow="ALWAYS">
+   <HBox fx:id="loginBox" visible="true" VBox.vgrow="ALWAYS">
       <TextField fx:id="loginField" visible="true" promptText="Login" />
       <PasswordField fx:id="passwordField" visible="true" promptText="Password" />
       <Button fx:id="AuthButton" defaultButton="true" visible="true" onAction="#btnAuthClick" text="Auth" />
