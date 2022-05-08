@@ -19,12 +19,6 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
 
     private final Path serverDir = Path.of("ServerFiles");
 
-    private final Path auth = Path.of("ServerFiles/command_auth.txt");
-
-    private final Path cmd = Path.of("ServerFiles/cmd");
-
-
-
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         ListMessage message = new ListMessage(serverDir);
@@ -34,7 +28,6 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, AbstractMessage msg) throws Exception {
         log.info("received: {} message", msg.getMessageType().getName());
-        // NEW NEW NEW NEW
         if (msg instanceof DownloadMessage downloadMessage) {
             String downloadFile = downloadMessage.getDownloadFileName();
             System.out.println("downloadMsg: " + downloadFile);
