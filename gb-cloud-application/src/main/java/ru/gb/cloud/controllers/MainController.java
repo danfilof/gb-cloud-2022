@@ -3,16 +3,17 @@ package ru.gb.cloud.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import lombok.extern.slf4j.Slf4j;
 import ru.gb.cloud.model.*;
 import ru.gb.cloud.network.Net;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,6 +24,9 @@ import java.util.ResourceBundle;
 public class MainController implements Initializable {
     public ListView<String> clientView;
     public ListView<String> serverView;
+    public Button cancelAuthButton;
+    public ImageView failedAuthImage;
+    public TextArea failedAuthMessage;
     private Net net;
    private Path clientDir;
 
@@ -51,28 +55,36 @@ public class MainController implements Initializable {
                 AbstractMessage message = net.read();
 
                 if (message instanceof ListMessage lm) {
+                    log.info("received ServerList...");
                     serverView.getItems().clear();
                     serverView.getItems().addAll(lm.getFiles());
                 }
 
                 if (message instanceof FileMessage file) {
+                    log.info("received file to be downloaded: " + file.getName());
                     Files.write(clientDir.resolve(file.getName()), file.getBytes());
                     reloadList();
                 }
 
                 if (message instanceof AuthMessage authMessage) {
                     String status = authMessage.getAuthData();
+                    log.info("received authentification status: " + status);
                     if (status.equals("%OK")) {
+                        log.info("successfully authenticated...");
                         loginBox.setVisible(false);
                         clientView.setVisible(true);
                         serverView.setVisible(true);
                         deleteButton.setVisible(true);
                         uploadButton.setVisible(true);
                         downloadButton.setVisible(true);
-                    }
-
-                    if (message.equals("%WrongData")) {
+                    } else {
+                        log.info("user used wrong password or login...");
                         System.out.println("Wrong login or password");
+                        InputStream stream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\sad_robot.jpg");
+                        Image image = new Image(stream);
+                        failedAuthImage.setImage(image);
+                        failedAuthImage.setVisible(true);
+                        failedAuthMessage.setVisible(true);
                     }
                 }
 
@@ -102,11 +114,14 @@ public class MainController implements Initializable {
 
     public void upload(ActionEvent actionEvent) throws Exception {
         String fileName = clientView.getSelectionModel().getSelectedItem();
+        log.info("sent file: " + fileName);
         net.write(new FileMessage(clientDir.resolve(fileName)));
     }
 
     public void download(ActionEvent actionEvent) throws Exception {
         String downloadFile = serverView.getSelectionModel().getSelectedItem();
+        log.info("sent request to download a file: " + downloadFile);
+        // send the name of the file that should be downloaded (string)
         net.write(new DownloadMessage(downloadFile));
     }
 
@@ -117,6 +132,8 @@ public class MainController implements Initializable {
 
     public void delete(ActionEvent actionEvent) throws IOException {
         String fileToDelete = serverView.getSelectionModel().getSelectedItem();
+        log.info("sent request to delete a file: " + fileToDelete);
+        // send the name of the file that should be deleted (string)
         net.write(new DeleteMessage(fileToDelete));
     }
 
@@ -124,7 +141,13 @@ public class MainController implements Initializable {
         String login = loginField.getText();
         String password = passwordField.getText();
         String authData = login + "#" + password;
-        System.out.println(authData);
+        // send "coded" authenticate data
         net.write(new AuthMessage(authData));
+        log.info("sent request to authenticate...");
+    }
+
+    public void cancelAuthClick(ActionEvent actionEvent) {
+        log.info("user closed the program by pressing cancel button...");
+        System.exit(0);
     }
 }

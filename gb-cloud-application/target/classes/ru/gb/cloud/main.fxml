@@ -2,16 +2,22 @@
 
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="673.0" prefWidth="1031.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.gb.cloud.controllers.MainController">
 
-   <HBox fx:id="loginBox" visible="true" VBox.vgrow="ALWAYS">
-      <TextField fx:id="loginField" visible="true" promptText="Login" />
-      <PasswordField fx:id="passwordField" visible="true" promptText="Password" />
-      <Button fx:id="AuthButton" defaultButton="true" visible="true" onAction="#btnAuthClick" text="Auth" />
+   <HBox fx:id="loginBox" prefHeight="162.0" prefWidth="523.0" visible="true" VBox.vgrow="ALWAYS">
+      <TextField fx:id="loginField" promptText="Login" visible="true" />
+      <PasswordField fx:id="passwordField" promptText="Password" visible="true" />
+      <Button fx:id="AuthButton" defaultButton="true" onAction="#btnAuthClick" text="Auth" visible="true" />
+      <Button fx:id="cancelAuthButton" layoutX="340.0" mnemonicParsing="false" onAction="#cancelAuthClick" text="Cancel" visible="true" />
    </HBox>
+
+      <ImageView fx:id="failedAuthImage" fitHeight="130.0" fitWidth="130.0" layoutX="30.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+
+   <TextArea fx:id="failedAuthMessage" layoutX="2.0" layoutY="162.0" prefHeight="25.0" prefWidth="434.0" text="Something went wrong. Probably wrong login and password. Please try again." visible="false" />
 
     <ListView fx:id="serverView" layoutX="607.0" layoutY="87.0" prefHeight="468.0" prefWidth="410.0" visible="false">
       <cursor>

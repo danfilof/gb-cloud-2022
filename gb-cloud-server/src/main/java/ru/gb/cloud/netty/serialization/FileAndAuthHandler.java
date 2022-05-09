@@ -26,23 +26,26 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, AbstractMessage msg) throws Exception {
         log.info("received: {} message", msg.getMessageType().getName());
+
         if (msg instanceof DownloadMessage downloadMessage) {
             String downloadFile = downloadMessage.getDownloadFileName();
-            System.out.println("downloadMsg: " + downloadFile);
+            log.info("received request to download {}", downloadFile);
             ctx.write(new FileMessage(serverDir.resolve(downloadFile)));
             ctx.writeAndFlush(new ListMessage(serverDir));
         }
 
         if (msg instanceof DeleteMessage deleteMessage) {
             String deleteFile = deleteMessage.getDeleteFileName();
-            System.out.println("deleteMsg: " + deleteFile);
+            log.info("received request to delete {} file", deleteFile);
             Path toDelete = Path.of("ServerFiles", deleteFile);
             Files.deleteIfExists(toDelete);
             ctx.writeAndFlush(new ListMessage(serverDir));
         }
 
         if (msg instanceof AuthMessage authMessage) {
+            log.info("received authenticate request...");
             String authData = authMessage.getAuthData();
+            // get user login and password from message, split them
             String[] split = authData.split("#");
             String login = split[0];
             String password = split[1];
@@ -52,6 +55,7 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
         }
 
         if (msg instanceof FileMessage file) {
+            log.info("received file {}", file.getName());
            Files.write(serverDir.resolve(file.getName()), file.getBytes());
             ctx.writeAndFlush(new ListMessage(serverDir));
         }
@@ -69,26 +73,25 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
             String id = null;
             String status = null;
             ResultSet rs = ps.executeQuery();
-            status = rs.getString("id");
-            log.info("Status after db: " + status);
-            if (status != null) {
-                System.out.println("Status in db: " + status);
+            int idCheck = rs.getInt("id");
+            log.info("data base query has been executed...");
+            if (idCheck == (int) idCheck) {
                 return status = "%OK";
             } else {
-                System.out.println("Status in db: " + status);
                 return status = "%WrongData";
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            return "wrongData";
         }
-        return null;
     }
 
     public void connect() {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:gb_chat_db.db");
             statement = connection.createStatement();
-        }catch (Exception e) {
+            log.info("successfully connected to dataBase");
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
