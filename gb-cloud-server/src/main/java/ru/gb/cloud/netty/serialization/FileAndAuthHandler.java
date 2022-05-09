@@ -15,8 +15,6 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
 
     private Connection connection;
     private Statement statement;
-
-
     private final Path serverDir = Path.of("ServerFiles");
 
     @Override
