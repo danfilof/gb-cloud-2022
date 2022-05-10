@@ -4,8 +4,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 import ru.gb.cloud.model.*;
-;
 
+
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
@@ -51,6 +52,26 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
             String password = split[1];
             String status = getStatusByLoginAndPassword(login,password);
             ctx.write(new AuthMessage(status));
+            ctx.writeAndFlush(new ListMessage(serverDir));
+        }
+
+        if (msg instanceof ChangeFileNameMessage changeFileNameMessage) {
+            log.info("received request to rename a file");
+            String fileNames = changeFileNameMessage.getFileNames();
+            String[] splitFileNames = fileNames.split("#");
+            String originalName = splitFileNames[0];
+            String newName = splitFileNames[1];
+            File originalFile = new File("ServerFiles", originalName);
+            File newFile = new File("ServerFiles", newName);
+
+            if (newFile.exists()) {
+               log.info("file exists already");
+            }
+            boolean successFileNameChange = originalFile.renameTo(newFile);
+
+            if (!successFileNameChange) {
+               log.info("Something went wrong, cannot rename a file");
+            }
             ctx.writeAndFlush(new ListMessage(serverDir));
         }
 

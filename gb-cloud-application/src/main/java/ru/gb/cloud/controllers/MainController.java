@@ -27,14 +27,24 @@ public class MainController implements Initializable {
     public Button cancelAuthButton;
     public ImageView failedAuthImage;
     public TextArea failedAuthMessage;
+    @FXML
+    private TextField newFileNameField;
+    @FXML
+    private HBox fileNameChangeBox;
+
     private Net net;
    private Path clientDir;
 
+    @FXML
+    private Button confirmFileNameChangeButton;
    @FXML
    private Button deleteButton;
 
    @FXML
    private Button downloadButton;
+
+   @FXML
+   private Button renameButton;
 
    @FXML
    private Button uploadButton;
@@ -77,6 +87,7 @@ public class MainController implements Initializable {
                         deleteButton.setVisible(true);
                         uploadButton.setVisible(true);
                         downloadButton.setVisible(true);
+                        renameButton.setVisible(true);
                     } else {
                         log.info("user used wrong password or login...");
                         System.out.println("Wrong login or password");
@@ -149,5 +160,19 @@ public class MainController implements Initializable {
     public void cancelAuthClick(ActionEvent actionEvent) {
         log.info("user closed the program by pressing cancel button...");
         System.exit(0);
+    }
+
+    public void rename(ActionEvent actionEvent) {
+        fileNameChangeBox.setVisible(true);
+    }
+
+    public void confirmFileNameChange(ActionEvent actionEvent) throws IOException {
+        String fileToRename = serverView.getSelectionModel().getSelectedItem();
+        String newFileName = newFileNameField.getText();
+        System.out.println(fileToRename + " ||| " + newFileName);
+        String authData = fileToRename + "#" + newFileName;
+        net.write(new ChangeFileNameMessage(authData));
+        fileNameChangeBox.setVisible(false);
+
     }
 }
