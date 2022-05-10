@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.gb.cloud.model.*;
 import ru.gb.cloud.network.Net;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -142,10 +143,15 @@ public class MainController implements Initializable {
     }
 
     public void delete(ActionEvent actionEvent) throws IOException {
-        String fileToDelete = serverView.getSelectionModel().getSelectedItem();
-        log.info("sent request to delete a file: " + fileToDelete);
+        String fileToDeleteOnServer = serverView.getSelectionModel().getSelectedItem();
+        log.info("sent request to delete a file: " + fileToDeleteOnServer);
         // send the name of the file that should be deleted (string)
-        net.write(new DeleteMessage(fileToDelete));
+        net.write(new DeleteMessage(fileToDeleteOnServer));
+
+        String fileToDeleteLocal = clientView.getSelectionModel().getSelectedItem();
+        Path toDelete = Path.of("LocalFiles", fileToDeleteLocal);
+        Files.deleteIfExists(toDelete);
+        reloadList();
     }
 
     public void btnAuthClick(ActionEvent actionEvent) throws IOException {
@@ -167,12 +173,34 @@ public class MainController implements Initializable {
     }
 
     public void confirmFileNameChange(ActionEvent actionEvent) throws IOException {
-        String fileToRename = serverView.getSelectionModel().getSelectedItem();
+        String serverFileToRename = serverView.getSelectionModel().getSelectedItem();
+        String localFileToRename = clientView.getSelectionModel().getSelectedItem();
         String newFileName = newFileNameField.getText();
-        System.out.println(fileToRename + " ||| " + newFileName);
-        String authData = fileToRename + "#" + newFileName;
-        net.write(new ChangeFileNameMessage(authData));
-        fileNameChangeBox.setVisible(false);
+
+        if (localFileToRename == null) {
+            String authData = serverFileToRename + "#" + newFileName;
+            net.write(new ChangeFileNameMessage(authData));
+            fileNameChangeBox.setVisible(false);
+            newFileNameField.clear();
+        }
+
+        if (serverFileToRename == null) {
+            File originalFile = new File("LocalFiles", localFileToRename);
+            File newFile = new File("LocalFiles", newFileName);
+
+            if (newFile.exists()) {
+                System.out.println("file exists already");
+            }
+            boolean successFileNameChange = originalFile.renameTo(newFile);
+
+            if (!successFileNameChange) {
+                System.out.println("Something went wrong, cannot rename a file");
+            }
+            fileNameChangeBox.setVisible(false);
+            newFileNameField.clear();
+            reloadList();
+        }
+
 
     }
 }
