@@ -1,21 +1,23 @@
 package ru.gb.cloud.controllers;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import lombok.extern.slf4j.Slf4j;
-import ru.gb.cloud.model.AbstractMessage;
-import ru.gb.cloud.model.FileMessage;
-import ru.gb.cloud.model.ListMessage;
+import ru.gb.cloud.model.*;
 import ru.gb.cloud.network.Net;
 
-import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -23,31 +25,81 @@ import java.util.ResourceBundle;
 public class MainController implements Initializable {
     public ListView<String> clientView;
     public ListView<String> serverView;
+    public Button cancelAuthButton;
+    public ImageView failedAuthImage;
+    public TextArea failedAuthMessage;
+    @FXML
+    private TextField newFileNameField;
+    @FXML
+    private HBox fileNameChangeBox;
+
     private Net net;
    private Path clientDir;
 
-   // folder where the "download_command.txt" is
-   private final Path cmdFiles = Path.of("cmd files");
+    @FXML
+    private Button confirmFileNameChangeButton;
+   @FXML
+   private Button deleteButton;
 
-   // exact path of "download_command.txt"
-   private final Path fileDownDir = Path.of("cmd files/command_download.txt");
+   @FXML
+   private Button downloadButton;
 
-   private final Path fileDelete = Path.of("cmd files/command_delete.txt");
+   @FXML
+   private Button renameButton;
+
+   @FXML
+   private Button uploadButton;
+
+   @FXML
+   private Button AuthButton;
+
+   @FXML
+    private TextField loginField;
+    @FXML
+    private PasswordField passwordField;
+
+    @FXML HBox loginBox;
 
     private void read() {
         try {
             while (true) {
                 AbstractMessage message = net.read();
+
                 if (message instanceof ListMessage lm) {
+                    log.info("received ServerList...");
                     serverView.getItems().clear();
                     serverView.getItems().addAll(lm.getFiles());
                 }
+
                 if (message instanceof FileMessage file) {
-                    // if the message is FileMessage, download ther file and reload the list
+                    log.info("received file to be downloaded: " + file.getName());
                     Files.write(clientDir.resolve(file.getName()), file.getBytes());
-                    clientView.getItems().clear();
-                    clientView.getItems().addAll(getClientFiles());
+                    reloadList();
                 }
+
+                if (message instanceof AuthMessage authMessage) {
+                    String status = authMessage.getAuthData();
+                    log.info("received authentification status: " + status);
+                    if (status.equals("%OK")) {
+                        log.info("successfully authenticated...");
+                        loginBox.setVisible(false);
+                        clientView.setVisible(true);
+                        serverView.setVisible(true);
+                        deleteButton.setVisible(true);
+                        uploadButton.setVisible(true);
+                        downloadButton.setVisible(true);
+                        renameButton.setVisible(true);
+                    } else {
+                        log.info("user used wrong password or login...");
+                        System.out.println("Wrong login or password");
+                        InputStream stream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\sad_robot.jpg");
+                        Image image = new Image(stream);
+                        failedAuthImage.setImage(image);
+                        failedAuthImage.setVisible(true);
+                        failedAuthMessage.setVisible(true);
+                    }
+                }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,20 +126,15 @@ public class MainController implements Initializable {
 
     public void upload(ActionEvent actionEvent) throws Exception {
         String fileName = clientView.getSelectionModel().getSelectedItem();
+        log.info("sent file: " + fileName);
         net.write(new FileMessage(clientDir.resolve(fileName)));
     }
 
     public void download(ActionEvent actionEvent) throws Exception {
-        // choosing a fileName with a click in jfx
-        String fileName = serverView.getSelectionModel().getSelectedItem();
-        // writes the name of the file to be downloaded into the "command_download.txt"
-        Files.writeString(fileDownDir, fileName, StandardCharsets.UTF_8);
-        // sends the "command_download.txt" as a FileMessage
-        net.write(new FileMessage(cmdFiles.resolve("command_download.txt")));
-        //clears the "command_download.txt" file for a further usage
-        BufferedWriter writer = Files.newBufferedWriter(Paths.get(String.valueOf(fileDownDir)));
-        writer.write("");
-        writer.flush();
+        String downloadFile = serverView.getSelectionModel().getSelectedItem();
+        log.info("sent request to download a file: " + downloadFile);
+        // send the name of the file that should be downloaded (string)
+        net.write(new DownloadMessage(downloadFile));
     }
 
     public void reloadList() throws IOException {
@@ -96,11 +143,64 @@ public class MainController implements Initializable {
     }
 
     public void delete(ActionEvent actionEvent) throws IOException {
-        String fileToDelete = serverView.getSelectionModel().getSelectedItem();
-        Files.writeString(fileDelete, fileToDelete, StandardCharsets.UTF_8);
-        net.write(new FileMessage(cmdFiles.resolve("command_delete.txt")));
-        BufferedWriter writer = Files.newBufferedWriter(Paths.get(String.valueOf(fileDelete)));
-        writer.write("");
-        writer.flush();
+        String fileToDeleteOnServer = serverView.getSelectionModel().getSelectedItem();
+        log.info("sent request to delete a file: " + fileToDeleteOnServer);
+        // send the name of the file that should be deleted (string)
+        net.write(new DeleteMessage(fileToDeleteOnServer));
+
+        String fileToDeleteLocal = clientView.getSelectionModel().getSelectedItem();
+        Path toDelete = Path.of("LocalFiles", fileToDeleteLocal);
+        Files.deleteIfExists(toDelete);
+        reloadList();
+    }
+
+    public void btnAuthClick(ActionEvent actionEvent) throws IOException {
+        String login = loginField.getText();
+        String password = passwordField.getText();
+        String authData = login + "#" + password;
+        // send "coded" authenticate data
+        net.write(new AuthMessage(authData));
+        log.info("sent request to authenticate...");
+    }
+
+    public void cancelAuthClick(ActionEvent actionEvent) {
+        log.info("user closed the program by pressing cancel button...");
+        System.exit(0);
+    }
+
+    public void rename(ActionEvent actionEvent) {
+        fileNameChangeBox.setVisible(true);
+    }
+
+    public void confirmFileNameChange(ActionEvent actionEvent) throws IOException {
+        String serverFileToRename = serverView.getSelectionModel().getSelectedItem();
+        String localFileToRename = clientView.getSelectionModel().getSelectedItem();
+        String newFileName = newFileNameField.getText();
+
+        if (localFileToRename == null) {
+            String authData = serverFileToRename + "#" + newFileName;
+            net.write(new ChangeFileNameMessage(authData));
+            fileNameChangeBox.setVisible(false);
+            newFileNameField.clear();
+        }
+
+        if (serverFileToRename == null) {
+            File originalFile = new File("LocalFiles", localFileToRename);
+            File newFile = new File("LocalFiles", newFileName);
+
+            if (newFile.exists()) {
+                System.out.println("file exists already");
+            }
+            boolean successFileNameChange = originalFile.renameTo(newFile);
+
+            if (!successFileNameChange) {
+                System.out.println("Something went wrong, cannot rename a file");
+            }
+            fileNameChangeBox.setVisible(false);
+            newFileNameField.clear();
+            reloadList();
+        }
+
+
     }
 }

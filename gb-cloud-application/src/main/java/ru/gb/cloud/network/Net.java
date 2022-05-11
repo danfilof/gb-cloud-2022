@@ -43,9 +43,4 @@ public class Net {
     public void write(AbstractMessage message) throws IOException {
         os.writeObject(message);
     }
-
-    public void download() throws IOException {
-        os.writeChars("#download");
-    }
-
 }
