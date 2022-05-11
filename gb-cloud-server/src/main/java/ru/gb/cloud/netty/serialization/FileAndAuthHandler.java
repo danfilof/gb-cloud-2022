@@ -20,7 +20,6 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        ListMessage message = new ListMessage(serverDir);
         ctx.writeAndFlush(new ListMessage(serverDir));
     }
 

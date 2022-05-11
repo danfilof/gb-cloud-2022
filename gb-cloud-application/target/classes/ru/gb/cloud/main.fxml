@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="673.0" prefWidth="1031.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.gb.cloud.controllers.MainController">
+<AnchorPane fx:id="mainAnchorPane" prefHeight="673.0" prefWidth="1031.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.gb.cloud.controllers.MainController">
 
    <HBox fx:id="loginBox" prefHeight="162.0" prefWidth="523.0" visible="true" VBox.vgrow="ALWAYS">
       <TextField fx:id="loginField" promptText="Login" visible="true" />
@@ -20,19 +20,17 @@
       <Button fx:id="confirmFileNameChangeButton" defaultButton="true" onAction="#confirmFileNameChange" text="Confirm" visible="true" />
    </HBox>
 
-
-
       <ImageView fx:id="failedAuthImage" fitHeight="130.0" fitWidth="130.0" layoutX="30.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" visible="false" />
-   <TextArea fx:id="failedAuthMessage" layoutX="2.0" layoutY="162.0" prefHeight="25.0" prefWidth="434.0" text="Something went wrong. Probably wrong login and password. Please try again." visible="false" />
+   <TextArea fx:id="failedAuthMessage" layoutX="2.0" layoutY="162.0" prefHeight="25.0" prefWidth="434.0" text="Something went wrong. Probably wrong login or  password. Please try again." visible="false" />
 
 
 
-    <ListView fx:id="serverView" layoutX="607.0" layoutY="87.0" prefHeight="468.0" prefWidth="410.0" visible="false">
+    <ListView fx:id="serverView" layoutX="607.0" layoutY="87.0" onMouseEntered="#dropSelectionOnClientList" prefHeight="468.0" prefWidth="410.0" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
     </ListView>
-   <Button fx:id="uploadButton" layoutX="448.0" layoutY="112.0" mnemonicParsing="false" onAction="#upload" prefHeight="61.0" prefWidth="135.0" text="Upload" textFill="#04f500b5" visible="false">
+   <Button fx:id="uploadButton" layoutX="447.0" layoutY="169.0" mnemonicParsing="false" onAction="#upload" prefHeight="61.0" prefWidth="135.0" text="Upload" textFill="#04f500b5" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
@@ -48,7 +46,7 @@
          <Font name="System Bold" size="16.0" />
       </font>
    </Button>
-   <Button fx:id="downloadButton" layoutX="448.0" layoutY="233.0" mnemonicParsing="false" onAction="#download" prefHeight="61.0" prefWidth="135.0" text="Download" textFill="#038ef2" visible="false">
+   <Button fx:id="downloadButton" layoutX="448.0" layoutY="260.0" mnemonicParsing="false" onAction="#download" prefHeight="61.0" prefWidth="135.0" text="Download" textFill="#038ef2" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
@@ -56,12 +54,12 @@
          <Font size="16.0" />
       </font>
    </Button>
-   <Button fx:id="renameButton" layoutX="450.0" layoutY="337.0" mnemonicParsing="false" onAction="#rename" prefHeight="61.0" prefWidth="135.0" text="Rename" textFill="#ffaa00" visible="false">
+   <Button fx:id="renameButton" layoutX="448.0" layoutY="355.0" mnemonicParsing="false" onAction="#rename" prefHeight="61.0" prefWidth="135.0" text="Rename" textFill="#ffaa00" visible="false">
       <font>
          <Font size="16.0" />
       </font>
    </Button>
-   <ListView fx:id="clientView" layoutX="14.0" layoutY="87.0" prefHeight="468.0" prefWidth="410.0" visible="false">
+   <ListView fx:id="clientView" layoutX="14.0" layoutY="87.0" onMouseEntered="#dropSelectionOnServerList" prefHeight="468.0" prefWidth="410.0" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>

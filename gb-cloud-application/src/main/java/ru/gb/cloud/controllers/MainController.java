@@ -6,6 +6,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import lombok.extern.slf4j.Slf4j;
 import ru.gb.cloud.model.*;
@@ -28,6 +30,10 @@ public class MainController implements Initializable {
     public Button cancelAuthButton;
     public ImageView failedAuthImage;
     public TextArea failedAuthMessage;
+    @FXML
+    public AnchorPane mainAnchorPane;
+    @FXML
+    public Button dropSelectionButton;
     @FXML
     private TextField newFileNameField;
     @FXML
@@ -83,12 +89,17 @@ public class MainController implements Initializable {
                     if (status.equals("%OK")) {
                         log.info("successfully authenticated...");
                         loginBox.setVisible(false);
+                        failedAuthMessage.setVisible(false);
+                        failedAuthImage.setVisible(false);
+                        mainAnchorPane.setStyle("-fx-background-color: linear-gradient(#4568DC, #B06AB3);");
                         clientView.setVisible(true);
                         serverView.setVisible(true);
+
                         deleteButton.setVisible(true);
                         uploadButton.setVisible(true);
                         downloadButton.setVisible(true);
                         renameButton.setVisible(true);
+                        dropSelectionButton.setVisible(true);
                     } else {
                         log.info("user used wrong password or login...");
                         System.out.println("Wrong login or password");
@@ -144,7 +155,7 @@ public class MainController implements Initializable {
 
     public void delete(ActionEvent actionEvent) throws IOException {
         String fileToDeleteOnServer = serverView.getSelectionModel().getSelectedItem();
-        log.info("sent request to delete a file: " + fileToDeleteOnServer);
+        System.out.println("sent request to delete a file: " + fileToDeleteOnServer);
         // send the name of the file that should be deleted (string)
         net.write(new DeleteMessage(fileToDeleteOnServer));
 
@@ -152,6 +163,9 @@ public class MainController implements Initializable {
         Path toDelete = Path.of("LocalFiles", fileToDeleteLocal);
         Files.deleteIfExists(toDelete);
         reloadList();
+
+        serverView.getSelectionModel().clearSelection();
+        clientView.getSelectionModel().clearSelection();
     }
 
     public void btnAuthClick(ActionEvent actionEvent) throws IOException {
@@ -188,19 +202,30 @@ public class MainController implements Initializable {
             File originalFile = new File("LocalFiles", localFileToRename);
             File newFile = new File("LocalFiles", newFileName);
 
-            if (newFile.exists()) {
-                System.out.println("file exists already");
-            }
-            boolean successFileNameChange = originalFile.renameTo(newFile);
+            if (localFileToRename != null ) {
+                if (newFile.exists()) {
+                    System.out.println("file exists already");
+                }
+                boolean successFileNameChange = originalFile.renameTo(newFile);
 
-            if (!successFileNameChange) {
-                System.out.println("Something went wrong, cannot rename a file");
+                if (!successFileNameChange) {
+                    System.out.println("Something went wrong, cannot rename a file");
+                }
+                fileNameChangeBox.setVisible(false);
+                newFileNameField.clear();
+                reloadList();
+            } else {
+                System.out.println("no data given");
             }
-            fileNameChangeBox.setVisible(false);
-            newFileNameField.clear();
-            reloadList();
+
         }
+    }
 
+    public void dropSelectionOnClientList(MouseEvent mouseEvent) {
+        clientView.getSelectionModel().clearSelection();
+    }
 
+    public void dropSelectionOnServerList(MouseEvent mouseEvent) {
+        serverView.getSelectionModel().clearSelection();
     }
 }
