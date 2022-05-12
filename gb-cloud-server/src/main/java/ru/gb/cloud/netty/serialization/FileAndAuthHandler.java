@@ -105,7 +105,6 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
             return "wrongData";
         }
     }
-
     public void connect() {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:gb_chat_db.db");

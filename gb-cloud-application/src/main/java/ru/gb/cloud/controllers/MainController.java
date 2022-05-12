@@ -6,8 +6,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import lombok.extern.slf4j.Slf4j;
 import ru.gb.cloud.model.*;
@@ -20,8 +22,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 @Slf4j
 public class MainController implements Initializable {
@@ -35,13 +36,16 @@ public class MainController implements Initializable {
     @FXML
     public Button dropSelectionButton;
     @FXML
+    public Button buttonIN;
+    @FXML
+    public Button buttonOUT;
+    @FXML
     private TextField newFileNameField;
     @FXML
     private HBox fileNameChangeBox;
 
     private Net net;
    private Path clientDir;
-
     @FXML
     private Button confirmFileNameChangeButton;
    @FXML
@@ -65,6 +69,8 @@ public class MainController implements Initializable {
     private PasswordField passwordField;
 
     @FXML HBox loginBox;
+
+    private Path testDir;
 
     private void read() {
         try {
@@ -91,15 +97,15 @@ public class MainController implements Initializable {
                         loginBox.setVisible(false);
                         failedAuthMessage.setVisible(false);
                         failedAuthImage.setVisible(false);
-                        mainAnchorPane.setStyle("-fx-background-color: linear-gradient(#4568DC, #B06AB3);");
+                        //mainAnchorPane.setStyle("-fx-background-color: linear-gradient(#4568DC, #B06AB3);");
                         clientView.setVisible(true);
                         serverView.setVisible(true);
-
                         deleteButton.setVisible(true);
                         uploadButton.setVisible(true);
                         downloadButton.setVisible(true);
                         renameButton.setVisible(true);
                         dropSelectionButton.setVisible(true);
+                        openDir();
                     } else {
                         log.info("user used wrong password or login...");
                         System.out.println("Wrong login or password");
@@ -119,6 +125,10 @@ public class MainController implements Initializable {
     private List<String> getClientFiles() throws IOException {
         return Files.list(clientDir).map(Path::getFileName).map(Path::toString).toList();
     }
+
+    private void openDir() throws IOException {
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -217,7 +227,6 @@ public class MainController implements Initializable {
             } else {
                 System.out.println("no data given");
             }
-
         }
     }
 
@@ -227,5 +236,44 @@ public class MainController implements Initializable {
 
     public void dropSelectionOnServerList(MouseEvent mouseEvent) {
         serverView.getSelectionModel().clearSelection();
+    }
+
+    public void buttonIN(ActionEvent actionEvent) throws IOException {
+        testDir = Path.of("LocalFiles", "test folder");
+        clientView.getItems().clear();
+        clientView.getItems().addAll(Files.list(testDir).map(Path::getFileName).map(Path::toString).toList());
+
+
+    }
+
+    public void buttonOUT(ActionEvent actionEvent) throws IOException {
+        reloadList();
+    }
+
+    public void openDirectories(MouseEvent mouseEvent) throws IOException {
+        ArrayList<String> dirList = new ArrayList<>();
+        String dirs = null;
+        dirList.add("LocalFiles");
+        String s = clientView.getSelectionModel().getSelectedItem();
+        System.out.println("Folder selected: " + s);
+        System.out.println("dirList: " + dirList);
+        dirList.add(s);
+
+
+        if (mouseEvent.getClickCount() == 2) {
+            Iterator it = dirList.iterator();
+            while (it.hasNext()) {
+                dirs = dirs + "/" + it.next();
+            }
+            dirs = dirs.replace("null/", "");
+            System.out.println("Detected double click");
+            System.out.println("dirs: " + dirs);
+
+            testDir = Path.of(dirs);
+            System.out.println("TestDir: " + testDir);
+            clientView.getItems().clear();
+            clientView.getItems().addAll(Files.list(testDir).map(Path::getFileName).map(Path::toString).toList());
+        }
+
     }
 }
