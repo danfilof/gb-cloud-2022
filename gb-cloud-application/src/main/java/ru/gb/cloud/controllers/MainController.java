@@ -239,16 +239,9 @@ public class MainController implements Initializable {
         serverView.getSelectionModel().clearSelection();
     }
 
-    public void buttonIN(ActionEvent actionEvent) throws IOException {
-        testDir = Path.of("LocalFiles", "test folder");
-        clientView.getItems().clear();
-        clientView.getItems().addAll(Files.list(testDir).map(Path::getFileName).map(Path::toString).toList());
-
-
-    }
-
     public void buttonOUT(ActionEvent actionEvent) throws IOException {
         reloadList();
+        dirList.clear();
     }
 
     public void openDirectories(MouseEvent mouseEvent) throws IOException {
@@ -259,6 +252,10 @@ public class MainController implements Initializable {
                 dirList.add(0,"LocalFiles");
             }
             String s = clientView.getSelectionModel().getSelectedItem();
+            if (s.contains(".txt")) {
+                System.out.println("Selected is a .txt file");
+                System.exit(0);
+            }
             // after selecting the folder to be opened the name of the folder is added into the arraylist
             dirList.add(s);
             System.out.println("BEFORE (!) : (!) dirList: " + dirList);
@@ -280,6 +277,18 @@ public class MainController implements Initializable {
             clientView.getItems().addAll(Files.list(testDir).map(Path::getFileName).map(Path::toString).toList());
             System.out.println("---------------------");
         }
+    }
 
+    public void buttonBACK(ActionEvent actionEvent) throws IOException {
+       int listSizeLastValue = dirList.size() - 1;
+       dirList.remove(listSizeLastValue);
+        String[] dirsArray = Arrays.copyOf(dirList.toArray(), dirList.size(), String[].class);
+        dirs = Arrays.toString(dirsArray);
+        dirs = dirs.replace(", ", "/");
+        dirs = dirs.replace("[", "");
+        dirs = dirs.replace("]", "");
+        testDir = Path.of(dirs);
+        clientView.getItems().clear();
+        clientView.getItems().addAll(Files.list(testDir).map(Path::getFileName).map(Path::toString).toList());
     }
 }
