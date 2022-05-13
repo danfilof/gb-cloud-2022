@@ -18,6 +18,8 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
     private Statement statement;
     private final Path serverDir = Path.of("ServerFiles");
 
+    private Path requestedDir;
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         ctx.writeAndFlush(new ListMessage(serverDir));
@@ -78,6 +80,13 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
             log.info("received file {}", file.getName());
            Files.write(serverDir.resolve(file.getName()), file.getBytes());
             ctx.writeAndFlush(new ListMessage(serverDir));
+        }
+
+        if (msg instanceof directoryMessage directoryMessage) {
+            log.info("received directory: " + directoryMessage.getDirectString());
+            requestedDir = Path.of(directoryMessage.getDirectString());
+            log.info("requested dir: " + requestedDir);
+            ctx.writeAndFlush(new ListMessage(requestedDir));
         }
     }
     public  String getStatusByLoginAndPassword(String login, String password) {

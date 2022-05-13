@@ -5,7 +5,9 @@ public enum MessageType {
     LIST("list"),
     DOWNLOAD("download"),
     DELETE("delete"),
-    AUTH("auth"), CHANGEFILENAME("change file name");
+    AUTH("auth"),
+    CHANGEFILENAME("change file name"),
+    DIRECT("directory");
 
 
 

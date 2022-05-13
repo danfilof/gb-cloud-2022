@@ -6,10 +6,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import lombok.extern.slf4j.Slf4j;
 import ru.gb.cloud.model.*;
@@ -68,12 +66,17 @@ public class MainController implements Initializable {
 
     @FXML HBox loginBox;
 
-    private Path testDir;
+    private Path clientFileTreeDir;
+    private Path serverFileTreeDir;
 
-    private int countClick = 0;
+    private int countClientClick = 0;
 
-    private ArrayList<String> dirList = new ArrayList<>();
+    private int countServerClick = 0;
+    private ArrayList<String> clientDirList = new ArrayList<>();
+    private ArrayList<String> serverDirList = new ArrayList<>();
     private String dirs = null;
+
+    private String serverDirs = null;
 
     private void read() {
         try {
@@ -239,30 +242,29 @@ public class MainController implements Initializable {
 
     public void buttonOUT(ActionEvent actionEvent) throws IOException {
         reloadList();
-        dirList.clear();
+        clientDirList.clear();
     }
 
-    public void openDirectories(MouseEvent mouseEvent) throws IOException {
+    public void openClientDirectories(MouseEvent mouseEvent) throws IOException {
         if (mouseEvent.getClickCount() == 2) {
             buttonBACK.setVisible(true);
             //count how many times happens a double click
-            countClick++;
-            if (countClick == 1) {
-                dirList.add(0,"LocalFiles");
+            countClientClick++;
+            if (countClientClick == 1) {
+                clientDirList.add(0,"LocalFiles");
             }
-            String s = clientView.getSelectionModel().getSelectedItem();
-            if (s.contains(".txt")) {
+            String clientSelection = clientView.getSelectionModel().getSelectedItem();
+            if (clientSelection.contains(".txt")) {
                 System.out.println("Selected is a .txt file");
                 System.exit(0);
             }
             // after selecting the folder to be opened the name of the folder is added into the arraylist
-            dirList.add(s);
-            System.out.println("BEFORE (!) : (!) dirList: " + dirList);
-            int size = dirList.size();
+            clientDirList.add(clientSelection);
+            System.out.println("BEFORE (!) : (!) dirList: " + clientDirList);
             // reads the arraylist into the array
-            String[] dirsArray = Arrays.copyOf(dirList.toArray(), dirList.size(), String[].class);
+            String[] clientDirsArray = Arrays.copyOf(clientDirList.toArray(), clientDirList.size(), String[].class);
             // reads the array into string
-            dirs = Arrays.toString(dirsArray);
+            dirs = Arrays.toString(clientDirsArray);
             System.out.println("dirs: " + dirs);
             // getting rid of array syntax which isn't necessary
             dirs = dirs.replace(", ", "/");
@@ -270,29 +272,55 @@ public class MainController implements Initializable {
             dirs = dirs.replace("]", "");
             System.out.println("dirs: " + dirs);
             // using the string as a path
-            testDir = Path.of(dirs);
-            System.out.println("TestDir: " + testDir);
+            clientFileTreeDir = Path.of(dirs);
+            System.out.println("localDir: " + clientFileTreeDir);
             clientView.getItems().clear();
-            clientView.getItems().addAll(Files.list(testDir).map(Path::getFileName).map(Path::toString).toList());
+            clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
             System.out.println("---------------------");
         }
     }
 
     public void buttonBACK(ActionEvent actionEvent) throws IOException {
-       int listSizeLastValue = dirList.size() - 1;
-       dirList.remove(listSizeLastValue);
-        String[] dirsArray = Arrays.copyOf(dirList.toArray(), dirList.size(), String[].class);
+       int listSizeLastValue = clientDirList.size() - 1;
+       clientDirList.remove(listSizeLastValue);
+        String[] dirsArray = Arrays.copyOf(clientDirList.toArray(), clientDirList.size(), String[].class);
         dirs = Arrays.toString(dirsArray);
         dirs = dirs.replace(", ", "/");
         dirs = dirs.replace("[", "");
         dirs = dirs.replace("]", "");
-        testDir = Path.of(dirs);
-        System.out.println("return to: " + testDir);
+        clientFileTreeDir = Path.of(dirs);
+        System.out.println("return to: " + clientFileTreeDir);
         clientView.getItems().clear();
-        clientView.getItems().addAll(Files.list(testDir).map(Path::getFileName).map(Path::toString).toList());
+        clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
 
-        if (testDir == Path.of("LocalFiles") || dirs.equals("LocalFiles")) {
+        if (clientFileTreeDir == Path.of("LocalFiles") || dirs.equals("LocalFiles")) {
             buttonBACK.setVisible(false);
         }
     }
-}
+
+    public void openServerDirectories(MouseEvent mouseEvent) throws IOException {
+        if (mouseEvent.getClickCount() == 2) {
+            countClientClick++;
+            if (countClientClick == 1) {
+                serverDirList.add(0, "ServerFiles");
+            }
+            String serverSelection = serverView.getSelectionModel().getSelectedItem();
+            System.out.println("selected file on server: " + serverSelection);
+            if (serverSelection.contains(".txt")) {
+                System.out.println("Selected is a .txt file");
+                System.exit(0);
+            }
+                serverDirList.add(serverSelection);
+                String[] serverDirsArray = Arrays.copyOf(serverDirList.toArray(), serverDirList.size(), String[].class);
+                serverDirs = Arrays.toString(serverDirsArray);
+                System.out.println("dirs on server: " + serverDirs);
+                serverDirs = serverDirs.replace(", ", "/");
+                serverDirs = serverDirs.replace("[", "");
+                serverDirs = serverDirs.replace("]", "");
+                serverFileTreeDir = Path.of(serverDirs);
+                String serverDIRS = String.valueOf(serverFileTreeDir);
+                System.out.println("serverDIRS: " + serverDIRS);
+                net.write(new directoryMessage(serverDIRS));
+            }
+        }
+    }
