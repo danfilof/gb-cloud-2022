@@ -253,22 +253,27 @@ public class MainController implements Initializable {
 
     public void openDirectories(MouseEvent mouseEvent) throws IOException {
         if (mouseEvent.getClickCount() == 2) {
+            //count how many times happens a double click
             countClick++;
             if (countClick == 1) {
                 dirList.add(0,"LocalFiles");
             }
-            System.out.println("CountClick " + countClick);
             String s = clientView.getSelectionModel().getSelectedItem();
+            // after selecting the folder to be opened the name of the folder is added into the arraylist
             dirList.add(s);
-            System.out.println("BEFORE ITERATING dirList: " + dirList);
+            System.out.println("BEFORE (!) : (!) dirList: " + dirList);
             int size = dirList.size();
-            String[] answer = Arrays.copyOf(dirList.toArray(), dirList.size(), String[].class);
-            dirs = Arrays.toString(answer);
+            // reads the arraylist into the array
+            String[] dirsArray = Arrays.copyOf(dirList.toArray(), dirList.size(), String[].class);
+            // reads the array into string
+            dirs = Arrays.toString(dirsArray);
             System.out.println("dirs: " + dirs);
+            // getting rid of array syntax which isn't necessary
             dirs = dirs.replace(", ", "/");
             dirs = dirs.replace("[", "");
             dirs = dirs.replace("]", "");
             System.out.println("dirs: " + dirs);
+            // using the string as a path
             testDir = Path.of(dirs);
             System.out.println("TestDir: " + testDir);
             clientView.getItems().clear();
