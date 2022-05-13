@@ -84,7 +84,9 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
 
         if (msg instanceof directoryMessage directoryMessage) {
             log.info("received directory: " + directoryMessage.getDirectString());
-            requestedDir = Path.of(directoryMessage.getDirectString());
+            String reqStr = directoryMessage.getDirectString();
+            System.out.println("reqStr: " + reqStr);
+            requestedDir = Path.of(reqStr);
             log.info("requested dir: " + requestedDir);
             ctx.writeAndFlush(new ListMessage(requestedDir));
         }

@@ -84,7 +84,7 @@ public class MainController implements Initializable {
                 AbstractMessage message = net.read();
 
                 if (message instanceof ListMessage lm) {
-                    log.info("received ServerList...");
+                    System.out.println("received ServerList...");
                     serverView.getItems().clear();
                     serverView.getItems().addAll(lm.getFiles());
                 }
@@ -318,9 +318,9 @@ public class MainController implements Initializable {
                 serverDirs = serverDirs.replace("[", "");
                 serverDirs = serverDirs.replace("]", "");
                 serverFileTreeDir = Path.of(serverDirs);
-                String serverDIRS = String.valueOf(serverFileTreeDir);
-                System.out.println("serverDIRS: " + serverDIRS);
-                net.write(new directoryMessage(serverDIRS));
+                System.out.println(serverFileTreeDir);
+                String serverTree = String.valueOf(serverFileTreeDir);
+                net.write(new directoryMessage(serverTree));
             }
         }
     }
