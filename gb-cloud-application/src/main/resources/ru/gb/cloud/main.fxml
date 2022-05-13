@@ -63,5 +63,5 @@
          <Cursor fx:constant="HAND" />
       </cursor>
    </ListView>
-   <Button fx:id="buttonIN" layoutX="507.0" layoutY="25.0" mnemonicParsing="false" onAction="#buttonBACK" text="ButtonBACK" />
+   <Button fx:id="buttonBACK" layoutX="300.0" layoutY="40.0" mnemonicParsing="false" onAction="#buttonBACK" text="ButtonBACK" visible="false"/>
 </AnchorPane>

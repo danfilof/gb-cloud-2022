@@ -36,9 +36,7 @@ public class MainController implements Initializable {
     @FXML
     public Button dropSelectionButton;
     @FXML
-    public Button buttonIN;
-    @FXML
-    public Button buttonOUT;
+    public Button buttonBACK;
     @FXML
     private TextField newFileNameField;
     @FXML
@@ -246,6 +244,7 @@ public class MainController implements Initializable {
 
     public void openDirectories(MouseEvent mouseEvent) throws IOException {
         if (mouseEvent.getClickCount() == 2) {
+            buttonBACK.setVisible(true);
             //count how many times happens a double click
             countClick++;
             if (countClick == 1) {
@@ -288,7 +287,12 @@ public class MainController implements Initializable {
         dirs = dirs.replace("[", "");
         dirs = dirs.replace("]", "");
         testDir = Path.of(dirs);
+        System.out.println("return to: " + testDir);
         clientView.getItems().clear();
         clientView.getItems().addAll(Files.list(testDir).map(Path::getFileName).map(Path::toString).toList());
+
+        if (testDir == Path.of("LocalFiles") || dirs.equals("LocalFiles")) {
+            buttonBACK.setVisible(false);
+        }
     }
 }
