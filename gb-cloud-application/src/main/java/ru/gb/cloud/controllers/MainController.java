@@ -72,6 +72,11 @@ public class MainController implements Initializable {
 
     private Path testDir;
 
+    private int countClick = 0;
+
+    private ArrayList<String> dirList = new ArrayList<>();
+    private String dirs = null;
+
     private void read() {
         try {
             while (true) {
@@ -105,7 +110,6 @@ public class MainController implements Initializable {
                         downloadButton.setVisible(true);
                         renameButton.setVisible(true);
                         dropSelectionButton.setVisible(true);
-                        openDir();
                     } else {
                         log.info("user used wrong password or login...");
                         System.out.println("Wrong login or password");
@@ -124,9 +128,6 @@ public class MainController implements Initializable {
     }
     private List<String> getClientFiles() throws IOException {
         return Files.list(clientDir).map(Path::getFileName).map(Path::toString).toList();
-    }
-
-    private void openDir() throws IOException {
     }
 
     @Override
@@ -251,28 +252,28 @@ public class MainController implements Initializable {
     }
 
     public void openDirectories(MouseEvent mouseEvent) throws IOException {
-        ArrayList<String> dirList = new ArrayList<>();
-        String dirs = null;
-        dirList.add("LocalFiles");
-        String s = clientView.getSelectionModel().getSelectedItem();
-        System.out.println("Folder selected: " + s);
-        System.out.println("dirList: " + dirList);
-        dirList.add(s);
-
-
         if (mouseEvent.getClickCount() == 2) {
-            Iterator it = dirList.iterator();
-            while (it.hasNext()) {
-                dirs = dirs + "/" + it.next();
+            countClick++;
+            if (countClick == 1) {
+                dirList.add(0,"LocalFiles");
             }
-            dirs = dirs.replace("null/", "");
-            System.out.println("Detected double click");
+            System.out.println("CountClick " + countClick);
+            String s = clientView.getSelectionModel().getSelectedItem();
+            dirList.add(s);
+            System.out.println("BEFORE ITERATING dirList: " + dirList);
+            int size = dirList.size();
+            String[] answer = Arrays.copyOf(dirList.toArray(), dirList.size(), String[].class);
+            dirs = Arrays.toString(answer);
             System.out.println("dirs: " + dirs);
-
+            dirs = dirs.replace(", ", "/");
+            dirs = dirs.replace("[", "");
+            dirs = dirs.replace("]", "");
+            System.out.println("dirs: " + dirs);
             testDir = Path.of(dirs);
             System.out.println("TestDir: " + testDir);
             clientView.getItems().clear();
             clientView.getItems().addAll(Files.list(testDir).map(Path::getFileName).map(Path::toString).toList());
+            System.out.println("---------------------");
         }
 
     }
