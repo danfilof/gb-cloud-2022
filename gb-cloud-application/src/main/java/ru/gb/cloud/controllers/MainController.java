@@ -249,14 +249,20 @@ public class MainController implements Initializable {
     public void upload(ActionEvent actionEvent) throws Exception {
         String fileName = clientView.getSelectionModel().getSelectedItem();
         log.info("sent file: " + fileName);
-        net.write(new FileMessage(clientFileTreeDir.resolve(fileName)));
+
+        if (clientFileTreeDir == null) {
+            net.write(new FileMessage(clientDir.resolve(fileName)));
+        } else {
+            net.write(new FileMessage(clientFileTreeDir.resolve(fileName)));
+        }
     }
 
     public void download(ActionEvent actionEvent) throws Exception {
-        String downloadFile = serverView.getSelectionModel().getSelectedItem();
-        log.info("sent request to download a file: " + downloadFile);
+        String selectedFileToDownload = serverView.getSelectionModel().getSelectedItem();
+        log.info("sent request to download a file: " + selectedFileToDownload);
+        String downloadFileDir = serverFileTreeDir + "%" + selectedFileToDownload;
         // send the name of the file that should be downloaded (string)
-        net.write(new DownloadMessage(downloadFile));
+        net.write(new DownloadMessage(selectedFileToDownload));
     }
 
     public void reloadList() throws IOException {

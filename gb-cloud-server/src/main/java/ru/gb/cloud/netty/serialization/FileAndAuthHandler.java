@@ -32,8 +32,12 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
 
         if (msg instanceof DownloadMessage downloadMessage) {
             String downloadFile = downloadMessage.getDownloadFileName();
+            String[] downloadSplit = downloadFile.split("%");
+            String downloadDir = downloadSplit[0];
+            Path downloadPath = Path.of(downloadDir);
+            String fileToDownload = downloadSplit[1];
             log.info("received request to download {}", downloadFile);
-            ctx.write(new FileMessage(serverDir.resolve(downloadFile)));
+            ctx.write(new FileMessage(downloadPath.resolve(fileToDownload)));
             ctx.writeAndFlush(new ListMessage(serverDir));
         }
 
