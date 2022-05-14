@@ -35,6 +35,7 @@ public class MainController implements Initializable {
     public Button dropSelectionButton;
     @FXML
     public Button buttonBACK;
+    public Button buttonBACKServer;
     @FXML
     private TextField newFileNameField;
     @FXML
@@ -298,6 +299,7 @@ public class MainController implements Initializable {
 
     public void openServerDirectories(MouseEvent mouseEvent) throws IOException {
         if (mouseEvent.getClickCount() == 2) {
+            buttonBACKServer.setVisible(true);
             countServerClick++;
             if (countServerClick == 1) {
                 serverDirList.add(0, "ServerFiles");
@@ -321,4 +323,22 @@ public class MainController implements Initializable {
                 net.write(new directoryMessage(serverTree));
             }
         }
+
+    public void buttonBACKServer(ActionEvent actionEvent) throws IOException {
+        int serverListSizeLastValue = serverDirList.size() - 1;
+        serverDirList.remove(serverListSizeLastValue);
+        String[] serverDirsArray = Arrays.copyOf(serverDirList.toArray(), serverDirList.size(), String[].class);
+        serverDirs = Arrays.toString(serverDirsArray);
+        serverDirs = serverDirs.replace(", ", "/");
+        serverDirs = serverDirs.replace("[", "");
+        serverDirs = serverDirs.replace("]", "");
+        serverFileTreeDir = Path.of(serverDirs);
+        System.out.println("return to: " + serverFileTreeDir);
+        String serverTreeReturn = String.valueOf(serverFileTreeDir);
+        net.write(new directoryMessage(serverTreeReturn));
+
+        if (serverFileTreeDir == Path.of("ServerFiles") || serverDirs.equals("ServerFiles")) {
+           buttonBACKServer.setVisible(false);
+        }
     }
+}
