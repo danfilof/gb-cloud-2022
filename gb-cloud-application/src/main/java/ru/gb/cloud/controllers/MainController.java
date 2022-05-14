@@ -262,7 +262,11 @@ public class MainController implements Initializable {
         log.info("sent request to download a file: " + selectedFileToDownload);
         String downloadFileDir = serverFileTreeDir + "%" + selectedFileToDownload;
         // send the name of the file that should be downloaded (string)
-        net.write(new DownloadMessage(selectedFileToDownload));
+        if (serverFileTreeDir == null) {
+            net.write(new DownloadMessage("null" + "%" + selectedFileToDownload));
+        } else {
+            net.write(new DownloadMessage(downloadFileDir));
+        }
     }
 
     public void reloadList() throws IOException {
