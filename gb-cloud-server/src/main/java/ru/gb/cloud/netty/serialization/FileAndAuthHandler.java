@@ -10,6 +10,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
+import java.util.List;
 
 @Slf4j
 public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMessage> {
@@ -88,7 +89,9 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
             System.out.println("reqStr: " + reqStr);
             requestedDir = Path.of(reqStr);
             log.info("requested dir: " + requestedDir);
-            ctx.writeAndFlush(new ListMessage(requestedDir));
+            List<String> testDir =  Files.list(requestedDir).map(Path::getFileName).map(Path::toString).toList();
+            log.info("testDir: " + testDir);
+           ctx.writeAndFlush(new ListMessage(requestedDir));
         }
     }
     public  String getStatusByLoginAndPassword(String login, String password) {

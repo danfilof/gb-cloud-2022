@@ -82,15 +82,14 @@ public class MainController implements Initializable {
         try {
             while (true) {
                 AbstractMessage message = net.read();
-
                 if (message instanceof ListMessage lm) {
-                    System.out.println("received ServerList...");
+                    System.out.println("received ServerList..." + lm.getFiles());
                     serverView.getItems().clear();
                     serverView.getItems().addAll(lm.getFiles());
                 }
 
                 if (message instanceof FileMessage file) {
-                    log.info("received file to be downloaded: " + file.getName());
+                    System.out.println("received file to be downloaded: " + file.getName());
                     Files.write(clientDir.resolve(file.getName()), file.getBytes());
                     reloadList();
                 }
@@ -110,7 +109,6 @@ public class MainController implements Initializable {
                         uploadButton.setVisible(true);
                         downloadButton.setVisible(true);
                         renameButton.setVisible(true);
-                        dropSelectionButton.setVisible(true);
                     } else {
                         log.info("user used wrong password or login...");
                         System.out.println("Wrong login or password");
@@ -300,8 +298,8 @@ public class MainController implements Initializable {
 
     public void openServerDirectories(MouseEvent mouseEvent) throws IOException {
         if (mouseEvent.getClickCount() == 2) {
-            countClientClick++;
-            if (countClientClick == 1) {
+            countServerClick++;
+            if (countServerClick == 1) {
                 serverDirList.add(0, "ServerFiles");
             }
             String serverSelection = serverView.getSelectionModel().getSelectedItem();

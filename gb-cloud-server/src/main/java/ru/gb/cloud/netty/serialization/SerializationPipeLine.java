@@ -15,7 +15,6 @@ public class SerializationPipeLine extends ChannelInitializer<SocketChannel> {
                 new ObjectEncoder(),
                 new FileAndAuthHandler(),
                 new LocalFileHandler()
-
         );
     }
 }

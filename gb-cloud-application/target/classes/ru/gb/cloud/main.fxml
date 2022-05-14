@@ -37,7 +37,7 @@
          <Font name="Segoe UI" size="18.0" />
       </font>
    </Button>
-   <Button fx:id="deleteButton" layoutX="781.0" layoutY="582.0" mnemonicParsing="false" onAction="#delete" prefHeight="61.0" prefWidth="187.0" text="Delete" textFill="#d11111d8" visible="false">
+   <Button fx:id="deleteButton" layoutX="301.0" layoutY="582.0" mnemonicParsing="false" onAction="#delete" prefHeight="61.0" prefWidth="187.0" text="Delete" textFill="#d11111d8" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
@@ -45,7 +45,7 @@
          <Font name="Segoe UI Bold" size="18.0" />
       </font>
    </Button>
-   <Button fx:id="downloadButton" layoutX="301.0" layoutY="582.0" mnemonicParsing="false" onAction="#download" prefHeight="61.0" prefWidth="187.0" text="Download" textFill="#038ef2" visible="false">
+   <Button fx:id="downloadButton" layoutX="775.0" layoutY="582.0" mnemonicParsing="false" onAction="#download" prefHeight="61.0" prefWidth="187.0" text="Download" textFill="#038ef2" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
