@@ -3,6 +3,7 @@ package ru.gb.cloud.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,6 +21,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 @Slf4j
@@ -146,10 +148,108 @@ public class MainController implements Initializable {
         }
     }
 
+    public void openClientDirectories(MouseEvent mouseEvent) throws IOException {
+        if (mouseEvent.getClickCount() == 2) {
+            buttonBACK.setVisible(true);
+            //count how many times happens a double click
+            countClientClick++;
+            if (countClientClick == 1) {
+                clientDirList.add(0,"LocalFiles");
+            }
+            String clientSelection = clientView.getSelectionModel().getSelectedItem();
+
+            if (clientSelection.contains(".txt")) {
+                System.out.println("Selected is a .txt file");
+                System.exit(0);
+            }
+            // after selecting the folder to be opened the name of the folder is added into the arraylist
+            clientDirList.add(clientSelection);
+            System.out.println("BEFORE (!) : (!) dirList: " + clientDirList);
+            // reads the arraylist into the array
+            String[] clientDirsArray = Arrays.copyOf(clientDirList.toArray(), clientDirList.size(), String[].class);
+            // reads the array into string
+            dirs = Arrays.toString(clientDirsArray);
+            System.out.println("dirs: " + dirs);
+            // getting rid of array syntax which isn't necessary
+            dirs = dirs.replace(", ", "/");
+            dirs = dirs.replace("[", "");
+            dirs = dirs.replace("]", "");
+            System.out.println("dirs: " + dirs);
+            // using the string as a path
+            clientFileTreeDir = Path.of(dirs);
+            System.out.println("localDir: " + clientFileTreeDir);
+            clientView.getItems().clear();
+            clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
+            System.out.println("---------------------");
+        }
+    }
+
+    public void buttonBACK(ActionEvent actionEvent) throws IOException {
+        int listSizeLastValue = clientDirList.size() - 1;
+        clientDirList.remove(listSizeLastValue);
+        String[] dirsArray = Arrays.copyOf(clientDirList.toArray(), clientDirList.size(), String[].class);
+        dirs = Arrays.toString(dirsArray);
+        dirs = dirs.replace(", ", "/");
+        dirs = dirs.replace("[", "");
+        dirs = dirs.replace("]", "");
+        clientFileTreeDir = Path.of(dirs);
+        System.out.println("return to: " + clientFileTreeDir);
+        clientView.getItems().clear();
+        clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
+
+        if (clientFileTreeDir == Path.of("LocalFiles") || dirs.equals("LocalFiles")) {
+            buttonBACK.setVisible(false);
+        }
+    }
+    public void openServerDirectories(MouseEvent mouseEvent) throws IOException {
+        if (mouseEvent.getClickCount() == 2) {
+            buttonBACKServer.setVisible(true);
+            countServerClick++;
+            if (countServerClick == 1) {
+                serverDirList.add(0, "ServerFiles");
+            }
+            String serverSelection = serverView.getSelectionModel().getSelectedItem();
+            System.out.println("selected file on server: " + serverSelection);
+            if (serverSelection.contains(".txt")) {
+                System.out.println("Selected is a .txt file");
+                System.exit(0);
+            }
+            serverDirList.add(serverSelection);
+            String[] serverDirsArray = Arrays.copyOf(serverDirList.toArray(), serverDirList.size(), String[].class);
+            serverDirs = Arrays.toString(serverDirsArray);
+            System.out.println("dirs on server: " + serverDirs);
+            serverDirs = serverDirs.replace(", ", "/");
+            serverDirs = serverDirs.replace("[", "");
+            serverDirs = serverDirs.replace("]", "");
+            serverFileTreeDir = Path.of(serverDirs);
+            System.out.println(serverFileTreeDir);
+            String serverTree = String.valueOf(serverFileTreeDir);
+            net.write(new directoryMessage(serverTree));
+        }
+    }
+
+    public void buttonBACKServer(ActionEvent actionEvent) throws IOException {
+        int serverListSizeLastValue = serverDirList.size() - 1;
+        serverDirList.remove(serverListSizeLastValue);
+        String[] serverDirsArray = Arrays.copyOf(serverDirList.toArray(), serverDirList.size(), String[].class);
+        serverDirs = Arrays.toString(serverDirsArray);
+        serverDirs = serverDirs.replace(", ", "/");
+        serverDirs = serverDirs.replace("[", "");
+        serverDirs = serverDirs.replace("]", "");
+        serverFileTreeDir = Path.of(serverDirs);
+        System.out.println("return to: " + serverFileTreeDir);
+        String serverTreeReturn = String.valueOf(serverFileTreeDir);
+        net.write(new directoryMessage(serverTreeReturn));
+
+        if (serverFileTreeDir == Path.of("ServerFiles") || serverDirs.equals("ServerFiles")) {
+            buttonBACKServer.setVisible(false);
+        }
+    }
+
     public void upload(ActionEvent actionEvent) throws Exception {
         String fileName = clientView.getSelectionModel().getSelectedItem();
         log.info("sent file: " + fileName);
-        net.write(new FileMessage(clientDir.resolve(fileName)));
+        net.write(new FileMessage(clientFileTreeDir.resolve(fileName)));
     }
 
     public void download(ActionEvent actionEvent) throws Exception {
@@ -237,108 +337,5 @@ public class MainController implements Initializable {
 
     public void dropSelectionOnServerList(MouseEvent mouseEvent) {
         serverView.getSelectionModel().clearSelection();
-    }
-
-    public void buttonOUT(ActionEvent actionEvent) throws IOException {
-        reloadList();
-        clientDirList.clear();
-    }
-
-    public void openClientDirectories(MouseEvent mouseEvent) throws IOException {
-        if (mouseEvent.getClickCount() == 2) {
-            buttonBACK.setVisible(true);
-            //count how many times happens a double click
-            countClientClick++;
-            if (countClientClick == 1) {
-                clientDirList.add(0,"LocalFiles");
-            }
-            String clientSelection = clientView.getSelectionModel().getSelectedItem();
-            if (clientSelection.contains(".txt")) {
-                System.out.println("Selected is a .txt file");
-                System.exit(0);
-            }
-            // after selecting the folder to be opened the name of the folder is added into the arraylist
-            clientDirList.add(clientSelection);
-            System.out.println("BEFORE (!) : (!) dirList: " + clientDirList);
-            // reads the arraylist into the array
-            String[] clientDirsArray = Arrays.copyOf(clientDirList.toArray(), clientDirList.size(), String[].class);
-            // reads the array into string
-            dirs = Arrays.toString(clientDirsArray);
-            System.out.println("dirs: " + dirs);
-            // getting rid of array syntax which isn't necessary
-            dirs = dirs.replace(", ", "/");
-            dirs = dirs.replace("[", "");
-            dirs = dirs.replace("]", "");
-            System.out.println("dirs: " + dirs);
-            // using the string as a path
-            clientFileTreeDir = Path.of(dirs);
-            System.out.println("localDir: " + clientFileTreeDir);
-            clientView.getItems().clear();
-            clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
-            System.out.println("---------------------");
-        }
-    }
-
-    public void buttonBACK(ActionEvent actionEvent) throws IOException {
-       int listSizeLastValue = clientDirList.size() - 1;
-       clientDirList.remove(listSizeLastValue);
-        String[] dirsArray = Arrays.copyOf(clientDirList.toArray(), clientDirList.size(), String[].class);
-        dirs = Arrays.toString(dirsArray);
-        dirs = dirs.replace(", ", "/");
-        dirs = dirs.replace("[", "");
-        dirs = dirs.replace("]", "");
-        clientFileTreeDir = Path.of(dirs);
-        System.out.println("return to: " + clientFileTreeDir);
-        clientView.getItems().clear();
-        clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
-
-        if (clientFileTreeDir == Path.of("LocalFiles") || dirs.equals("LocalFiles")) {
-            buttonBACK.setVisible(false);
-        }
-    }
-
-    public void openServerDirectories(MouseEvent mouseEvent) throws IOException {
-        if (mouseEvent.getClickCount() == 2) {
-            buttonBACKServer.setVisible(true);
-            countServerClick++;
-            if (countServerClick == 1) {
-                serverDirList.add(0, "ServerFiles");
-            }
-            String serverSelection = serverView.getSelectionModel().getSelectedItem();
-            System.out.println("selected file on server: " + serverSelection);
-            if (serverSelection.contains(".txt")) {
-                System.out.println("Selected is a .txt file");
-                System.exit(0);
-            }
-                serverDirList.add(serverSelection);
-                String[] serverDirsArray = Arrays.copyOf(serverDirList.toArray(), serverDirList.size(), String[].class);
-                serverDirs = Arrays.toString(serverDirsArray);
-                System.out.println("dirs on server: " + serverDirs);
-                serverDirs = serverDirs.replace(", ", "/");
-                serverDirs = serverDirs.replace("[", "");
-                serverDirs = serverDirs.replace("]", "");
-                serverFileTreeDir = Path.of(serverDirs);
-                System.out.println(serverFileTreeDir);
-                String serverTree = String.valueOf(serverFileTreeDir);
-                net.write(new directoryMessage(serverTree));
-            }
-        }
-
-    public void buttonBACKServer(ActionEvent actionEvent) throws IOException {
-        int serverListSizeLastValue = serverDirList.size() - 1;
-        serverDirList.remove(serverListSizeLastValue);
-        String[] serverDirsArray = Arrays.copyOf(serverDirList.toArray(), serverDirList.size(), String[].class);
-        serverDirs = Arrays.toString(serverDirsArray);
-        serverDirs = serverDirs.replace(", ", "/");
-        serverDirs = serverDirs.replace("[", "");
-        serverDirs = serverDirs.replace("]", "");
-        serverFileTreeDir = Path.of(serverDirs);
-        System.out.println("return to: " + serverFileTreeDir);
-        String serverTreeReturn = String.valueOf(serverFileTreeDir);
-        net.write(new directoryMessage(serverTreeReturn));
-
-        if (serverFileTreeDir == Path.of("ServerFiles") || serverDirs.equals("ServerFiles")) {
-           buttonBACKServer.setVisible(false);
-        }
     }
 }

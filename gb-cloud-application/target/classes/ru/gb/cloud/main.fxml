@@ -64,5 +64,5 @@
       </cursor>
    </ListView>
    <Button fx:id="buttonBACK" layoutX="300.0" layoutY="40.0" mnemonicParsing="false" onAction="#buttonBACK" text="ButtonBACK" visible="false" />
-   <Button fx:id="buttonBACKServer" layoutX="700.0" layoutY="40.0" mnemonicParsing="false" onAction="#buttonBACKServer" text="ButtonBACK" visible="false" />
+   <Button fx:id="buttonBACKServer" layoutX="900.0" layoutY="40.0" mnemonicParsing="false" onAction="#buttonBACKServer" text="ButtonBACK" visible="false" />
 </AnchorPane>
