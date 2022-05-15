@@ -47,10 +47,21 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
 
         if (msg instanceof DeleteMessage deleteMessage) {
             String deleteFile = deleteMessage.getDeleteFileName();
-            log.info("received request to delete {} file", deleteFile);
-            Path toDelete = Path.of("ServerFiles", deleteFile);
-            Files.deleteIfExists(toDelete);
-            ctx.writeAndFlush(new ListMessage(serverDir));
+            String[] deleteSplit = deleteFile.split("%");
+            String deleteDir = deleteSplit[0];
+            String fileToDelete = deleteSplit[1];
+            log.info("received request to delete {} file", fileToDelete);
+
+            if (deleteDir.equals("null")){
+                Path toDelete = Path.of("ServerFiles", fileToDelete);
+                Files.deleteIfExists(toDelete);
+                ctx.writeAndFlush(new ListMessage(serverDir));
+            } else {
+                Path toBeDeleted = Path.of(deleteDir, fileToDelete);
+                Files.deleteIfExists(toBeDeleted);
+                Path toSend = Path.of(deleteDir);
+                ctx.writeAndFlush(new ListMessage(toSend));
+            }
         }
 
         if (msg instanceof AuthMessage authMessage) {

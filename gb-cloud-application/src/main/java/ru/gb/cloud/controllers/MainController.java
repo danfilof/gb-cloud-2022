@@ -277,14 +277,25 @@ public class MainController implements Initializable {
     public void delete(ActionEvent actionEvent) throws IOException {
         String fileToDeleteOnServer = serverView.getSelectionModel().getSelectedItem();
         System.out.println("sent request to delete a file: " + fileToDeleteOnServer);
-        // send the name of the file that should be deleted (string)
-        net.write(new DeleteMessage(fileToDeleteOnServer));
+        String deleteFileDir = serverFileTreeDir + "%" + fileToDeleteOnServer;
+        if (serverFileTreeDir == null) {
+            net.write(new DeleteMessage("null" + "%" + fileToDeleteOnServer));
+        } else {
+            net.write(new DeleteMessage(deleteFileDir));
+        }
 
         String fileToDeleteLocal = clientView.getSelectionModel().getSelectedItem();
-        Path toDelete = Path.of("LocalFiles", fileToDeleteLocal);
-        Files.deleteIfExists(toDelete);
-        reloadList();
 
+        if (clientFileTreeDir == null) {
+            Path toDelete = Path.of("LocalFiles", fileToDeleteLocal);
+            Files.deleteIfExists(toDelete);
+            reloadList();
+        } else {
+            Path toBeDeleted = Path.of(String.valueOf(clientFileTreeDir), fileToDeleteLocal);
+            Files.deleteIfExists(toBeDeleted);
+            clientView.getItems().clear();
+            clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
+        }
         serverView.getSelectionModel().clearSelection();
         clientView.getSelectionModel().clearSelection();
     }
