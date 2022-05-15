@@ -324,31 +324,60 @@ public class MainController implements Initializable {
         String newFileName = newFileNameField.getText();
 
         if (localFileToRename == null) {
-            String authData = serverFileToRename + "#" + newFileName;
-            net.write(new ChangeFileNameMessage(authData));
+
+            if (serverFileTreeDir == null) {
+                String toRename = "null" + "#" + serverFileToRename + "#" + newFileName;
+                net.write(new ChangeFileNameMessage(toRename));
+            } else {
+                String toRename = serverFileTreeDir + "#" + serverFileToRename + "#" + newFileName;
+                net.write(new ChangeFileNameMessage(toRename));
+            }
+
             fileNameChangeBox.setVisible(false);
             newFileNameField.clear();
         }
 
         if (serverFileToRename == null) {
-            File originalFile = new File("LocalFiles", localFileToRename);
-            File newFile = new File("LocalFiles", newFileName);
+            if (clientFileTreeDir == null) {
+                File originalFile = new File("LocalFiles", localFileToRename);
+                File newFile = new File("LocalFiles", newFileName);
 
-            if (localFileToRename != null ) {
-                if (newFile.exists()) {
-                    System.out.println("file exists already");
-                }
-                boolean successFileNameChange = originalFile.renameTo(newFile);
+                if (localFileToRename != null ) {
+                    if (newFile.exists()) {
+                        System.out.println("file exists already");
+                    }
+                    boolean successFileNameChange = originalFile.renameTo(newFile);
 
-                if (!successFileNameChange) {
-                    System.out.println("Something went wrong, cannot rename a file");
+                    if (!successFileNameChange) {
+                        System.out.println("Something went wrong, cannot rename a file");
+                    }
+                    fileNameChangeBox.setVisible(false);
+                    newFileNameField.clear();
+                    reloadList();
+                } else {
+                    System.out.println("no data given");
                 }
-                fileNameChangeBox.setVisible(false);
-                newFileNameField.clear();
-                reloadList();
             } else {
-                System.out.println("no data given");
+                File originalFile = new File(String.valueOf(clientFileTreeDir), localFileToRename);
+                File newFile = new File(String.valueOf(clientFileTreeDir), newFileName);
+                if (localFileToRename != null ) {
+                    if (newFile.exists()) {
+                        System.out.println("file exists already");
+                    }
+                    boolean successFileNameChange = originalFile.renameTo(newFile);
+
+                    if (!successFileNameChange) {
+                        System.out.println("Something went wrong, cannot rename a file");
+                    }
+                    fileNameChangeBox.setVisible(false);
+                    newFileNameField.clear();
+                    clientView.getItems().clear();
+                    clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
+                } else {
+                    System.out.println("no data given");
+                }
             }
+
         }
     }
 

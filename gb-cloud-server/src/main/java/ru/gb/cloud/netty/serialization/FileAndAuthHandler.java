@@ -80,20 +80,39 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
             log.info("received request to rename a file");
             String fileNames = changeFileNameMessage.getFileNames();
             String[] splitFileNames = fileNames.split("#");
-            String originalName = splitFileNames[0];
-            String newName = splitFileNames[1];
-            File originalFile = new File("ServerFiles", originalName);
-            File newFile = new File("ServerFiles", newName);
+            String changeFileNameDir = splitFileNames[0];
+            String originalName = splitFileNames[1];
+            String newName = splitFileNames[2];
+            log.info(changeFileNameDir + " || " + originalName + " || " + newName);
 
-            if (newFile.exists()) {
-               log.info("file exists already");
-            }
-            boolean successFileNameChange = originalFile.renameTo(newFile);
+            if (changeFileNameDir.equals("null")) {
+                File originalFile = new File("ServerFiles", originalName);
+                File newFile = new File("ServerFiles", newName);
 
-            if (!successFileNameChange) {
-               log.info("Something went wrong, cannot rename a file");
+                if (newFile.exists()) {
+                    log.info("file exists already");
+                }
+                boolean successFileNameChange = originalFile.renameTo(newFile);
+
+                if (!successFileNameChange) {
+                    log.info("Something went wrong, cannot rename a file");
+                }
+                ctx.writeAndFlush(new ListMessage(serverDir));
+            } else {
+                File originalFile = new File(changeFileNameDir, originalName);
+                File newFile = new File(changeFileNameDir, newName);
+                if (newFile.exists()) {
+                    log.info("file exists already");
+                }
+                boolean successFileNameChange = originalFile.renameTo(newFile);
+
+                if (!successFileNameChange) {
+                    log.info("Something went wrong, cannot rename a file");
+                }
+                Path changedNamePath = Path.of(changeFileNameDir);
+                ctx.writeAndFlush(new ListMessage(changedNamePath));
             }
-            ctx.writeAndFlush(new ListMessage(serverDir));
+
         }
 
         if (msg instanceof FileMessage file) {
