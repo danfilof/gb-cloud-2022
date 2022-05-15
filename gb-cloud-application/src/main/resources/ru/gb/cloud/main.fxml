@@ -15,7 +15,7 @@
       <Button fx:id="cancelAuthButton" layoutX="340.0" mnemonicParsing="false" onAction="#cancelAuthClick" text="Cancel" visible="true" />
    </HBox>
 
-   <HBox fx:id="fileNameChangeBox" layoutX="632.0" layoutY="14.0" prefHeight="53.0" prefWidth="226.0" visible="false">
+   <HBox fx:id="fileNameChangeBox" layoutX="410.0" layoutY="380.0" prefHeight="53.0" prefWidth="226.0" visible="false">
       <TextField fx:id="newFileNameField" promptText="New file name" visible="true" />
       <Button fx:id="confirmFileNameChangeButton" defaultButton="true" onAction="#confirmFileNameChange" text="Confirm" visible="true" />
    </HBox>
@@ -24,12 +24,12 @@
    <TextArea fx:id="failedAuthMessage" layoutX="2.0" layoutY="162.0" prefHeight="25.0" prefWidth="434.0" text="Something went wrong. Probably wrong login or  password. Please try again." visible="false" />
 
 
-    <ListView fx:id="serverView" layoutX="544.0" layoutY="87.0" onMouseClicked="#openServerDirectories" onMouseEntered="#dropSelectionOnClientList" prefHeight="468.0" prefWidth="473.0" visible="false">
+    <ListView fx:id="serverView" layoutX="683.0" layoutY="87.0" onMouseClicked="#openServerDirectories" onMouseEntered="#dropSelectionOnClientList" prefHeight="456.0" prefWidth="334.0" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
     </ListView>
-   <Button fx:id="uploadButton" layoutX="64.0" layoutY="582.0" mnemonicParsing="false" onAction="#upload" prefHeight="61.0" prefWidth="187.0" text="Upload" textFill="#04f500b5" textOverrun="CLIP" visible="false">
+   <Button fx:id="uploadButton" layoutX="422.0" layoutY="90.0" mnemonicParsing="false" onAction="#upload" prefHeight="61.0" prefWidth="187.0" text="Upload" textFill="#04f500b5" textOverrun="CLIP" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
@@ -37,7 +37,7 @@
          <Font name="Segoe UI" size="18.0" />
       </font>
    </Button>
-   <Button fx:id="deleteButton" layoutX="301.0" layoutY="582.0" mnemonicParsing="false" onAction="#delete" prefHeight="61.0" prefWidth="187.0" text="Delete" textFill="#d11111d8" visible="false">
+   <Button fx:id="deleteButton" layoutX="422.0" layoutY="446.0" mnemonicParsing="false" onAction="#delete" prefHeight="61.0" prefWidth="187.0" text="Delete" textFill="#d11111d8" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
@@ -45,7 +45,7 @@
          <Font name="Segoe UI Bold" size="18.0" />
       </font>
    </Button>
-   <Button fx:id="downloadButton" layoutX="775.0" layoutY="582.0" mnemonicParsing="false" onAction="#download" prefHeight="61.0" prefWidth="187.0" text="Download" textFill="#038ef2" visible="false">
+   <Button fx:id="downloadButton" layoutX="422.0" layoutY="181.0" mnemonicParsing="false" onAction="#download" prefHeight="61.0" prefWidth="187.0" text="Download" textFill="#038ef2" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
@@ -53,16 +53,16 @@
          <Font name="Segoe UI" size="18.0" />
       </font>
    </Button>
-   <Button fx:id="renameButton" layoutX="544.0" layoutY="582.0" mnemonicParsing="false" onAction="#rename" prefHeight="61.0" prefWidth="187.0" text="Rename" textFill="#ffaa00" visible="false">
+   <Button fx:id="renameButton" layoutX="422.0" layoutY="285.0" mnemonicParsing="false" onAction="#rename" prefHeight="61.0" prefWidth="187.0" text="Rename" textFill="#ffaa00" visible="false">
       <font>
          <Font name="Segoe UI" size="18.0" />
       </font>
    </Button>
-   <ListView fx:id="clientView" layoutX="14.0" layoutY="87.0" onMouseClicked="#openClientDirectories" onMouseEntered="#dropSelectionOnServerList" prefHeight="468.0" prefWidth="473.0" visible="false">
+   <ListView fx:id="clientView" layoutX="14.0" layoutY="87.0" onMouseClicked="#openClientDirectories" onMouseEntered="#dropSelectionOnServerList" prefHeight="456.0" prefWidth="334.0" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
    </ListView>
-   <Button fx:id="buttonBACK" layoutX="300.0" layoutY="40.0" mnemonicParsing="false" onAction="#buttonBACK" text="ButtonBACK" visible="false" />
-   <Button fx:id="buttonBACKServer" layoutX="900.0" layoutY="40.0" mnemonicParsing="false" onAction="#buttonBACKServer" text="ButtonBACK" visible="false" />
+   <Button fx:id="buttonBACK" layoutX="15.0" layoutY="60.0" mnemonicParsing="false" onAction="#buttonBACK" text="ButtonBACK" visible="false" />
+   <Button fx:id="buttonBACKServer" layoutX="935.0" layoutY="60.0" mnemonicParsing="false" onAction="#buttonBACKServer" text="ButtonBACK" visible="false" />
 </AnchorPane>
