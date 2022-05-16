@@ -8,7 +8,9 @@ public enum MessageType {
     AUTH("auth"),
     CHANGEFILENAME("change file name"),
     DIRECT("directory"),
-    CREATENEWDIR("create new dir");
+    CREATENEWDIR("create new dir"),
+
+    MOVE("move");
 
 
 

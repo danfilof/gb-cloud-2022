@@ -164,6 +164,27 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
                 ctx.writeAndFlush(new ListMessage(path));
             }
         }
+
+        if (msg instanceof  moveMessage moveMessage) {
+            String moveData = moveMessage.getMoveData();
+            String[] moveDataArr = moveData.split("#");
+            String initialDir = moveDataArr[0];
+            String finalDir = moveDataArr[1];
+            String actualFile = moveDataArr[2];
+
+            if (initialDir.equals("null")) {
+                File serverFile1 = new File("ServerFiles" + "/" + actualFile);
+                serverFile1.renameTo(new File(finalDir + "/" + actualFile));
+                Path path1 = Path.of(finalDir);
+                ctx.writeAndFlush(new ListMessage(path1));
+            } else {
+                File serverFile2 = new File(initialDir + "/" + actualFile);
+                serverFile2.renameTo(new File(finalDir + "/" + actualFile));
+                Path path2 = Path.of(finalDir);
+                ctx.writeAndFlush(new ListMessage(path2));
+            }
+
+        }
     }
     public  String getStatusByLoginAndPassword(String login, String password) {
         connect();

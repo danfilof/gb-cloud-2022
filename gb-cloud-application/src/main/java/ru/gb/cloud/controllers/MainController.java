@@ -97,6 +97,8 @@ public class MainController implements Initializable {
     private String clientSelectedFileToMove = null;
     private String ServerSelectedFileToMove = null;
 
+
+
     private void read() {
         try {
             while (true) {
@@ -477,10 +479,10 @@ public class MainController implements Initializable {
         String localFileToMove = clientSelectedFileToMove;
         String serverFileToMove = ServerSelectedFileToMove;
         String localFirstDir = initialLocalDir + "/" + localFileToMove;
-        String serverFirstDir = initialServerDir + "/" + serverFileToMove;
+        String serverFirstDir = initialServerDir;
 
         String localFinalDir = String.valueOf(clientFileTreeDir) + "/" + localFileToMove;
-        String serverFinalDir = String.valueOf(serverFileTreeDir) + "/" + serverFileToMove;
+        String serverFinalDir = String.valueOf(serverFileTreeDir);
 
         if (serverFileToMove == null) {
 
@@ -503,6 +505,17 @@ public class MainController implements Initializable {
 
         if (localFileToMove == null) {
 
+            if (serverFirstDir == null) {
+                String toSendMove = "null" + "#" + serverFinalDir + "#" + serverFileToMove;
+                net.write(new moveMessage(toSendMove));
+                confirmMoveButton.setVisible(false);
+                moveButton.setVisible(true);
+            } else {
+                String toSendMove = serverFirstDir + "#" + serverFinalDir + "#" + serverFileToMove;
+                net.write(new moveMessage(toSendMove));
+                confirmMoveButton.setVisible(false);
+                moveButton.setVisible(true);
+            }
         }
 
     }
