@@ -36,8 +36,15 @@ public class MainController implements Initializable {
     @FXML
     public Button dropSelectionButton;
     @FXML
-    public Button buttonBACK;
-    public Button buttonBACKServer;
+    public TextField newFolderNameField;
+    @FXML
+    private Button buttonBACK;
+    @FXML
+    private Button buttonBACKServer;
+    @FXML
+    private Button createNewFolderButton;
+    @FXML
+    private HBox createNewFolder;
     @FXML
     private TextField newFileNameField;
     @FXML
@@ -387,5 +394,58 @@ public class MainController implements Initializable {
 
     public void dropSelectionOnServerList(MouseEvent mouseEvent) {
         serverView.getSelectionModel().clearSelection();
+    }
+
+    public void createNewFolder(ActionEvent actionEvent) {
+        createNewFolder.setVisible(true);
+
+    }
+
+    public void confirmFolderNameChange(ActionEvent actionEvent) throws IOException {
+        String serverSideSelected = serverView.getSelectionModel().getSelectedItem();
+        String localSideSelected = clientView.getSelectionModel().getSelectedItem();
+        String newFolderName = newFolderNameField.getText();
+
+
+        if (serverSideSelected == null) {
+
+            if (clientFileTreeDir == null) {
+                String toCreateFolder = "LocalFiles" + "/" + newFolderName;
+                File newFolder = new File(toCreateFolder);
+
+                boolean bool = newFolder.mkdir();
+                if(bool){
+                    System.out.println("Folder is created successfully");
+                }else{
+                    System.out.println("Something went wrong. Could not create a directory");
+                }
+                newFolderNameField.clear();
+                createNewFolder.setVisible(false);
+                reloadList();
+            } else {
+                String toCreateFolder = clientFileTreeDir + "/" + newFolderName;
+                File newFolder = new File(toCreateFolder);
+
+                boolean bool = newFolder.mkdir();
+                if(bool){
+                    System.out.println("Folder is created successfully");
+                }else{
+                    System.out.println("Something went wrong. Could not create a directory");
+                }
+                newFolderNameField.clear();
+                createNewFolder.setVisible(false);
+                clientView.getItems().clear();
+                clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
+            }
+        }
+
+        if (localSideSelected == null) {
+
+            if (serverFileTreeDir == null) {
+
+            } else {
+
+            }
+        }
     }
 }
