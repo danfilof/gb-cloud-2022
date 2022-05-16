@@ -1,5 +1,6 @@
 package ru.gb.cloud.controllers;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -104,9 +105,15 @@ public class MainController implements Initializable {
             while (true) {
                 AbstractMessage message = net.read();
                 if (message instanceof ListMessage lm) {
-                    System.out.println("received ServerList..." + lm.getFiles());
-                    serverView.getItems().clear();
-                    serverView.getItems().addAll(lm.getFiles());
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println("received ServerList..." + lm.getFiles());
+                            serverView.getItems().clear();
+                            serverView.getItems().addAll(lm.getFiles());
+                        }
+                    });
+
                 }
 
                 if (message instanceof FileMessage file) {
