@@ -105,6 +105,7 @@ public class MainController implements Initializable {
             while (true) {
                 AbstractMessage message = net.read();
                 if (message instanceof ListMessage lm) {
+                    // In order to avoid jfx exception, use Platform.runLater
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
@@ -127,6 +128,7 @@ public class MainController implements Initializable {
                     log.info("received authentification status: " + status);
                     if (status.equals("%OK")) {
                         log.info("successfully authenticated...");
+                        // make all buttons and list visible
                         loginBox.setVisible(false);
                         failedAuthMessage.setVisible(false);
                         failedAuthImage.setVisible(false);
@@ -141,12 +143,14 @@ public class MainController implements Initializable {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
+                                // add some background gradient
                                 mainAnchorPane.setStyle("-fx-background-color: linear-gradient(#4568DC, #B06AB3);");
                             }
                         });
                     } else {
                         log.info("user used wrong password or login...");
                         System.out.println("Wrong login or password");
+                        // upload image
                         InputStream stream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\sad_robot.jpg");
                         Image image = new Image(stream);
                         failedAuthImage.setImage(image);
@@ -183,13 +187,13 @@ public class MainController implements Initializable {
     public void openClientDirectories(MouseEvent mouseEvent) throws IOException {
         if (mouseEvent.getClickCount() == 2) {
             buttonBACK.setVisible(true);
-            //count how many times happens a double click
+            //count how many times does the double click happen
             countClientClick++;
             if (countClientClick == 1) {
                 clientDirList.add(0,"LocalFiles");
             }
             String clientSelection = clientView.getSelectionModel().getSelectedItem();
-
+            // TODO if selected is a file
             if (clientSelection.contains(".txt")) {
                 System.out.println("Selected is a .txt file");
                 System.exit(0);
@@ -217,10 +221,12 @@ public class MainController implements Initializable {
     }
 
     public void buttonBACK(ActionEvent actionEvent) throws IOException {
+        //this button allows to return to previous directory
         int listSizeLastValue = clientDirList.size() - 1;
         clientDirList.remove(listSizeLastValue);
         String[] dirsArray = Arrays.copyOf(clientDirList.toArray(), clientDirList.size(), String[].class);
         dirs = Arrays.toString(dirsArray);
+        // getting rid of array syntax which isn't necessary
         dirs = dirs.replace(", ", "/");
         dirs = dirs.replace("[", "");
         dirs = dirs.replace("]", "");
@@ -230,6 +236,7 @@ public class MainController implements Initializable {
         clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
 
         if (clientFileTreeDir == Path.of("LocalFiles") || dirs.equals("LocalFiles")) {
+            // if the user reaches the "root folder" the button disappears in order to avoid user going out of the folder
             buttonBACK.setVisible(false);
         }
     }
@@ -238,10 +245,12 @@ public class MainController implements Initializable {
             buttonBACKServer.setVisible(true);
             countServerClick++;
             if (countServerClick == 1) {
+                // every time user any new directory the [0] index in array list becomes "root folder"
                 serverDirList.add(0, "ServerFiles");
             }
             String serverSelection = serverView.getSelectionModel().getSelectedItem();
             System.out.println("selected file on server: " + serverSelection);
+
             if (serverSelection.contains(".txt")) {
                 System.out.println("Selected is a .txt file");
                 System.exit(0);
@@ -256,6 +265,7 @@ public class MainController implements Initializable {
             serverFileTreeDir = Path.of(serverDirs);
             System.out.println(serverFileTreeDir);
             String serverTree = String.valueOf(serverFileTreeDir);
+            // sending the path needed to the server
             net.write(new directoryMessage(serverTree));
         }
     }
@@ -278,10 +288,17 @@ public class MainController implements Initializable {
         }
     }
 
+    // In every futher usage "serverFileTreeDir" and "clientFileTreeDir" are basically the directories which are opened
+    // in the ListViews.
+
+    // if the serverFileTreeDir or clientFileTreeDir == null, that means that the file is in the 'root folder' - either "LocalFiles" or
+    // "ServerFiles" for all other further usages
+
+    // for any further usage, there is a script that drops selection on a first list when a mouse enters the second
+
     public void upload(ActionEvent actionEvent) throws Exception {
         String fileName = clientView.getSelectionModel().getSelectedItem();
         log.info("sent file: " + fileName);
-
         if (clientFileTreeDir == null) {
             net.write(new FileMessage(clientDir.resolve(fileName)));
         } else {
@@ -336,7 +353,7 @@ public class MainController implements Initializable {
         String login = loginField.getText();
         String password = passwordField.getText();
         String authData = login + "#" + password;
-        // send "coded" authenticate data
+        // send "coded" authentication data
         net.write(new AuthMessage(authData));
         log.info("sent request to authenticate...");
     }
@@ -347,6 +364,8 @@ public class MainController implements Initializable {
     }
 
     public void rename(ActionEvent actionEvent) {
+        // make visible textArea for new file name
+        // make visible button to confirm the change
         fileNameChangeBox.setVisible(true);
     }
 
@@ -431,7 +450,6 @@ public class MainController implements Initializable {
         String localSideSelected = clientView.getSelectionModel().getSelectedItem();
         String newFolderName = newFolderNameField.getText();
 
-
         if (serverSideSelected == null) {
 
             if (clientFileTreeDir == null) {
@@ -483,6 +501,7 @@ public class MainController implements Initializable {
     public void move(ActionEvent actionEvent) {
         clientSelectedFileToMove = clientView.getSelectionModel().getSelectedItem();
         ServerSelectedFileToMove = serverView.getSelectionModel().getSelectedItem();
+        // getting the directories of files before move
         initialLocalDir = String.valueOf(clientFileTreeDir);
         initialServerDir = String.valueOf(serverFileTreeDir);
         confirmMoveButton.setVisible(true);
@@ -490,11 +509,13 @@ public class MainController implements Initializable {
     }
 
     public void moveHere(ActionEvent actionEvent) throws IOException {
+        // name of the files to be moved
         String localFileToMove = clientSelectedFileToMove;
         String serverFileToMove = ServerSelectedFileToMove;
+        // saving the initial directories of the files
         String localFirstDir = initialLocalDir + "/" + localFileToMove;
         String serverFirstDir = initialServerDir;
-
+        // getting the desired directories where files should be moved
         String localFinalDir = String.valueOf(clientFileTreeDir) + "/" + localFileToMove;
         String serverFinalDir = String.valueOf(serverFileTreeDir);
 
@@ -531,6 +552,5 @@ public class MainController implements Initializable {
                 moveButton.setVisible(true);
             }
         }
-
     }
 }
