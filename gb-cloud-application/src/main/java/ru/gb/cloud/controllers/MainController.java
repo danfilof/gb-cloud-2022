@@ -38,6 +38,10 @@ public class MainController implements Initializable {
     @FXML
     public TextField newFolderNameField;
     @FXML
+    private Button confirmMoveButton;
+    @FXML
+    private Button moveButton;
+    @FXML
     private Button buttonBACK;
     @FXML
     private Button buttonBACKServer;
@@ -87,6 +91,11 @@ public class MainController implements Initializable {
     private String dirs = null;
 
     private String serverDirs = null;
+
+    private String initialLocalDir = null;
+    private String initialServerDir = null;
+    private String clientSelectedFileToMove = null;
+    private String ServerSelectedFileToMove = null;
 
     private void read() {
         try {
@@ -453,5 +462,48 @@ public class MainController implements Initializable {
                 createNewFolder.setVisible(false);
             }
         }
+    }
+
+    public void move(ActionEvent actionEvent) {
+        clientSelectedFileToMove = clientView.getSelectionModel().getSelectedItem();
+        ServerSelectedFileToMove = serverView.getSelectionModel().getSelectedItem();
+        initialLocalDir = String.valueOf(clientFileTreeDir);
+        initialServerDir = String.valueOf(serverFileTreeDir);
+        confirmMoveButton.setVisible(true);
+        moveButton.setVisible(false);
+    }
+
+    public void moveHere(ActionEvent actionEvent) throws IOException {
+        String localFileToMove = clientSelectedFileToMove;
+        String serverFileToMove = ServerSelectedFileToMove;
+        String localFirstDir = initialLocalDir + "/" + localFileToMove;
+        String serverFirstDir = initialServerDir + "/" + serverFileToMove;
+
+        String localFinalDir = String.valueOf(clientFileTreeDir) + "/" + localFileToMove;
+        String serverFinalDir = String.valueOf(serverFileTreeDir) + "/" + serverFileToMove;
+
+        if (serverFileToMove == null) {
+
+            if (initialLocalDir == null) {
+                System.out.println("FROM LOCALFILES: " + "LocalFiles" + "/" + localFileToMove);
+                File localFile1 = new File("LocalFiles" + "/" + localFileToMove);
+                localFile1.renameTo(new File(localFinalDir));
+                reloadList();
+                confirmMoveButton.setVisible(false);
+                moveButton.setVisible(true);
+            } else {
+                File localFile1 = new File(localFirstDir);
+                localFile1.renameTo(new File(localFinalDir));
+                clientView.getItems().clear();
+                clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
+                confirmMoveButton.setVisible(false);
+                moveButton.setVisible(true);
+            }
+        }
+
+        if (localFileToMove == null) {
+
+        }
+
     }
 }

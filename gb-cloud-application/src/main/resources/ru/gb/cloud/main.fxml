@@ -55,7 +55,7 @@
          <Cursor fx:constant="HAND" />
       </cursor>
       <font>
-         <Font name="Segoe UI Bold" size="18.0" />
+         <Font name="Segoe UI" size="18.0" />
       </font>
    </Button>
    <Button fx:id="downloadButton" layoutX="422.0" layoutY="145.0" mnemonicParsing="false" onAction="#download" prefHeight="61.0" prefWidth="187.0" text="Download" textFill="#038ef2" visible="true">
@@ -66,6 +66,25 @@
          <Font name="Segoe UI" size="18.0" />
       </font>
    </Button>
+
+   <Button fx:id="moveButton" layoutX="422.0" layoutY="420.0" mnemonicParsing="false" onAction="#move" prefHeight="61.0" prefWidth="187.0" text="Move" textFill="#c305f0" visible="true">
+      <cursor>
+         <Cursor fx:constant="HAND" />
+      </cursor>
+      <font>
+         <Font name="Segoe UI" size="18.0" />
+      </font>
+   </Button>
+
+   <Button fx:id="confirmMoveButton" layoutX="422.0" layoutY="420.0" mnemonicParsing="false" onAction="#moveHere" prefHeight="61.0" prefWidth="187.0" text="Move here" textFill="#c305f0" visible="false">
+      <cursor>
+         <Cursor fx:constant="HAND" />
+      </cursor>
+      <font>
+         <Font name="Segoe UI" size="18.0" />
+      </font>
+   </Button>
+
    <Button fx:id="renameButton" layoutX="422.0" layoutY="220.0" mnemonicParsing="false" onAction="#rename" prefHeight="61.0" prefWidth="187.0" text="Rename" textFill="#ffaa00" visible="true">
       <font>
          <Font name="Segoe UI" size="18.0" />
