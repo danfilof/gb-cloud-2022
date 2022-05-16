@@ -38,6 +38,8 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
             Path downloadPath = Path.of(downloadDir);
             log.info("received request to download {}", downloadFile);
             if (downloadDir.equals("null")){
+                // when downloadDir is written as "null", that means that the file selected is in "root folder"
+                // - either ServerFiles or LocalFiles
                 ctx.write(new FileMessage(serverDir.resolve(fileToDownload)));
             } else {
                 ctx.write(new FileMessage(downloadPath.resolve(fileToDownload)));
@@ -121,6 +123,7 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
             ctx.writeAndFlush(new ListMessage(serverDir));
         }
 
+        // open directory command/message
         if (msg instanceof directoryMessage directoryMessage) {
             log.info("received directory: " + directoryMessage.getDirectString());
             String reqStr = directoryMessage.getDirectString();
@@ -201,6 +204,7 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
             ResultSet rs = ps.executeQuery();
             int idCheck = rs.getInt("id");
             log.info("data base query has been executed...");
+            // if what returns is a number, the user exists, return positive status
             if (idCheck == (int) idCheck) {
                 return status = "%OK";
             } else {
