@@ -130,13 +130,20 @@ public class MainController implements Initializable {
                         loginBox.setVisible(false);
                         failedAuthMessage.setVisible(false);
                         failedAuthImage.setVisible(false);
-                        //mainAnchorPane.setStyle("-fx-background-color: linear-gradient(#4568DC, #B06AB3);");
                         clientView.setVisible(true);
                         serverView.setVisible(true);
                         deleteButton.setVisible(true);
                         uploadButton.setVisible(true);
                         downloadButton.setVisible(true);
                         renameButton.setVisible(true);
+                        moveButton.setVisible(true);
+                        createNewFolderButton.setVisible(true);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                mainAnchorPane.setStyle("-fx-background-color: linear-gradient(#4568DC, #B06AB3);");
+                            }
+                        });
                     } else {
                         log.info("user used wrong password or login...");
                         System.out.println("Wrong login or password");

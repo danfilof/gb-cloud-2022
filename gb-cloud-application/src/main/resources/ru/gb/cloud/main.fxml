@@ -29,12 +29,12 @@
    <TextArea fx:id="failedAuthMessage" layoutX="2.0" layoutY="162.0" prefHeight="25.0" prefWidth="434.0" text="Something went wrong. Probably wrong login or  password. Please try again." visible="false" />
 
 
-    <ListView fx:id="serverView" layoutX="683.0" layoutY="87.0" onMouseClicked="#openServerDirectories" onMouseEntered="#dropSelectionOnClientList" prefHeight="456.0" prefWidth="334.0" visible="true">
+    <ListView fx:id="serverView" layoutX="683.0" layoutY="87.0" onMouseClicked="#openServerDirectories" onMouseEntered="#dropSelectionOnClientList" prefHeight="456.0" prefWidth="334.0" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
     </ListView>
-   <Button fx:id="uploadButton" layoutX="422.0" layoutY="75.0" mnemonicParsing="false" onAction="#upload" prefHeight="61.0" prefWidth="187.0" text="Upload" textFill="#04f500b5" textOverrun="CLIP" visible="true">
+   <Button fx:id="uploadButton" layoutX="422.0" layoutY="75.0" mnemonicParsing="false" onAction="#upload" prefHeight="61.0" prefWidth="187.0" text="Upload" textFill="#04f500b5" textOverrun="CLIP" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
@@ -42,7 +42,7 @@
          <Font name="Segoe UI" size="18.0" />
       </font>
    </Button>
-   <Button fx:id="deleteButton" layoutX="422.0" layoutY="510.0" mnemonicParsing="false" onAction="#delete" prefHeight="61.0" prefWidth="187.0" text="Delete" textFill="#d11111d8" visible="true">
+   <Button fx:id="deleteButton" layoutX="422.0" layoutY="510.0" mnemonicParsing="false" onAction="#delete" prefHeight="61.0" prefWidth="187.0" text="Delete" textFill="#d11111d8" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
@@ -50,7 +50,7 @@
          <Font name="Segoe UI Bold" size="18.0" />
       </font>
    </Button>
-   <Button fx:id="createNewFolderButton" layoutX="422.0" layoutY="340.0" mnemonicParsing="false" onAction="#createNewFolder" prefHeight="61.0" prefWidth="187.0" text="Create Folder" textFill="#4acaf2d9" visible="true">
+   <Button fx:id="createNewFolderButton" layoutX="422.0" layoutY="340.0" mnemonicParsing="false" onAction="#createNewFolder" prefHeight="61.0" prefWidth="187.0" text="Create Folder" textFill="#4acaf2d9" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
@@ -58,7 +58,7 @@
          <Font name="Segoe UI" size="18.0" />
       </font>
    </Button>
-   <Button fx:id="downloadButton" layoutX="422.0" layoutY="145.0" mnemonicParsing="false" onAction="#download" prefHeight="61.0" prefWidth="187.0" text="Download" textFill="#038ef2" visible="true">
+   <Button fx:id="downloadButton" layoutX="422.0" layoutY="145.0" mnemonicParsing="false" onAction="#download" prefHeight="61.0" prefWidth="187.0" text="Download" textFill="#038ef2" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
@@ -67,7 +67,7 @@
       </font>
    </Button>
 
-   <Button fx:id="moveButton" layoutX="422.0" layoutY="420.0" mnemonicParsing="false" onAction="#move" prefHeight="61.0" prefWidth="187.0" text="Move" textFill="#c305f0" visible="true">
+   <Button fx:id="moveButton" layoutX="422.0" layoutY="420.0" mnemonicParsing="false" onAction="#move" prefHeight="61.0" prefWidth="187.0" text="Move" textFill="#c305f0" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
@@ -85,17 +85,16 @@
       </font>
    </Button>
 
-   <Button fx:id="renameButton" layoutX="422.0" layoutY="220.0" mnemonicParsing="false" onAction="#rename" prefHeight="61.0" prefWidth="187.0" text="Rename" textFill="#ffaa00" visible="true">
+   <Button fx:id="renameButton" layoutX="422.0" layoutY="220.0" mnemonicParsing="false" onAction="#rename" prefHeight="61.0" prefWidth="187.0" text="Rename" textFill="#ffaa00" visible="false">
       <font>
          <Font name="Segoe UI" size="18.0" />
       </font>
    </Button>
-   <ListView fx:id="clientView" layoutX="14.0" layoutY="87.0" onMouseClicked="#openClientDirectories" onMouseEntered="#dropSelectionOnServerList" prefHeight="456.0" prefWidth="334.0" visible="true">
+   <ListView fx:id="clientView" layoutX="14.0" layoutY="87.0" onMouseClicked="#openClientDirectories" onMouseEntered="#dropSelectionOnServerList" prefHeight="456.0" prefWidth="334.0" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
    </ListView>
    <Button fx:id="buttonBACK" layoutX="15.0" layoutY="60.0" mnemonicParsing="false" onAction="#buttonBACK" text="ButtonBACK" visible="false" />
    <Button fx:id="buttonBACKServer" layoutX="935.0" layoutY="60.0" mnemonicParsing="false" onAction="#buttonBACKServer" text="ButtonBACK" visible="false" />
-   <Button mnemonicParsing="false" text="Button" />
 </AnchorPane>
