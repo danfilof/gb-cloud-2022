@@ -131,6 +131,39 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
             log.info("testDir: " + testDir);
            ctx.writeAndFlush(new ListMessage(requestedDir));
         }
+
+        if (msg instanceof createNewDirMessage createNewDirMessage) {
+            log.info("received command to create a new directory");
+            String newFolderDir = createNewDirMessage.getNewDir();
+            String[] splitFolderDir = newFolderDir.split("@");
+            String directory = splitFolderDir[0];
+            String newDir = splitFolderDir[1];
+
+            if (directory.equals("null")) {
+                String newActualFolder = "ServerFiles" + "/" + newDir;
+                File newFolder = new File(newActualFolder);
+
+                boolean bool = newFolder.mkdir();
+                if(bool){
+                    System.out.println("Folder is created successfully");
+                }else{
+                    System.out.println("Something went wrong. Could not create a directory");
+                }
+                ctx.writeAndFlush(new ListMessage(serverDir));
+            } else {
+                String newActualFolder = directory + "/" + newDir;
+                File newFolder = new File(newActualFolder);
+
+                boolean bool = newFolder.mkdir();
+                if(bool){
+                    System.out.println("Folder is created successfully");
+                }else{
+                    System.out.println("Something went wrong. Could not create a directory");
+                }
+                Path path = Path.of(directory);
+                ctx.writeAndFlush(new ListMessage(path));
+            }
+        }
     }
     public  String getStatusByLoginAndPassword(String login, String password) {
         connect();

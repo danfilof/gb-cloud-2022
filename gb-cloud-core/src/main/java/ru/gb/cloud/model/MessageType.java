@@ -7,7 +7,8 @@ public enum MessageType {
     DELETE("delete"),
     AUTH("auth"),
     CHANGEFILENAME("change file name"),
-    DIRECT("directory");
+    DIRECT("directory"),
+    CREATENEWDIR("create new dir");
 
 
 

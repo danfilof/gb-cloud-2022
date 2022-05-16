@@ -442,9 +442,15 @@ public class MainController implements Initializable {
         if (localSideSelected == null) {
 
             if (serverFileTreeDir == null) {
-
+                String newServerDir = "null" + "@" + newFolderName;
+                net.write(new createNewDirMessage(newServerDir));
+                newFolderNameField.clear();
+                createNewFolder.setVisible(false);
             } else {
-
+                String newServerDir = serverFileTreeDir + "@" + newFolderName;
+                net.write(new createNewDirMessage(newServerDir));
+                newFolderNameField.clear();
+                createNewFolder.setVisible(false);
             }
         }
     }
