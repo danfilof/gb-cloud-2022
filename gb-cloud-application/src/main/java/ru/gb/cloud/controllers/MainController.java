@@ -4,21 +4,19 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import ru.gb.cloud.model.*;
 import ru.gb.cloud.network.Net;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,6 +36,10 @@ public class MainController implements Initializable {
     public Button dropSelectionButton;
     @FXML
     public TextField newFolderNameField;
+    @FXML
+    public ListView contextMenu;
+    @FXML
+    public VBox buttonSelectionBox;
     @FXML
     private Button confirmMoveButton;
     @FXML
@@ -302,15 +304,97 @@ public class MainController implements Initializable {
                             public void run() {
                                 // add some background gradient
                                 mainAnchorPane.setStyle("-fx-background-color: linear-gradient(#4568DC, #B06AB3);");
+                                ImageView deleteImage = new ImageView();
+                                InputStream deleteStream = null;
+
+                                ImageView uploadImage = new ImageView();
+                                InputStream uploadStream = null;
+
+                                ImageView downloadImage = new ImageView();
+                                InputStream downloadStream = null;
+
+                                ImageView renameImage = new ImageView();
+                                InputStream renameStream = null;
+
+                                ImageView newFolderImage = new ImageView();
+                                InputStream newFolderStream = null;
+
+                                ImageView moveImage = new ImageView();
+                                InputStream moveStream = null;
+
+                                ImageView returnImage = new ImageView();
+                                InputStream returnStream = null;
+
+                                ImageView returnImageII = new ImageView();
+                                InputStream returnStreamII = null;
+                                try {
+                                    deleteStream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\delete.jpg");
+                                    uploadStream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\upload.png");
+                                    downloadStream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\download.png");
+                                    renameStream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\rename.png");
+                                    newFolderStream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\createNewFolder.png");
+                                    moveStream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\move.png");
+                                    returnStream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\return.png");
+                                    returnStreamII = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\return.png");
+                                } catch (FileNotFoundException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                Image deleteI = new Image(deleteStream);
+                                deleteImage.setImage(deleteI);
+                                deleteImage.setFitWidth(45);
+                                deleteImage.setFitHeight(45);
+                                deleteButton.setGraphic(deleteImage);
+
+                                Image uploadI = new Image(uploadStream);
+                                uploadImage.setImage(uploadI);
+                                uploadImage.setFitWidth(45);
+                                uploadImage.setFitHeight(45);
+                                uploadButton.setGraphic(uploadImage);
+
+                                Image downloadI = new Image(downloadStream);
+                                downloadImage.setImage(downloadI);
+                                downloadImage.setFitWidth(45);
+                                downloadImage.setFitHeight(45);
+                                downloadButton.setGraphic(downloadImage);
+
+                                Image renameI = new Image(renameStream);
+                                renameImage.setImage(renameI);
+                                renameImage.setFitWidth(45);
+                                renameImage.setFitHeight(45);
+                                renameButton.setGraphic(renameImage);
+
+                                Image newFolderI = new Image(newFolderStream);
+                                newFolderImage.setImage(newFolderI);
+                                newFolderImage.setFitWidth(45);
+                                newFolderImage.setFitHeight(45);
+                                createNewFolderButton.setGraphic(newFolderImage);
+
+                                Image moveI = new Image(moveStream);
+                                moveImage.setImage(moveI);
+                                moveImage.setFitWidth(45);
+                                moveImage.setFitHeight(45);
+                                moveButton.setGraphic(moveImage);
+
+                                Image returnI = new Image(returnStream);
+                                returnImage.setImage(returnI);
+                                returnImage.setFitWidth(15);
+                                returnImage.setFitHeight(15);
+                                buttonBACK.setGraphic(returnImage);
+
+                                Image returnII = new Image(returnStreamII);
+                                returnImageII.setImage(returnII);
+                                returnImageII.setFitWidth(15);
+                                returnImageII.setFitHeight(15);
+                                buttonBACKServer.setGraphic(returnImageII);
                             }
                         });
                     } else {
                         log.info("user used wrong password or login...");
                         System.out.println("Wrong login or password");
                         // upload image
-                        InputStream stream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\sad_robot.jpg");
-                        Image image = new Image(stream);
-                        failedAuthImage.setImage(image);
+                        InputStream streamRobot = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\sad_robot.jpg");
+                        Image robotImage = new Image(streamRobot);
+                        failedAuthImage.setImage(robotImage);
                         failedAuthImage.setVisible(true);
                         failedAuthMessage.setVisible(true);
                     }
@@ -584,5 +668,13 @@ public class MainController implements Initializable {
                 moveButton.setVisible(true);
             }
         }
+    }
+
+    public void localContextMenuRequested(ContextMenuEvent contextMenuEvent) {
+        System.out.println("OMAGAD LOCAL CONTEXT MENU REQUESTED");
+    }
+
+    public void serverContextMenuRequested(ContextMenuEvent contextMenuEvent) {
+        System.out.println("OMAGAD SERVER CONTEXT MENU REQUESTED");
     }
 }

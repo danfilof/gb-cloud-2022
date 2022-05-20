@@ -25,15 +25,15 @@
       <Button fx:id="confirmNewFolderButton" defaultButton="true" onAction="#confirmFolderNameChange" text="Confirm" visible="true" />
    </HBox>
 
-      <ImageView fx:id="failedAuthImage" fitHeight="130.0" fitWidth="130.0" layoutX="30.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+   <ImageView fx:id="failedAuthImage" fitHeight="130.0" fitWidth="130.0" layoutX="30.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" visible="false" />
    <TextArea fx:id="failedAuthMessage" layoutX="2.0" layoutY="162.0" prefHeight="25.0" prefWidth="434.0" text="Something went wrong. Probably wrong login or  password. Please try again." visible="false" />
 
 
-    <ListView fx:id="serverView" layoutX="683.0" layoutY="87.0" onMouseClicked="#openServerDirectories" onMouseEntered="#dropSelectionOnClientList" prefHeight="456.0" prefWidth="334.0" visible="false">
+   <ListView fx:id="serverView" layoutX="683.0" layoutY="87.0" onMouseClicked="#openServerDirectories" onMouseEntered="#dropSelectionOnClientList" prefHeight="456.0" prefWidth="334.0" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
-    </ListView>
+   </ListView>
    <Button fx:id="uploadButton" layoutX="422.0" layoutY="75.0" mnemonicParsing="false" onAction="#upload" prefHeight="61.0" prefWidth="187.0" text="Upload" textFill="#04f500b5" textOverrun="CLIP" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
@@ -42,7 +42,7 @@
          <Font name="Segoe UI" size="18.0" />
       </font>
    </Button>
-   <Button fx:id="deleteButton" layoutX="422.0" layoutY="510.0" mnemonicParsing="false" onAction="#delete" prefHeight="61.0" prefWidth="187.0" text="Delete" textFill="#d11111d8" visible="false">
+   <Button fx:id="deleteButton" layoutX="422.0" layoutY="510.0" mnemonicParsing="false" onAction="#delete" prefHeight="61.0" prefWidth="187.0" text="Remove" textFill="#d11111d8" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
@@ -95,6 +95,6 @@
          <Cursor fx:constant="HAND" />
       </cursor>
    </ListView>
-   <Button fx:id="buttonBACK" layoutX="15.0" layoutY="60.0" mnemonicParsing="false" onAction="#buttonBACK" text="ButtonBACK" visible="false" />
-   <Button fx:id="buttonBACKServer" layoutX="935.0" layoutY="60.0" mnemonicParsing="false" onAction="#buttonBACKServer" text="ButtonBACK" visible="false" />
+   <Button fx:id="buttonBACK" layoutX="15.0" layoutY="60.0" mnemonicParsing="false" onAction="#buttonBACK" text="Return" visible="false" />
+   <Button fx:id="buttonBACKServer" layoutX="935.0" layoutY="60.0" mnemonicParsing="false" onAction="#buttonBACKServer" text="Return" visible="false" />
 </AnchorPane>
