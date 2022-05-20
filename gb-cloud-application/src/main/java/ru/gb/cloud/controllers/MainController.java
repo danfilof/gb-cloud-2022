@@ -481,7 +481,7 @@ public class MainController implements Initializable {
 
     public void cancelAuthClick(ActionEvent actionEvent) {
         log.info("user closed the program by pressing cancel button...");
-        System.exit(0);
+        System.exit(22);
     }
 
     public void rename(ActionEvent actionEvent) {
