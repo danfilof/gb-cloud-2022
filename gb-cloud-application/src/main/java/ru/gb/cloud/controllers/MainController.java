@@ -98,72 +98,6 @@ public class MainController implements Initializable {
     private String clientSelectedFileToMove = null;
     private String ServerSelectedFileToMove = null;
 
-
-
-    private void read() {
-        try {
-            while (true) {
-                AbstractMessage message = net.read();
-                if (message instanceof ListMessage lm) {
-                    // In order to avoid jfx exception, use Platform.runLater
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            System.out.println("received ServerList..." + lm.getFiles());
-                            serverView.getItems().clear();
-                            serverView.getItems().addAll(lm.getFiles());
-                        }
-                    });
-
-                }
-
-                if (message instanceof FileMessage file) {
-                    System.out.println("received file to be downloaded: " + file.getName());
-                    Files.write(clientDir.resolve(file.getName()), file.getBytes());
-                    reloadList();
-                }
-
-                if (message instanceof AuthMessage authMessage) {
-                    String status = authMessage.getAuthData();
-                    log.info("received authentification status: " + status);
-                    if (status.equals("%OK")) {
-                        log.info("successfully authenticated...");
-                        // make all buttons and list visible
-                        loginBox.setVisible(false);
-                        failedAuthMessage.setVisible(false);
-                        failedAuthImage.setVisible(false);
-                        clientView.setVisible(true);
-                        serverView.setVisible(true);
-                        deleteButton.setVisible(true);
-                        uploadButton.setVisible(true);
-                        downloadButton.setVisible(true);
-                        renameButton.setVisible(true);
-                        moveButton.setVisible(true);
-                        createNewFolderButton.setVisible(true);
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                // add some background gradient
-                                mainAnchorPane.setStyle("-fx-background-color: linear-gradient(#4568DC, #B06AB3);");
-                            }
-                        });
-                    } else {
-                        log.info("user used wrong password or login...");
-                        System.out.println("Wrong login or password");
-                        // upload image
-                        InputStream stream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\sad_robot.jpg");
-                        Image image = new Image(stream);
-                        failedAuthImage.setImage(image);
-                        failedAuthImage.setVisible(true);
-                        failedAuthMessage.setVisible(true);
-                    }
-                }
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     private List<String> getClientFiles() throws IOException {
         return Files.list(clientDir).map(Path::getFileName).map(Path::toString).toList();
     }
@@ -269,7 +203,6 @@ public class MainController implements Initializable {
 
             if (serverSelection.contains(".txt")) {
                 System.out.println("Selected is a .txt file");
-                System.exit(0);
             }
             serverDirList.add(serverSelection);
             String[] serverDirsArray = Arrays.copyOf(serverDirList.toArray(), serverDirList.size(), String[].class);
@@ -281,6 +214,7 @@ public class MainController implements Initializable {
             serverFileTreeDir = Path.of(serverDirs);
             System.out.println(serverFileTreeDir);
             String serverTree = String.valueOf(serverFileTreeDir);
+            System.out.println("serverTree: " + serverTree);
             // sending the path needed to the server
             net.write(new directoryMessage(serverTree));
         }
@@ -311,7 +245,82 @@ public class MainController implements Initializable {
     // "ServerFiles" for all other further usages
 
     // for any further usage, there is a script that drops selection on a first list when a mouse enters the second
+    private void read() {
+        try {
+            while (true) {
+                AbstractMessage message = net.read();
+                if (message instanceof ListMessage lm) {
+                    // In order to avoid jfx exception, use Platform.runLater
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println("received ServerList..." + lm.getFiles());
+                            serverView.getItems().clear();
+                            serverView.getItems().addAll(lm.getFiles());
+                        }
+                    });
 
+                }
+
+                if (message instanceof fileContentMessage fileContentMessage) {
+                    String serverFileContent = fileContentMessage.getFileText();
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            serverView.getItems().clear();
+                            serverView.getItems().add(serverFileContent);
+                        }
+                    });
+                }
+
+                if (message instanceof FileMessage file) {
+                    System.out.println("received file to be downloaded: " + file.getName());
+                    Files.write(clientDir.resolve(file.getName()), file.getBytes());
+                    reloadList();
+                }
+
+                if (message instanceof AuthMessage authMessage) {
+                    String status = authMessage.getAuthData();
+                    log.info("received authentification status: " + status);
+                    if (status.equals("%OK")) {
+                        log.info("successfully authenticated...");
+                        // make all buttons and list visible
+                        loginBox.setVisible(false);
+                        failedAuthMessage.setVisible(false);
+                        failedAuthImage.setVisible(false);
+                        clientView.setVisible(true);
+                        serverView.setVisible(true);
+                        deleteButton.setVisible(true);
+                        uploadButton.setVisible(true);
+                        downloadButton.setVisible(true);
+                        renameButton.setVisible(true);
+                        moveButton.setVisible(true);
+                        createNewFolderButton.setVisible(true);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                // add some background gradient
+                                mainAnchorPane.setStyle("-fx-background-color: linear-gradient(#4568DC, #B06AB3);");
+                            }
+                        });
+                    } else {
+                        log.info("user used wrong password or login...");
+                        System.out.println("Wrong login or password");
+                        // upload image
+                        InputStream stream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\sad_robot.jpg");
+                        Image image = new Image(stream);
+                        failedAuthImage.setImage(image);
+                        failedAuthImage.setVisible(true);
+                        failedAuthMessage.setVisible(true);
+                    }
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public void upload(ActionEvent actionEvent) throws Exception {
         String fileName = clientView.getSelectionModel().getSelectedItem();
         log.info("sent file: " + fileName);

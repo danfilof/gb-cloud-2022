@@ -10,7 +10,8 @@ public enum MessageType {
     DIRECT("directory"),
     CREATENEWDIR("create new dir"),
 
-    MOVE("move");
+    MOVE("move"),
+    fileContent("file content");
 
 
 

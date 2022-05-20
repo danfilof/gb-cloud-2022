@@ -7,8 +7,10 @@ import ru.gb.cloud.model.*;
 
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.List;
 
@@ -125,14 +127,30 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
 
         // open directory command/message
         if (msg instanceof directoryMessage directoryMessage) {
-            log.info("received directory: " + directoryMessage.getDirectString());
-            String reqStr = directoryMessage.getDirectString();
-            System.out.println("reqStr: " + reqStr);
-            requestedDir = Path.of(reqStr);
-            log.info("requested dir: " + requestedDir);
-            List<String> testDir =  Files.list(requestedDir).map(Path::getFileName).map(Path::toString).toList();
-            log.info("testDir: " + testDir);
-           ctx.writeAndFlush(new ListMessage(requestedDir));
+
+            if (directoryMessage.getDirectString().contains(".txt")){
+                log.info("received directory with a .txt file: " + directoryMessage.getDirectString());
+                String reqStr = directoryMessage.getDirectString();
+                try
+                {
+                    byte[] bytes = Files.readAllBytes(Paths.get(String.valueOf(reqStr)));
+                    String fileContent = new String (bytes);
+                    ctx.writeAndFlush(new fileContentMessage(fileContent));
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            } else {
+                log.info("received directory: " + directoryMessage.getDirectString());
+                String reqStr = directoryMessage.getDirectString();
+                System.out.println("reqStr: " + reqStr);
+                requestedDir = Path.of(reqStr);
+                log.info("requested dir: " + requestedDir);
+                List<String> testDir =  Files.list(requestedDir).map(Path::getFileName).map(Path::toString).toList();
+                log.info("testDir: " + testDir);
+                ctx.writeAndFlush(new ListMessage(requestedDir));
+            }
         }
 
         if (msg instanceof createNewDirMessage createNewDirMessage) {
