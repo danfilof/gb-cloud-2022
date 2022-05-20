@@ -59,25 +59,25 @@ public class MainController implements Initializable {
     private HBox fileNameChangeBox;
 
     private Net net;
-   private Path clientDir;
+    private Path clientDir;
     @FXML
     private Button confirmFileNameChangeButton;
-   @FXML
-   private Button deleteButton;
+    @FXML
+    private Button deleteButton;
 
-   @FXML
-   private Button downloadButton;
+    @FXML
+    private Button downloadButton;
 
-   @FXML
-   private Button renameButton;
+    @FXML
+    private Button renameButton;
 
-   @FXML
-   private Button uploadButton;
+    @FXML
+    private Button uploadButton;
 
-   @FXML
-   private Button AuthButton;
+    @FXML
+    private Button AuthButton;
 
-   @FXML
+    @FXML
     private TextField loginField;
     @FXML
     private PasswordField passwordField;
