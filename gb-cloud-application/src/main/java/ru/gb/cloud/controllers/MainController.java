@@ -657,12 +657,23 @@ public class MainController implements Initializable {
                 confirmMoveButton.setVisible(false);
                 moveButton.setVisible(true);
             } else {
-                File localFile1 = new File(localFirstDir);
-                localFile1.renameTo(new File(localFinalDir));
-                clientView.getItems().clear();
-                clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
-                confirmMoveButton.setVisible(false);
-                moveButton.setVisible(true);
+                if (localFirstDir.contains("null")) {
+                    System.out.println("localFirstDir contains null: " + localFirstDir);
+                    File localFile1 = new File("LocalFiles" + "/" + localFileToMove);
+                    localFile1.renameTo(new File(localFinalDir));
+                    clientView.getItems().clear();
+                    clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
+                    confirmMoveButton.setVisible(false);
+                    moveButton.setVisible(true);
+                } else {
+                    File localFile1 = new File(localFirstDir);
+                    localFile1.renameTo(new File(localFinalDir));
+                    System.out.println("FROM: " + localFirstDir + " TO " + localFinalDir);
+                    clientView.getItems().clear();
+                    clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
+                    confirmMoveButton.setVisible(false);
+                    moveButton.setVisible(true);
+                }
             }
         }
 
