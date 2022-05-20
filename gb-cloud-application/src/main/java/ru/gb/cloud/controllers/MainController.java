@@ -185,7 +185,7 @@ public class MainController implements Initializable {
     }
 
     public void openClientDirectories(MouseEvent mouseEvent) throws IOException {
-        if (mouseEvent.getClickCount() == 2) {
+        if (mouseEvent.getClickCount() == 2 && clientView.getSelectionModel().getSelectedItem() != null) {
             buttonBACK.setVisible(true);
             //count how many times does the double click happen
             countClientClick++;
@@ -241,7 +241,7 @@ public class MainController implements Initializable {
         }
     }
     public void openServerDirectories(MouseEvent mouseEvent) throws IOException {
-        if (mouseEvent.getClickCount() == 2) {
+        if (mouseEvent.getClickCount() == 2 && serverView.getSelectionModel().getSelectedItem() != null) {
             buttonBACKServer.setVisible(true);
             countServerClick++;
             if (countServerClick == 1) {
