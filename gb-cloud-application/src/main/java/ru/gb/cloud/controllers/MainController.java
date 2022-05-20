@@ -450,6 +450,13 @@ public class MainController implements Initializable {
         String localSideSelected = clientView.getSelectionModel().getSelectedItem();
         String newFolderName = newFolderNameField.getText();
 
+        if (serverSideSelected == null && localSideSelected == null) {
+            System.out.println("Non of the sides has been selected to create a folder");
+            newFolderNameField.clear();
+            createNewFolder.setVisible(false);
+            confirmFileNameChange(actionEvent);
+        }
+
         if (serverSideSelected == null) {
 
             if (clientFileTreeDir == null) {
