@@ -193,11 +193,6 @@ public class MainController implements Initializable {
                 clientDirList.add(0,"LocalFiles");
             }
             String clientSelection = clientView.getSelectionModel().getSelectedItem();
-            // TODO if selected is a file
-            if (clientSelection.contains(".txt")) {
-                System.out.println("Selected is a .txt file");
-                System.exit(0);
-            }
             // after selecting the folder to be opened the name of the folder is added into the arraylist
             clientDirList.add(clientSelection);
             System.out.println("BEFORE (!) : (!) dirList: " + clientDirList);
@@ -214,9 +209,30 @@ public class MainController implements Initializable {
             // using the string as a path
             clientFileTreeDir = Path.of(dirs);
             System.out.println("localDir: " + clientFileTreeDir);
-            clientView.getItems().clear();
-            clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
-            System.out.println("---------------------");
+
+            // TODO if selected is a file
+            if (clientSelection.contains(".txt")) {
+                System.out.println("Selected is a .txt file");
+                try
+                {
+                    byte[] bytes = Files.readAllBytes(Paths.get(String.valueOf(clientFileTreeDir)));
+                    String fileContent = new String (bytes);
+                    System.out.println("fileContent: " + fileContent);
+                    clientView.getItems().clear();
+                    clientView.getItems().add(fileContent);
+                    clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
+                    System.out.println("---------------------");
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            } else {
+                clientView.getItems().clear();
+                clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
+                System.out.println("---------------------");
+            }
+
         }
     }
 
