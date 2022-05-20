@@ -13,6 +13,7 @@ public class Main extends Application {
         Parent parent = FXMLLoader.load(getClass().getResource("main.fxml"));
         primaryStage.setScene(new Scene(parent));
         primaryStage.setTitle("GB Cloud Service");
+       // parent.getStylesheets().add(getClass().getResource("cssStyle.css").toExternalForm());
         primaryStage.show();
     }
 }

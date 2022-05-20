@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -303,7 +304,8 @@ public class MainController implements Initializable {
                             @Override
                             public void run() {
                                 // add some background gradient
-                                mainAnchorPane.setStyle("-fx-background-color: linear-gradient(#4568DC, #B06AB3);");
+                                mainAnchorPane.setStyle("-fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);");
+
                                 ImageView deleteImage = new ImageView();
                                 InputStream deleteStream = null;
 
@@ -428,8 +430,17 @@ public class MainController implements Initializable {
     }
 
     public void reloadList() throws IOException {
-        clientView.getItems().clear();
-        clientView.getItems().addAll(getClientFiles());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                clientView.getItems().clear();
+                try {
+                    clientView.getItems().addAll(getClientFiles());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
     public void delete(ActionEvent actionEvent) throws IOException {
