@@ -15,15 +15,15 @@
       <Button fx:id="cancelAuthButton" layoutX="340.0" mnemonicParsing="false" onAction="#cancelAuthClick" text="Cancel" visible="true" />
    </HBox>
 
-   <HBox fx:id="fileNameChangeBox" layoutX="410.0" layoutY="290.0" prefHeight="53.0" prefWidth="226.0" visible="false">
+   <StackPane fx:id="createNewFolderPane" alignment="TOP_RIGHT" layoutX="370.0" layoutY="281.0" visible="false">
+      <TextField fx:id="newFolderNameField" prefHeight="25.0" prefWidth="292.0" promptText="New folder name" visible="true" />
+      <Button fx:id="confirmNewFolderButton" defaultButton="true" layoutX="5.0" onAction="#confirmFolderNameChange" text="Confirm" visible="true" />
+   </StackPane>
+
+   <StackPane fx:id="changeFileNamePane" alignment="TOP_RIGHT" layoutX="426.0" layoutY="281.0" prefHeight="25.0" prefWidth="180.0" visible="false">
       <TextField fx:id="newFileNameField" promptText="New file name" visible="true" />
       <Button fx:id="confirmFileNameChangeButton" defaultButton="true" onAction="#confirmFileNameChange" text="Confirm" visible="true" />
-   </HBox>
-
-   <HBox fx:id="createNewFolder" layoutX="410.0" layoutY="290.0" prefHeight="53.0" prefWidth="226.0" visible="false">
-      <TextField fx:id="newFolderNameField" promptText="New folder name" visible="true" />
-      <Button fx:id="confirmNewFolderButton" defaultButton="true" onAction="#confirmFolderNameChange" text="Confirm" visible="true" />
-   </HBox>
+   </StackPane>
 
    <ImageView fx:id="failedAuthImage" fitHeight="130.0" fitWidth="130.0" layoutX="30.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" visible="false" />
    <TextArea fx:id="failedAuthMessage" layoutX="2.0" layoutY="162.0" prefHeight="25.0" prefWidth="434.0" text="Something went wrong. Probably wrong login or  password. Please try again." visible="false" />
@@ -33,48 +33,59 @@
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
+      <contextMenu>
+         <ContextMenu fx:id="serverCM">
+            <items>
+               <MenuItem fx:id="MIDOWNLOAD" onAction="#download" text="Download" />
+               <MenuItem fx:id="MIRENAME" onAction="#rename" text="Rename" />
+               <MenuItem fx:id="MICREATEFOLDER" onAction="#createNewFolder" text="Create Folder" />
+               <MenuItem fx:id="MIMOVE" onAction="#move" text="Move" />
+               <MenuItem fx:id="MIDELETE" onAction="#delete" text="Remove" />
+            </items>
+         </ContextMenu>
+      </contextMenu>
    </ListView>
-   <Button fx:id="uploadButton" layoutX="422.0" layoutY="75.0" mnemonicParsing="false" onAction="#upload" prefHeight="61.0" prefWidth="187.0" text="Upload" textFill="#04f500b5" textOverrun="CLIP" visible="false">
-      <cursor>
-         <Cursor fx:constant="HAND" />
-      </cursor>
-      <font>
-         <Font name="Segoe UI" size="18.0" />
-      </font>
-   </Button>
-   <Button fx:id="deleteButton" layoutX="422.0" layoutY="510.0" mnemonicParsing="false" onAction="#delete" prefHeight="61.0" prefWidth="187.0" text="Remove" textFill="#d11111d8" visible="false">
-      <cursor>
-         <Cursor fx:constant="HAND" />
-      </cursor>
-      <font>
-         <Font name="Segoe UI Bold" size="18.0" />
-      </font>
-   </Button>
-   <Button fx:id="createNewFolderButton" layoutX="422.0" layoutY="340.0" mnemonicParsing="false" onAction="#createNewFolder" prefHeight="61.0" prefWidth="187.0" text="Create Folder" textFill="#4acaf2d9" visible="false">
-      <cursor>
-         <Cursor fx:constant="HAND" />
-      </cursor>
-      <font>
-         <Font name="Segoe UI" size="18.0" />
-      </font>
-   </Button>
-   <Button fx:id="downloadButton" layoutX="422.0" layoutY="145.0" mnemonicParsing="false" onAction="#download" prefHeight="61.0" prefWidth="187.0" text="Download" textFill="#038ef2" visible="false">
-      <cursor>
-         <Cursor fx:constant="HAND" />
-      </cursor>
-      <font>
-         <Font name="Segoe UI" size="18.0" />
-      </font>
-   </Button>
+<!--   <Button fx:id="uploadButton" layoutX="422.0" layoutY="75.0" mnemonicParsing="false" onAction="#upload" prefHeight="61.0" prefWidth="187.0" text="Upload" textFill="#04f500b5" textOverrun="CLIP" visible="false">-->
+<!--      <cursor>-->
+<!--         <Cursor fx:constant="HAND" />-->
+<!--      </cursor>-->
+<!--      <font>-->
+<!--         <Font name="Segoe UI" size="18.0" />-->
+<!--      </font>-->
+<!--   </Button>-->
+<!--   <Button fx:id="deleteButton" layoutX="422.0" layoutY="510.0" mnemonicParsing="false" onAction="#delete" prefHeight="61.0" prefWidth="187.0" text="Remove" textFill="#d11111d8" visible="false">-->
+<!--      <cursor>-->
+<!--         <Cursor fx:constant="HAND" />-->
+<!--      </cursor>-->
+<!--      <font>-->
+<!--         <Font name="Segoe UI Bold" size="18.0" />-->
+<!--      </font>-->
+<!--   </Button>-->
+<!--   <Button fx:id="createNewFolderButton" layoutX="422.0" layoutY="340.0" mnemonicParsing="false" onAction="#createNewFolder" prefHeight="61.0" prefWidth="187.0" text="Create Folder" textFill="#4acaf2d9" visible="false">-->
+<!--      <cursor>-->
+<!--         <Cursor fx:constant="HAND" />-->
+<!--      </cursor>-->
+<!--      <font>-->
+<!--         <Font name="Segoe UI" size="18.0" />-->
+<!--      </font>-->
+<!--   </Button>-->
+<!--   <Button fx:id="downloadButton" layoutX="422.0" layoutY="145.0" mnemonicParsing="false" onAction="#download" prefHeight="61.0" prefWidth="187.0" text="Download" textFill="#038ef2" visible="false">-->
+<!--      <cursor>-->
+<!--         <Cursor fx:constant="HAND" />-->
+<!--      </cursor>-->
+<!--      <font>-->
+<!--         <Font name="Segoe UI" size="18.0" />-->
+<!--      </font>-->
+<!--   </Button>-->
 
-   <Button fx:id="moveButton" layoutX="422.0" layoutY="420.0" mnemonicParsing="false" onAction="#move" prefHeight="61.0" prefWidth="187.0" text="Move" textFill="#c305f0" visible="false">
-      <cursor>
-         <Cursor fx:constant="HAND" />
-      </cursor>
-      <font>
-         <Font name="Segoe UI" size="18.0" />
-      </font>
-   </Button>
+<!--   <Button fx:id="moveButton" layoutX="422.0" layoutY="420.0" mnemonicParsing="false" onAction="#move" prefHeight="61.0" prefWidth="187.0" text="Move" textFill="#c305f0" visible="false">-->
+<!--      <cursor>-->
+<!--         <Cursor fx:constant="HAND" />-->
+<!--      </cursor>-->
+<!--      <font>-->
+<!--         <Font name="Segoe UI" size="18.0" />-->
+<!--      </font>-->
+<!--   </Button>-->
 
    <Button fx:id="confirmMoveButton" layoutX="422.0" layoutY="420.0" mnemonicParsing="false" onAction="#moveHere" prefHeight="61.0" prefWidth="187.0" text="Move here" textFill="#c305f0" visible="false">
       <cursor>
@@ -85,15 +96,27 @@
       </font>
    </Button>
 
-   <Button fx:id="renameButton" layoutX="422.0" layoutY="220.0" mnemonicParsing="false" onAction="#rename" prefHeight="61.0" prefWidth="187.0" text="Rename" textFill="#ffaa00" visible="false">
-      <font>
-         <Font name="Segoe UI" size="18.0" />
-      </font>
-   </Button>
+<!--   <Button fx:id="renameButton" layoutX="422.0" layoutY="220.0" mnemonicParsing="false" onAction="#rename" prefHeight="61.0" prefWidth="187.0" text="Rename" textFill="#ffaa00" visible="false">-->
+<!--      <font>-->
+<!--         <Font name="Segoe UI" size="18.0" />-->
+<!--      </font>-->
+<!--   </Button>-->
    <ListView fx:id="clientView" layoutX="14.0" layoutY="87.0" onMouseClicked="#openClientDirectories" onMouseEntered="#dropSelectionOnServerList" prefHeight="456.0" prefWidth="334.0" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
+      <contextMenu>
+         <ContextMenu fx:id="localCM">
+            <items>
+               <MenuItem fx:id="MIUpload" onAction="#upload" text="Upload" />
+               <MenuItem fx:id="MIRename" onAction="#rename" text="Rename" />
+               <MenuItem fx:id="MINewFolder" onAction="#createNewFolder" text="Create Folder" />
+               <MenuItem fx:id="MIMove" onAction="#move" text="Move" />
+               <MenuItem fx:id="MIDelete" onAction="#delete" text="Remove" />
+
+            </items>
+         </ContextMenu>
+      </contextMenu>
    </ListView>
    <Button fx:id="buttonBACK" layoutX="15.0" layoutY="60.0" mnemonicParsing="false" onAction="#buttonBACK" text="Return" visible="false" />
    <Button fx:id="buttonBACKServer" layoutX="935.0" layoutY="60.0" mnemonicParsing="false" onAction="#buttonBACKServer" text="Return" visible="false" />

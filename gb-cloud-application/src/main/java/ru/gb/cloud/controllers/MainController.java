@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,6 +11,7 @@ import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import ru.gb.cloud.model.*;
@@ -42,6 +42,34 @@ public class MainController implements Initializable {
     @FXML
     public VBox buttonSelectionBox;
     @FXML
+    public ContextMenu localCM;
+    @FXML
+    public ContextMenu serverCM;
+    @FXML
+    public Button confirmNewFolderButton;
+    @FXML
+    public StackPane changeFileNamePane;
+    @FXML
+    public MenuItem MIUpload;
+    @FXML
+    public MenuItem MIRename;
+    @FXML
+    public MenuItem MINewFolder;
+    @FXML
+    public MenuItem MIMove;
+    @FXML
+    public MenuItem MIDelete;
+    @FXML
+    public MenuItem MIDOWNLOAD;
+    @FXML
+    public MenuItem MIRENAME;
+    @FXML
+    public MenuItem MICREATEFOLDER;
+    @FXML
+    public MenuItem MIMOVE;
+    @FXML
+    public MenuItem MIDELETE;
+    @FXML
     private Button confirmMoveButton;
     @FXML
     private Button moveButton;
@@ -52,7 +80,7 @@ public class MainController implements Initializable {
     @FXML
     private Button createNewFolderButton;
     @FXML
-    private HBox createNewFolder;
+    private StackPane createNewFolderPane;
     @FXML
     private TextField newFileNameField;
     @FXML
@@ -294,12 +322,6 @@ public class MainController implements Initializable {
                         failedAuthImage.setVisible(false);
                         clientView.setVisible(true);
                         serverView.setVisible(true);
-                        deleteButton.setVisible(true);
-                        uploadButton.setVisible(true);
-                        downloadButton.setVisible(true);
-                        renameButton.setVisible(true);
-                        moveButton.setVisible(true);
-                        createNewFolderButton.setVisible(true);
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
@@ -308,6 +330,9 @@ public class MainController implements Initializable {
 
                                 ImageView deleteImage = new ImageView();
                                 InputStream deleteStream = null;
+
+                                ImageView deleteImageII = new ImageView();
+                                InputStream deleteStreamII = null;
 
                                 ImageView uploadImage = new ImageView();
                                 InputStream uploadStream = null;
@@ -318,12 +343,21 @@ public class MainController implements Initializable {
                                 ImageView renameImage = new ImageView();
                                 InputStream renameStream = null;
 
+                                ImageView renameImageII = new ImageView();
+                                InputStream renameStreamII = null;
+
                                 ImageView newFolderImage = new ImageView();
                                 InputStream newFolderStream = null;
+
+                                ImageView newFolderImageII = new ImageView();
+                                InputStream newFolderStreamII = null;
 
                                 ImageView moveImage = new ImageView();
                                 InputStream moveStream = null;
 
+                                ImageView moveImageII = new ImageView();
+                                InputStream moveStreamII = null;
+//
                                 ImageView returnImage = new ImageView();
                                 InputStream returnStream = null;
 
@@ -334,48 +368,76 @@ public class MainController implements Initializable {
                                     uploadStream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\upload.png");
                                     downloadStream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\download.png");
                                     renameStream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\rename.png");
+                                    renameStreamII = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\rename.png");
                                     newFolderStream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\createNewFolder.png");
+                                    newFolderStreamII = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\createNewFolder.png");
                                     moveStream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\move.png");
+                                    moveStreamII = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\move.png");
                                     returnStream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\return.png");
                                     returnStreamII = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\return.png");
+                                    deleteStreamII = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\delete.jpg");
                                 } catch (FileNotFoundException e) {
                                     throw new RuntimeException(e);
                                 }
                                 Image deleteI = new Image(deleteStream);
                                 deleteImage.setImage(deleteI);
-                                deleteImage.setFitWidth(45);
-                                deleteImage.setFitHeight(45);
-                                deleteButton.setGraphic(deleteImage);
+                                deleteImage.setFitWidth(20);
+                                deleteImage.setFitHeight(20);
+                                MIDelete.setGraphic(deleteImage);
 
+                                Image deleteII = new Image(deleteStreamII);
+                                deleteImageII.setImage(deleteII);
+                                deleteImageII.setFitWidth(20);
+                                deleteImageII.setFitHeight(20);
+                                MIDELETE.setGraphic(deleteImageII);
+//
                                 Image uploadI = new Image(uploadStream);
                                 uploadImage.setImage(uploadI);
-                                uploadImage.setFitWidth(45);
-                                uploadImage.setFitHeight(45);
-                                uploadButton.setGraphic(uploadImage);
+                                uploadImage.setFitWidth(20);
+                                uploadImage.setFitHeight(20);
+                                MIUpload.setGraphic(uploadImage);
 
                                 Image downloadI = new Image(downloadStream);
                                 downloadImage.setImage(downloadI);
-                                downloadImage.setFitWidth(45);
-                                downloadImage.setFitHeight(45);
-                                downloadButton.setGraphic(downloadImage);
+                                downloadImage.setFitWidth(20);
+                                downloadImage.setFitHeight(20);
+                                MIDOWNLOAD.setGraphic(downloadImage);
 
                                 Image renameI = new Image(renameStream);
                                 renameImage.setImage(renameI);
-                                renameImage.setFitWidth(45);
-                                renameImage.setFitHeight(45);
-                                renameButton.setGraphic(renameImage);
+                                renameImage.setFitWidth(20);
+                                renameImage.setFitHeight(20);
+                                MIRename.setGraphic(renameImage);
+
+                                Image renameII = new Image(renameStreamII);
+                                renameImageII.setImage(renameII);
+                                renameImageII.setFitWidth(20);
+                                renameImageII.setFitHeight(20);
+                                MIRENAME.setGraphic(renameImageII);
 
                                 Image newFolderI = new Image(newFolderStream);
                                 newFolderImage.setImage(newFolderI);
-                                newFolderImage.setFitWidth(45);
-                                newFolderImage.setFitHeight(45);
-                                createNewFolderButton.setGraphic(newFolderImage);
+                                newFolderImage.setFitWidth(20);
+                                newFolderImage.setFitHeight(20);
+                                MINewFolder.setGraphic(newFolderImage);
+
+                                Image newFolderII = new Image(newFolderStreamII);
+                                newFolderImageII.setImage(newFolderII);
+                                newFolderImageII.setFitWidth(20);
+                                newFolderImageII.setFitHeight(20);
+                                MICREATEFOLDER.setGraphic(newFolderImageII);
 
                                 Image moveI = new Image(moveStream);
                                 moveImage.setImage(moveI);
-                                moveImage.setFitWidth(45);
-                                moveImage.setFitHeight(45);
-                                moveButton.setGraphic(moveImage);
+                                moveImage.setFitWidth(20);
+                                moveImage.setFitHeight(20);
+                                MIMove.setGraphic(moveImage);
+
+                                Image moveII = new Image(moveStreamII);
+                                moveImageII.setImage(moveII);
+                                moveImageII.setFitWidth(20);
+                                moveImageII.setFitHeight(20);
+                                MIMOVE.setGraphic(moveImageII);
 
                                 Image returnI = new Image(returnStream);
                                 returnImage.setImage(returnI);
@@ -487,7 +549,7 @@ public class MainController implements Initializable {
     public void rename(ActionEvent actionEvent) {
         // make visible textArea for new file name
         // make visible button to confirm the change
-        fileNameChangeBox.setVisible(true);
+       changeFileNamePane.setVisible(true);
     }
 
     public void confirmFileNameChange(ActionEvent actionEvent) throws IOException {
@@ -505,7 +567,7 @@ public class MainController implements Initializable {
                 net.write(new ChangeFileNameMessage(toRename));
             }
 
-            fileNameChangeBox.setVisible(false);
+            changeFileNamePane.setVisible(false);
             newFileNameField.clear();
         }
 
@@ -523,7 +585,7 @@ public class MainController implements Initializable {
                     if (!successFileNameChange) {
                         System.out.println("Something went wrong, cannot rename a file");
                     }
-                    fileNameChangeBox.setVisible(false);
+                    changeFileNamePane.setVisible(false);
                     newFileNameField.clear();
                     reloadList();
                 } else {
@@ -541,7 +603,7 @@ public class MainController implements Initializable {
                     if (!successFileNameChange) {
                         System.out.println("Something went wrong, cannot rename a file");
                     }
-                    fileNameChangeBox.setVisible(false);
+                    changeFileNamePane.setVisible(false);
                     newFileNameField.clear();
                     clientView.getItems().clear();
                     clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
@@ -562,7 +624,7 @@ public class MainController implements Initializable {
     }
 
     public void createNewFolder(ActionEvent actionEvent) {
-        createNewFolder.setVisible(true);
+        createNewFolderPane.setVisible(true);
 
     }
 
@@ -574,7 +636,7 @@ public class MainController implements Initializable {
         if (serverSideSelected == null && localSideSelected == null) {
             System.out.println("Non of the sides has been selected to create a folder");
             newFolderNameField.clear();
-            createNewFolder.setVisible(false);
+            createNewFolderPane.setVisible(false);
             confirmFileNameChange(actionEvent);
         }
 
@@ -591,7 +653,7 @@ public class MainController implements Initializable {
                     System.out.println("Something went wrong. Could not create a directory");
                 }
                 newFolderNameField.clear();
-                createNewFolder.setVisible(false);
+                createNewFolderPane.setVisible(false);
                 reloadList();
             } else {
                 String toCreateFolder = clientFileTreeDir + "/" + newFolderName;
@@ -604,7 +666,7 @@ public class MainController implements Initializable {
                     System.out.println("Something went wrong. Could not create a directory");
                 }
                 newFolderNameField.clear();
-                createNewFolder.setVisible(false);
+                createNewFolderPane.setVisible(false);
                 clientView.getItems().clear();
                 clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
             }
@@ -616,12 +678,12 @@ public class MainController implements Initializable {
                 String newServerDir = "null" + "@" + newFolderName;
                 net.write(new createNewDirMessage(newServerDir));
                 newFolderNameField.clear();
-                createNewFolder.setVisible(false);
+                createNewFolderPane.setVisible(false);
             } else {
                 String newServerDir = serverFileTreeDir + "@" + newFolderName;
                 net.write(new createNewDirMessage(newServerDir));
                 newFolderNameField.clear();
-                createNewFolder.setVisible(false);
+                createNewFolderPane.setVisible(false);
             }
         }
     }
@@ -633,7 +695,7 @@ public class MainController implements Initializable {
         initialLocalDir = String.valueOf(clientFileTreeDir);
         initialServerDir = String.valueOf(serverFileTreeDir);
         confirmMoveButton.setVisible(true);
-        moveButton.setVisible(false);
+//        moveButton.setVisible(false);
     }
 
     public void moveHere(ActionEvent actionEvent) throws IOException {
