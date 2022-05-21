@@ -793,6 +793,20 @@ public class MainController implements Initializable {
         String localFinalDir = String.valueOf(clientFileTreeDir) + "/" + localFileToMove;
         String serverFinalDir = String.valueOf(serverFileTreeDir);
 
+        if (localFileToMove.contains(".txt") && localFinalDir.contains(".txt")) {
+            if (localFirstDir.contains("null")) {
+                MIMove.setVisible(true);
+                MIMoveHere.setVisible(false);
+                reloadList();
+                localCM.hide();
+            } else {
+                MIMove.setVisible(true);
+                MIMoveHere.setVisible(false);
+                reloadList();
+                localCM.hide();
+            }
+        }
+
         if (serverFileToMove == null) {
 
             if (initialLocalDir == null) {
