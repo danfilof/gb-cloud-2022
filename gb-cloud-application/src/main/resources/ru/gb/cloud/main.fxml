@@ -8,6 +8,16 @@
 
 <AnchorPane fx:id="mainAnchorPane" prefHeight="673.0" prefWidth="1031.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.gb.cloud.controllers.MainController">
 
+   <TextField fx:id="clientTextArea" alignment="CENTER" layoutX="115.0" layoutY="43.0" prefHeight="25.0" prefWidth="149.0" text="Local Drive" visible="false">
+      <font>
+         <Font name="Californian FB Bold" size="24.0" />
+      </font></TextField>
+
+   <TextField fx:id="serverTextArea" layoutX="582.0" layoutY="46.0" prefHeight="44.0" prefWidth="149.0" text="Server Drive" visible="false">
+      <font>
+         <Font name="Californian FB" size="24.0" />
+      </font></TextField>
+
    <HBox fx:id="loginBox" prefHeight="162.0" prefWidth="523.0" visible="true" VBox.vgrow="ALWAYS">
       <TextField fx:id="loginField" promptText="Login" visible="true" />
       <PasswordField fx:id="passwordField" promptText="Password" visible="true" />
@@ -29,7 +39,7 @@
    <TextArea fx:id="failedAuthMessage" layoutX="2.0" layoutY="162.0" prefHeight="25.0" prefWidth="434.0" text="Something went wrong. Probably wrong login or  password. Please try again." visible="false" />
 
 
-   <ListView fx:id="serverView" layoutX="683.0" layoutY="87.0" onMouseClicked="#openServerDirectories" onMouseEntered="#dropSelectionOnClientList" prefHeight="456.0" prefWidth="334.0" visible="false">
+   <ListView fx:id="serverView" layoutX="583.0" layoutY="87.0" onMouseClicked="#openServerDirectories" onMouseEntered="#dropSelectionOnClientList" prefHeight="476.0" prefWidth="354.0" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>
@@ -45,47 +55,6 @@
          </ContextMenu>
       </contextMenu>
    </ListView>
-<!--   <Button fx:id="uploadButton" layoutX="422.0" layoutY="75.0" mnemonicParsing="false" onAction="#upload" prefHeight="61.0" prefWidth="187.0" text="Upload" textFill="#04f500b5" textOverrun="CLIP" visible="false">-->
-<!--      <cursor>-->
-<!--         <Cursor fx:constant="HAND" />-->
-<!--      </cursor>-->
-<!--      <font>-->
-<!--         <Font name="Segoe UI" size="18.0" />-->
-<!--      </font>-->
-<!--   </Button>-->
-<!--   <Button fx:id="deleteButton" layoutX="422.0" layoutY="510.0" mnemonicParsing="false" onAction="#delete" prefHeight="61.0" prefWidth="187.0" text="Remove" textFill="#d11111d8" visible="false">-->
-<!--      <cursor>-->
-<!--         <Cursor fx:constant="HAND" />-->
-<!--      </cursor>-->
-<!--      <font>-->
-<!--         <Font name="Segoe UI Bold" size="18.0" />-->
-<!--      </font>-->
-<!--   </Button>-->
-<!--   <Button fx:id="createNewFolderButton" layoutX="422.0" layoutY="340.0" mnemonicParsing="false" onAction="#createNewFolder" prefHeight="61.0" prefWidth="187.0" text="Create Folder" textFill="#4acaf2d9" visible="false">-->
-<!--      <cursor>-->
-<!--         <Cursor fx:constant="HAND" />-->
-<!--      </cursor>-->
-<!--      <font>-->
-<!--         <Font name="Segoe UI" size="18.0" />-->
-<!--      </font>-->
-<!--   </Button>-->
-<!--   <Button fx:id="downloadButton" layoutX="422.0" layoutY="145.0" mnemonicParsing="false" onAction="#download" prefHeight="61.0" prefWidth="187.0" text="Download" textFill="#038ef2" visible="false">-->
-<!--      <cursor>-->
-<!--         <Cursor fx:constant="HAND" />-->
-<!--      </cursor>-->
-<!--      <font>-->
-<!--         <Font name="Segoe UI" size="18.0" />-->
-<!--      </font>-->
-<!--   </Button>-->
-
-<!--   <Button fx:id="moveButton" layoutX="422.0" layoutY="420.0" mnemonicParsing="false" onAction="#move" prefHeight="61.0" prefWidth="187.0" text="Move" textFill="#c305f0" visible="false">-->
-<!--      <cursor>-->
-<!--         <Cursor fx:constant="HAND" />-->
-<!--      </cursor>-->
-<!--      <font>-->
-<!--         <Font name="Segoe UI" size="18.0" />-->
-<!--      </font>-->
-<!--   </Button>-->
 
    <Button fx:id="confirmMoveButton" layoutX="422.0" layoutY="420.0" mnemonicParsing="false" onAction="#moveHere" prefHeight="61.0" prefWidth="187.0" text="Move here" textFill="#c305f0" visible="false">
       <cursor>
@@ -95,13 +64,7 @@
          <Font name="Segoe UI" size="18.0" />
       </font>
    </Button>
-
-<!--   <Button fx:id="renameButton" layoutX="422.0" layoutY="220.0" mnemonicParsing="false" onAction="#rename" prefHeight="61.0" prefWidth="187.0" text="Rename" textFill="#ffaa00" visible="false">-->
-<!--      <font>-->
-<!--         <Font name="Segoe UI" size="18.0" />-->
-<!--      </font>-->
-<!--   </Button>-->
-   <ListView fx:id="clientView" layoutX="14.0" layoutY="87.0" onMouseClicked="#openClientDirectories" onMouseEntered="#dropSelectionOnServerList" prefHeight="456.0" prefWidth="334.0" visible="false">
+   <ListView fx:id="clientView" layoutX="114.0" layoutY="87.0" onMouseClicked="#openClientDirectories" onMouseEntered="#dropSelectionOnServerList" prefHeight="476.0" prefWidth="354.0" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
       </cursor>

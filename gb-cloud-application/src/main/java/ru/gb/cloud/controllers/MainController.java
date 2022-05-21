@@ -70,6 +70,10 @@ public class MainController implements Initializable {
     @FXML
     public MenuItem MIDELETE;
     @FXML
+    public TextField clientTextArea;
+    @FXML
+    public TextField serverTextArea;
+    @FXML
     private Button confirmMoveButton;
     @FXML
     private Button moveButton;
@@ -322,6 +326,8 @@ public class MainController implements Initializable {
                         failedAuthImage.setVisible(false);
                         clientView.setVisible(true);
                         serverView.setVisible(true);
+                        clientTextArea.setVisible(true);
+                        serverTextArea.setVisible(true);
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
@@ -512,8 +518,10 @@ public class MainController implements Initializable {
         String deleteFileDir = serverFileTreeDir + "%" + fileToDeleteOnServer;
         if (serverFileTreeDir == null) {
             net.write(new DeleteMessage("null" + "%" + fileToDeleteOnServer));
+            serverCM.hide();
         } else {
             net.write(new DeleteMessage(deleteFileDir));
+            serverCM.hide();
         }
 
         String fileToDeleteLocal = clientView.getSelectionModel().getSelectedItem();
@@ -522,11 +530,13 @@ public class MainController implements Initializable {
             Path toDelete = Path.of("LocalFiles", fileToDeleteLocal);
             Files.deleteIfExists(toDelete);
             reloadList();
+            serverCM.hide();
         } else {
             Path toBeDeleted = Path.of(String.valueOf(clientFileTreeDir), fileToDeleteLocal);
             Files.deleteIfExists(toBeDeleted);
             clientView.getItems().clear();
             clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
+            serverCM.hide();
         }
         serverView.getSelectionModel().clearSelection();
         clientView.getSelectionModel().clearSelection();
@@ -549,7 +559,19 @@ public class MainController implements Initializable {
     public void rename(ActionEvent actionEvent) {
         // make visible textArea for new file name
         // make visible button to confirm the change
-       changeFileNamePane.setVisible(true);
+        if (serverView.getSelectionModel().getSelectedItem() == null) {
+            changeFileNamePane.setLayoutX(275);
+            changeFileNamePane.setLayoutY(525);
+            changeFileNamePane.setVisible(true);
+            changeFileNamePane.toFront();
+        }
+        if (clientView.getSelectionModel().getSelectedItem() == null) {
+            changeFileNamePane.setLayoutX(740);
+            changeFileNamePane.setLayoutY(525);
+            changeFileNamePane.setVisible(true);
+            changeFileNamePane.toFront();
+        }
+
     }
 
     public void confirmFileNameChange(ActionEvent actionEvent) throws IOException {
@@ -611,7 +633,6 @@ public class MainController implements Initializable {
                     System.out.println("no data given");
                 }
             }
-
         }
     }
 
@@ -624,7 +645,18 @@ public class MainController implements Initializable {
     }
 
     public void createNewFolder(ActionEvent actionEvent) {
-        createNewFolderPane.setVisible(true);
+        if (serverView.getSelectionModel().getSelectedItem() == null) {
+            createNewFolderPane.setLayoutX(155);
+            createNewFolderPane.setLayoutY(525);
+            createNewFolderPane.setVisible(true);
+            createNewFolderPane.toFront();
+        }
+        if (clientView.getSelectionModel().getSelectedItem() == null) {
+            createNewFolderPane.setLayoutX(635);
+            createNewFolderPane.setLayoutY(525);
+            createNewFolderPane.setVisible(true);
+            createNewFolderPane.toFront();
+        }
 
     }
 
