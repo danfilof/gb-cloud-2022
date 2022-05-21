@@ -227,7 +227,7 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
             if (idCheck == (int) idCheck) {
                 return status = nickCheck + "#" + "OK";
             } else {
-                return status = "%WrongData";
+                return status = "null" + "#" + "wrongData";
             }
         } catch (SQLException e) {
             e.printStackTrace();

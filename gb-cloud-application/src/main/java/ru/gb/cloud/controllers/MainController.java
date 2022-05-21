@@ -78,6 +78,10 @@ public class MainController implements Initializable {
     @FXML
     public TextField welcomeField;
     @FXML
+    public MenuItem MIMOVEHERE;
+    @FXML
+    public MenuItem MIMoveHere;
+    @FXML
     private Button confirmMoveButton;
     @FXML
     private Button moveButton;
@@ -183,7 +187,6 @@ public class MainController implements Initializable {
             clientFileTreeDir = Path.of(dirs);
             System.out.println("localDir: " + clientFileTreeDir);
 
-            // TODO if selected is a file
             if (clientSelection.contains(".txt")) {
                 System.out.println("Selected is a .txt file");
                 try
@@ -322,7 +325,7 @@ public class MainController implements Initializable {
                 if (message instanceof AuthMessage authMessage) {
                     String authData = authMessage.getAuthData();
                     System.out.println("AuthData: " + authData);
-                    log.info("received authentification status: " + authData);
+                    log.info("received authentication status: " + authData);
                     String[] authDATA = authData.split("#");
                     String status = authDATA[1];
                     String nick = authDATA[0];
@@ -337,6 +340,8 @@ public class MainController implements Initializable {
                         serverView.setVisible(true);
                         clientTextArea.setVisible(true);
                         serverTextArea.setVisible(true);
+                        MIMoveHere.setVisible(false);
+                        MIMOVEHERE.setVisible(false);
                         welcomeField.setVisible(true);
                         welcomeField.setText("Welcome back, " + nick + " !");
 
@@ -352,6 +357,9 @@ public class MainController implements Initializable {
                             public void run() {
                                 // add some background gradient
                                 mainAnchorPane.setStyle("-fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);");
+
+//                                 final Image txt  = new Image("C:\\Java\\gb-cloud\\AuthPicture\\txt.png");
+//                                 final Image folder  = new Image("C:\\Java\\gb-cloud\\AuthPicture\\folder.png");
 
                                 ImageView deleteImage = new ImageView();
                                 InputStream deleteStream = null;
@@ -388,6 +396,12 @@ public class MainController implements Initializable {
 
                                 ImageView returnImageII = new ImageView();
                                 InputStream returnStreamII = null;
+
+                                ImageView moveHereImageI = new ImageView();
+                                InputStream moveHereStreamI = null;
+
+                                ImageView moveHereImageII = new ImageView();
+                                InputStream moveHereStreamII = null;
                                 try {
                                     deleteStream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\delete.jpg");
                                     uploadStream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\upload.png");
@@ -401,6 +415,8 @@ public class MainController implements Initializable {
                                     returnStream = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\return.png");
                                     returnStreamII = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\return.png");
                                     deleteStreamII = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\delete.jpg");
+                                    moveHereStreamI = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\moveHere.png");
+                                    moveHereStreamII = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\moveHere.png");
                                 } catch (FileNotFoundException e) {
                                     throw new RuntimeException(e);
                                 }
@@ -475,6 +491,18 @@ public class MainController implements Initializable {
                                 returnImageII.setFitWidth(15);
                                 returnImageII.setFitHeight(15);
                                 buttonBACKServer.setGraphic(returnImageII);
+
+                                Image moveHereI= new Image(moveHereStreamI);
+                                moveHereImageI.setImage(moveHereI);
+                                moveHereImageI.setFitWidth(15);
+                                moveHereImageI.setFitHeight(15);
+                                MIMOVEHERE.setGraphic(moveHereImageI);
+
+                                Image moveHereII = new Image(moveHereStreamII);
+                                moveHereImageII.setImage(moveHereI);
+                                moveHereImageII.setFitWidth(15);
+                                moveHereImageII.setFitHeight(15);
+                                MIMoveHere.setGraphic(moveHereImageII);
                             }
                         });
                     } else {
@@ -745,8 +773,13 @@ public class MainController implements Initializable {
         // getting the directories of files before move
         initialLocalDir = String.valueOf(clientFileTreeDir);
         initialServerDir = String.valueOf(serverFileTreeDir);
-        confirmMoveButton.setVisible(true);
+       // confirmMoveButton.setVisible(true);
 //        moveButton.setVisible(false);
+        MIMOVE.setVisible(false);
+        MIMove.setVisible(false);
+        MIMOVEHERE.setVisible(true);
+        MIMoveHere.setVisible(true);
+
     }
 
     public void moveHere(ActionEvent actionEvent) throws IOException {
@@ -767,8 +800,8 @@ public class MainController implements Initializable {
                 File localFile1 = new File("LocalFiles" + "/" + localFileToMove);
                 localFile1.renameTo(new File(localFinalDir));
                 reloadList();
-                confirmMoveButton.setVisible(false);
-                moveButton.setVisible(true);
+                MIMoveHere.setVisible(false);
+                MIMove.setVisible(true);
             } else {
                 if (localFirstDir.contains("null")) {
                     System.out.println("localFirstDir contains null: " + localFirstDir);
@@ -776,16 +809,16 @@ public class MainController implements Initializable {
                     localFile1.renameTo(new File(localFinalDir));
                     clientView.getItems().clear();
                     clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
-                    confirmMoveButton.setVisible(false);
-                    moveButton.setVisible(true);
+                    MIMoveHere.setVisible(false);
+                    MIMove.setVisible(true);
                 } else {
                     File localFile1 = new File(localFirstDir);
                     localFile1.renameTo(new File(localFinalDir));
                     System.out.println("FROM: " + localFirstDir + " TO " + localFinalDir);
                     clientView.getItems().clear();
                     clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
-                    confirmMoveButton.setVisible(false);
-                    moveButton.setVisible(true);
+                    MIMoveHere.setVisible(false);
+                    MIMove.setVisible(true);
                 }
             }
         }
@@ -795,13 +828,15 @@ public class MainController implements Initializable {
             if (serverFirstDir == null) {
                 String toSendMove = "null" + "#" + serverFinalDir + "#" + serverFileToMove;
                 net.write(new moveMessage(toSendMove));
-                confirmMoveButton.setVisible(false);
-                moveButton.setVisible(true);
+                serverCM.hide();
+                MIMOVEHERE.setVisible(false);
+                MIMOVE.setVisible(true);
             } else {
                 String toSendMove = serverFirstDir + "#" + serverFinalDir + "#" + serverFileToMove;
                 net.write(new moveMessage(toSendMove));
-                confirmMoveButton.setVisible(false);
-                moveButton.setVisible(true);
+                serverCM.hide();
+                MIMOVEHERE.setVisible(false);
+                MIMOVE.setVisible(true);
             }
         }
     }

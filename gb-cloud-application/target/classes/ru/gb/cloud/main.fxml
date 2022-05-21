@@ -8,19 +8,19 @@
 
 <AnchorPane fx:id="mainAnchorPane" prefHeight="673.0" prefWidth="1031.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.gb.cloud.controllers.MainController">
 
-   <TextField fx:id="clientTextArea" alignment="CENTER" layoutX="115.0" layoutY="43.0" prefHeight="25.0" prefWidth="149.0" text="Local Drive" visible="false">
+   <TextField fx:id="clientTextArea" alignment="CENTER" layoutX="113.0" layoutY="67.0" prefHeight="20.0" prefWidth="80.0" text="Local Drive" visible="false">
       <font>
-         <Font name="Californian FB Bold" size="24.0" />
+         <Font name="Californian FB Bold" size="10.0" />
       </font></TextField>
 
-   <TextField fx:id="serverTextArea" layoutX="582.0" layoutY="46.0" prefHeight="44.0" prefWidth="149.0" text="Server Drive" visible="false">
+   <TextField fx:id="serverTextArea" alignment="CENTER" layoutX="582.0" layoutY="68.0" prefHeight="20.0" prefWidth="80.0" text="Server Drive" visible="false">
       <font>
-         <Font name="Californian FB" size="24.0" />
+         <Font name="Californian FB" size="10.0" />
       </font></TextField>
 
-   <TextField fx:id="welcomeField" text="Welcome, " visible="false">
+   <TextField fx:id="welcomeField" layoutX="20.0" layoutY="30.0" text="Welcome, " visible="false">
       <font>
-         <Font name="Californian FB Bold" size="24.0" />
+         <Font name="Californian FB Bold" size="11.0" />
       </font></TextField>
 
    <HBox fx:id="loginBox" prefHeight="162.0" prefWidth="523.0" visible="true" VBox.vgrow="ALWAYS">
@@ -55,20 +55,13 @@
                <MenuItem fx:id="MIRENAME" onAction="#rename" text="Rename" />
                <MenuItem fx:id="MICREATEFOLDER" onAction="#createNewFolder" text="Create Folder" />
                <MenuItem fx:id="MIMOVE" onAction="#move" text="Move" />
+               <MenuItem fx:id="MIMOVEHERE" onAction="#moveHere" text="Move here" />
                <MenuItem fx:id="MIDELETE" onAction="#delete" text="Remove" />
             </items>
          </ContextMenu>
       </contextMenu>
    </ListView>
 
-   <Button fx:id="confirmMoveButton" layoutX="422.0" layoutY="420.0" mnemonicParsing="false" onAction="#moveHere" prefHeight="61.0" prefWidth="187.0" text="Move here" textFill="#c305f0" visible="false">
-      <cursor>
-         <Cursor fx:constant="HAND" />
-      </cursor>
-      <font>
-         <Font name="Segoe UI" size="18.0" />
-      </font>
-   </Button>
    <ListView fx:id="clientView" layoutX="114.0" layoutY="87.0" onMouseClicked="#openClientDirectories" onMouseEntered="#dropSelectionOnServerList" prefHeight="476.0" prefWidth="354.0" visible="false">
       <cursor>
          <Cursor fx:constant="HAND" />
@@ -80,12 +73,13 @@
                <MenuItem fx:id="MIRename" onAction="#rename" text="Rename" />
                <MenuItem fx:id="MINewFolder" onAction="#createNewFolder" text="Create Folder" />
                <MenuItem fx:id="MIMove" onAction="#move" text="Move" />
+               <MenuItem fx:id="MIMoveHere" onAction="#moveHere" text="Move here" />
                <MenuItem fx:id="MIDelete" onAction="#delete" text="Remove" />
 
             </items>
          </ContextMenu>
       </contextMenu>
    </ListView>
-   <Button fx:id="buttonBACK" layoutX="15.0" layoutY="60.0" mnemonicParsing="false" onAction="#buttonBACK" text="Return" visible="false" />
-   <Button fx:id="buttonBACKServer" layoutX="935.0" layoutY="60.0" mnemonicParsing="false" onAction="#buttonBACKServer" text="Return" visible="false" />
+   <Button fx:id="buttonBACK" layoutX="365.0" layoutY="60.0" mnemonicParsing="false" onAction="#buttonBACK" text="Return" visible="false" />
+   <Button fx:id="buttonBACKServer" layoutX="835.0" layoutY="60.0" mnemonicParsing="false" onAction="#buttonBACKServer" text="Return" visible="false" />
 </AnchorPane>
