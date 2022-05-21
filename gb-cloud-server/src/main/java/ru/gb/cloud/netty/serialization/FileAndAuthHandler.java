@@ -231,7 +231,7 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return "wrongData";
+            return "null" + "#" + "wrongData";
         }
     }
     public void connect() {

@@ -327,9 +327,9 @@ public class MainController implements Initializable {
                     System.out.println("AuthData: " + authData);
                     log.info("received authentication status: " + authData);
                     String[] authDATA = authData.split("#");
+                    System.out.println(Arrays.toString(authDATA));
                     String status = authDATA[1];
                     String nick = authDATA[0];
-
                     if (status.equals("OK")) {
                         log.info("successfully authenticated...");
                         // make all buttons and list visible
