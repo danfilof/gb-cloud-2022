@@ -779,7 +779,6 @@ public class MainController implements Initializable {
         MIMove.setVisible(false);
         MIMOVEHERE.setVisible(true);
         MIMoveHere.setVisible(true);
-
     }
 
     public void moveHere(ActionEvent actionEvent) throws IOException {
@@ -799,11 +798,17 @@ public class MainController implements Initializable {
                 MIMoveHere.setVisible(false);
                 reloadList();
                 localCM.hide();
+                buttonBACK(actionEvent);
             } else {
                 MIMove.setVisible(true);
                 MIMoveHere.setVisible(false);
                 reloadList();
                 localCM.hide();
+                int clicker = countClientClick - 1;
+
+                for (int i = 0; i < clicker; i++) {
+                    buttonBACK(actionEvent);
+                }
             }
         }
 
