@@ -18,6 +18,11 @@
          <Font name="Californian FB" size="24.0" />
       </font></TextField>
 
+   <TextField fx:id="welcomeField" text="Welcome, " visible="false">
+      <font>
+         <Font name="Californian FB Bold" size="24.0" />
+      </font></TextField>
+
    <HBox fx:id="loginBox" prefHeight="162.0" prefWidth="523.0" visible="true" VBox.vgrow="ALWAYS">
       <TextField fx:id="loginField" promptText="Login" visible="true" />
       <PasswordField fx:id="passwordField" promptText="Password" visible="true" />

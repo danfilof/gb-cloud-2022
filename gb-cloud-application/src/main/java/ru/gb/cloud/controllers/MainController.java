@@ -1,5 +1,6 @@
 package ru.gb.cloud.controllers;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 import ru.gb.cloud.model.*;
 import ru.gb.cloud.network.Net;
@@ -73,6 +75,8 @@ public class MainController implements Initializable {
     public TextField clientTextArea;
     @FXML
     public TextField serverTextArea;
+    @FXML
+    public TextField welcomeField;
     @FXML
     private Button confirmMoveButton;
     @FXML
@@ -316,9 +320,14 @@ public class MainController implements Initializable {
                 }
 
                 if (message instanceof AuthMessage authMessage) {
-                    String status = authMessage.getAuthData();
-                    log.info("received authentification status: " + status);
-                    if (status.equals("%OK")) {
+                    String authData = authMessage.getAuthData();
+                    System.out.println("AuthData: " + authData);
+                    log.info("received authentification status: " + authData);
+                    String[] authDATA = authData.split("#");
+                    String status = authDATA[1];
+                    String nick = authDATA[0];
+
+                    if (status.equals("OK")) {
                         log.info("successfully authenticated...");
                         // make all buttons and list visible
                         loginBox.setVisible(false);
@@ -328,6 +337,16 @@ public class MainController implements Initializable {
                         serverView.setVisible(true);
                         clientTextArea.setVisible(true);
                         serverTextArea.setVisible(true);
+                        welcomeField.setVisible(true);
+                        welcomeField.setText("Welcome back, " + nick + " !");
+
+                        PauseTransition visiblePause = new PauseTransition(
+                                Duration.seconds(3)
+                        );
+                        visiblePause.setOnFinished(
+                                event -> welcomeField.setVisible(false)
+                        );
+                        visiblePause.play();
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {

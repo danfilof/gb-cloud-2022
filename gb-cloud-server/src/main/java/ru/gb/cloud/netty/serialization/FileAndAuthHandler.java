@@ -214,17 +214,18 @@ public class FileAndAuthHandler extends SimpleChannelInboundHandler<AbstractMess
     }
 
     public String checkAuth(String login, String password) {
-        try (PreparedStatement ps = connection.prepareStatement("select id from users where login = ? and pass = ?")){
+        try (PreparedStatement ps = connection.prepareStatement("select id, nick from users where login = ? and pass = ?")){
             ps.setString(1, login);
             ps.setString(2, password);
             String id = null;
             String status = null;
             ResultSet rs = ps.executeQuery();
             int idCheck = rs.getInt("id");
-            log.info("data base query has been executed...");
+            String nickCheck = rs.getString("nick");
+            log.info("data base query has been executed... " + nickCheck);
             // if what returns is a number, the user exists, return positive status
             if (idCheck == (int) idCheck) {
-                return status = "%OK";
+                return status = nickCheck + "#" + "OK";
             } else {
                 return status = "%WrongData";
             }
