@@ -841,6 +841,21 @@ public class MainController implements Initializable {
 
         if (localFileToMove == null) {
 
+            if (serverFileToMove.contains(".txt") && serverFinalDir.contains(".txt")) {
+                System.out.println("moving .txt into .txt");
+                if (serverFirstDir.contains("null")) {
+                    MIMOVE.setVisible(true);
+                    MIMOVEHERE.setVisible(false);
+                    serverCM.hide();
+                    buttonBACKServer(actionEvent);
+                } else {
+                    MIMOVE.setVisible(true);
+                    MIMOVEHERE.setVisible(false);
+                    buttonBACKServer(actionEvent);
+                    serverCM.hide();
+                }
+            }
+
             if (serverFirstDir == null) {
                 String toSendMove = "null" + "#" + serverFinalDir + "#" + serverFileToMove;
                 net.write(new moveMessage(toSendMove));
