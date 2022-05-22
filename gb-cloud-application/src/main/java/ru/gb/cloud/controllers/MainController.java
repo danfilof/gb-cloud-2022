@@ -737,6 +737,14 @@ public class MainController implements Initializable {
                 createNewFolderPane.setVisible(false);
                 reloadList();
             } else {
+                String s = String.valueOf(clientFileTreeDir);
+
+                if (s.contains(".txt")) {
+                    newFolderNameField.clear();
+                    createNewFolderPane.setVisible(false);
+                    buttonBACK(actionEvent);
+                }
+
                 System.out.println("Create new folder, serverside = null, clientFree != null");
                 String toCreateFolder = clientFileTreeDir + "/" + newFolderName;
                 File newFolder = new File(toCreateFolder);
@@ -762,6 +770,14 @@ public class MainController implements Initializable {
                 newFolderNameField.clear();
                 createNewFolderPane.setVisible(false);
             } else {
+
+                String sServer = String.valueOf(serverFileTreeDir);
+
+                if (sServer.contains(".txt")) {
+                    newFolderNameField.clear();
+                    createNewFolderPane.setVisible(false);
+                    buttonBACKServer(actionEvent);
+                }
                 String newServerDir = serverFileTreeDir + "@" + newFolderName;
                 net.write(new createNewDirMessage(newServerDir));
                 newFolderNameField.clear();
