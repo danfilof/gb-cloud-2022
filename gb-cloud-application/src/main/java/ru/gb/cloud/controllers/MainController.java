@@ -722,7 +722,9 @@ public class MainController implements Initializable {
         if (serverSideSelected == null) {
 
             if (clientFileTreeDir == null) {
+                System.out.println("Create new folder, serverside = null, clientFree = null");
                 String toCreateFolder = "LocalFiles" + "/" + newFolderName;
+                //System.out.println("toCreateFolder: " + toCreateFolder);
                 File newFolder = new File(toCreateFolder);
 
                 boolean bool = newFolder.mkdir();
@@ -735,6 +737,7 @@ public class MainController implements Initializable {
                 createNewFolderPane.setVisible(false);
                 reloadList();
             } else {
+                System.out.println("Create new folder, serverside = null, clientFree != null");
                 String toCreateFolder = clientFileTreeDir + "/" + newFolderName;
                 File newFolder = new File(toCreateFolder);
 
