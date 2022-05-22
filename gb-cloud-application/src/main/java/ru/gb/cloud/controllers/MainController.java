@@ -361,6 +361,71 @@ public class MainController implements Initializable {
 //                                 final Image txt  = new Image("C:\\Java\\gb-cloud\\AuthPicture\\txt.png");
 //                                 final Image folder  = new Image("C:\\Java\\gb-cloud\\AuthPicture\\folder.png");
 
+                                clientView.setCellFactory(listView -> new ListCell<String>() {
+                                    ImageView localImageView = new ImageView();
+                                    final Image txt  = new Image("C:\\Java\\gb-cloud\\AuthPicture\\txt.png");
+                                    final Image folder  = new Image("C:\\Java\\gb-cloud\\AuthPicture\\folder.png");
+                                    public void updateItem(String friend, boolean empty) {
+                                        super.updateItem(friend, empty);
+                                        if (empty) {
+                                            setText(null);
+                                            setGraphic(null);
+                                        } else {
+
+                                            String serverTXTIcon = String.valueOf(serverFileTreeDir);
+
+                                            if (serverTXTIcon.contains(".txt")) {
+                                                System.out.println("Opened .txt test icon");
+                                                setGraphic(null);
+                                            }
+                                            if (friend.contains(".txt")) {
+                                                localImageView.setImage(txt);
+                                                localImageView.setFitWidth(20);
+                                                localImageView.setFitHeight(20);
+                                                setText(friend);
+                                                setGraphic(localImageView);
+                                            } else {
+                                                localImageView.setImage(folder);
+                                                localImageView.setFitWidth(20);
+                                                localImageView.setFitHeight(20);
+                                                setText(friend);
+                                                setGraphic(localImageView);
+                                            }
+
+                                        }
+                                    }
+
+                                });
+
+                                serverView.setCellFactory(listView -> new ListCell<String>() {
+                                    ImageView serverImageView = new ImageView();
+                                    final Image txt  = new Image("C:\\Java\\gb-cloud\\AuthPicture\\txt.png");
+                                    final Image folder  = new Image("C:\\Java\\gb-cloud\\AuthPicture\\folder.png");
+                                    public void updateItem(String friend, boolean empty) {
+                                        super.updateItem(friend, empty);
+                                        if (empty) {
+                                            setText(null);
+                                            setGraphic(null);
+                                        } else {
+                                            if (friend.contains(".txt")) {
+                                                serverImageView.setImage(txt);
+                                                serverImageView.setFitWidth(20);
+                                                serverImageView.setFitHeight(20);
+                                                setText(friend);
+                                                setGraphic(serverImageView);
+                                            } else {
+                                                serverImageView.setImage(folder);
+                                                serverImageView.setFitWidth(20);
+                                                serverImageView.setFitHeight(20);
+                                                setText(friend);
+                                                setGraphic(serverImageView);
+                                            }
+
+                                        }
+                                    }
+
+                                });
+
                                 ImageView deleteImage = new ImageView();
                                 InputStream deleteStream = null;
 
