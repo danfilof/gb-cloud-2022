@@ -789,26 +789,27 @@ public class MainController implements Initializable {
         String localFirstDir = initialLocalDir + "/" + localFileToMove;
         String serverFirstDir = initialServerDir;
         // getting the desired directories where files should be moved
+        String localFinalDirMoveBug = String.valueOf(clientFileTreeDir);
         String localFinalDir = String.valueOf(clientFileTreeDir) + "/" + localFileToMove;
         String serverFinalDir = String.valueOf(serverFileTreeDir);
 
-        if (localFileToMove.contains(".txt") && localFinalDir.contains(".txt")) {
-            if (localFirstDir.contains("null")) {
-                MIMove.setVisible(true);
-                MIMoveHere.setVisible(false);
-                reloadList();
-                localCM.hide();
-                buttonBACK(actionEvent);
-            } else {
-                MIMove.setVisible(true);
-                MIMoveHere.setVisible(false);
-                buttonBACK(actionEvent);
-                localCM.hide();
-
-            }
-        }
-
         if (serverFileToMove == null) {
+
+            if (localFileToMove.contains(".txt") && localFinalDirMoveBug.contains(".txt")) {
+                System.out.println("moving .txt into .txt");
+                if (localFirstDir.contains("null")) {
+                    MIMove.setVisible(true);
+                    MIMoveHere.setVisible(false);
+                    reloadList();
+                    localCM.hide();
+                    buttonBACK(actionEvent);
+                } else {
+                    MIMove.setVisible(true);
+                    MIMoveHere.setVisible(false);
+                    buttonBACK(actionEvent);
+                    localCM.hide();
+                }
+            }
 
             if (initialLocalDir == null) {
                 System.out.println("FROM LOCALFILES: " + "LocalFiles" + "/" + localFileToMove);
