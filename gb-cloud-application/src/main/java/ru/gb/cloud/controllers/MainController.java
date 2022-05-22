@@ -814,7 +814,7 @@ public class MainController implements Initializable {
 
         if (serverFileToMove == null) {
 
-            if (localFileToMove.contains(".txt") && localFinalDirMoveBug.contains(".txt")) {
+            if (localFinalDirMoveBug.contains(".txt")) {
                 System.out.println("moving .txt into .txt");
                 if (localFirstDir.contains("null")) {
                     MIMove.setVisible(true);
@@ -860,7 +860,7 @@ public class MainController implements Initializable {
 
         if (localFileToMove == null) {
 
-            if (serverFileToMove.contains(".txt") && serverFinalDir.contains(".txt")) {
+            if (serverFinalDir.contains(".txt")) {
                 System.out.println("moving .txt into .txt");
                 if (serverFirstDir.contains("null")) {
                     MIMOVE.setVisible(true);
