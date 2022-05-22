@@ -802,13 +802,9 @@ public class MainController implements Initializable {
             } else {
                 MIMove.setVisible(true);
                 MIMoveHere.setVisible(false);
-                reloadList();
+                buttonBACK(actionEvent);
                 localCM.hide();
-                int clicker = countClientClick - 1;
 
-                for (int i = 0; i < clicker; i++) {
-                    buttonBACK(actionEvent);
-                }
             }
         }
 
