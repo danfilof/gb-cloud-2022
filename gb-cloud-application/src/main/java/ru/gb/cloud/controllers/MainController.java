@@ -903,13 +903,17 @@ public class MainController implements Initializable {
                 System.out.println("moving .txt into .txt");
                 if (localFirstDir.contains("null")) {
                     MIMove.setVisible(true);
+                    MIMOVE.setVisible(true);
                     MIMoveHere.setVisible(false);
+                    MIMOVEHERE.setVisible(false);
                     reloadList();
                     localCM.hide();
                     buttonBACK(actionEvent);
                 } else {
                     MIMove.setVisible(true);
+                    MIMOVE.setVisible(true);
                     MIMoveHere.setVisible(false);
+                    MIMOVEHERE.setVisible(false);
                     buttonBACK(actionEvent);
                     localCM.hide();
                 }
@@ -922,6 +926,8 @@ public class MainController implements Initializable {
                 reloadList();
                 MIMoveHere.setVisible(false);
                 MIMove.setVisible(true);
+                MIMOVE.setVisible(true);
+                MIMOVEHERE.setVisible(false);
             } else {
                 if (localFirstDir.contains("null")) {
                     System.out.println("localFirstDir contains null: " + localFirstDir);
@@ -931,6 +937,8 @@ public class MainController implements Initializable {
                     clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
                     MIMoveHere.setVisible(false);
                     MIMove.setVisible(true);
+                    MIMOVE.setVisible(true);
+                    MIMOVEHERE.setVisible(false);
                 } else {
                     File localFile1 = new File(localFirstDir);
                     localFile1.renameTo(new File(localFinalDir));
@@ -939,6 +947,8 @@ public class MainController implements Initializable {
                     clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
                     MIMoveHere.setVisible(false);
                     MIMove.setVisible(true);
+                    MIMOVE.setVisible(true);
+                    MIMOVEHERE.setVisible(false);
                 }
             }
         }
@@ -950,11 +960,15 @@ public class MainController implements Initializable {
                 if (serverFirstDir.contains("null")) {
                     MIMOVE.setVisible(true);
                     MIMOVEHERE.setVisible(false);
+                    MIMove.setVisible(true);
+                    MIMoveHere.setVisible(true);
                     serverCM.hide();
                     buttonBACKServer(actionEvent);
                 } else {
                     MIMOVE.setVisible(true);
                     MIMOVEHERE.setVisible(false);
+                    MIMove.setVisible(true);
+                    MIMoveHere.setVisible(true);
                     buttonBACKServer(actionEvent);
                     serverCM.hide();
                 }
@@ -966,12 +980,16 @@ public class MainController implements Initializable {
                 serverCM.hide();
                 MIMOVEHERE.setVisible(false);
                 MIMOVE.setVisible(true);
+                MIMove.setVisible(true);
+                MIMoveHere.setVisible(true);
             } else {
                 String toSendMove = serverFirstDir + "#" + serverFinalDir + "#" + serverFileToMove;
                 net.write(new moveMessage(toSendMove));
                 serverCM.hide();
                 MIMOVEHERE.setVisible(false);
                 MIMOVE.setVisible(true);
+                MIMove.setVisible(true);
+                MIMoveHere.setVisible(true);
             }
         }
     }
