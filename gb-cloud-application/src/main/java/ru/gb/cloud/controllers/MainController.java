@@ -100,22 +100,25 @@ public class MainController implements Initializable {
 
     private Net net;
     private Path clientDir;
-    @FXML
-    private Button confirmFileNameChangeButton;
-    @FXML
-    private Button deleteButton;
 
-    @FXML
-    private Button downloadButton;
-
-    @FXML
-    private Button renameButton;
-
-    @FXML
-    private Button uploadButton;
-
-    @FXML
-    private Button AuthButton;
+    //TODO
+//    @FXML
+//    private Button confirmFileNameChangeButton;
+//    @FXML
+//    private Button deleteButton;
+//
+//    @FXML
+//    private Button downloadButton;
+//
+//    @FXML
+//    private Button renameButton;
+//
+//    @FXML
+//    private Button uploadButton;
+//
+//    @FXML
+//    private Button AuthButton;
+    //TODO
 
     @FXML
     private TextField loginField;
@@ -172,20 +175,16 @@ public class MainController implements Initializable {
             String clientSelection = clientView.getSelectionModel().getSelectedItem();
             // after selecting the folder to be opened the name of the folder is added into the arraylist
             clientDirList.add(clientSelection);
-            System.out.println("BEFORE (!) : (!) dirList: " + clientDirList);
             // reads the arraylist into the array
             String[] clientDirsArray = Arrays.copyOf(clientDirList.toArray(), clientDirList.size(), String[].class);
             // reads the array into string
             dirs = Arrays.toString(clientDirsArray);
-            System.out.println("dirs: " + dirs);
             // getting rid of array syntax which isn't necessary
             dirs = dirs.replace(", ", "/");
             dirs = dirs.replace("[", "");
             dirs = dirs.replace("]", "");
-            System.out.println("dirs: " + dirs);
             // using the string as a path
             clientFileTreeDir = Path.of(dirs);
-            System.out.println("localDir: " + clientFileTreeDir);
 
             if (clientSelection.contains(".txt")) {
                 System.out.println("Selected is a .txt file");
@@ -223,7 +222,6 @@ public class MainController implements Initializable {
         dirs = dirs.replace("[", "");
         dirs = dirs.replace("]", "");
         clientFileTreeDir = Path.of(dirs);
-        System.out.println("return to: " + clientFileTreeDir);
         clientView.getItems().clear();
         clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
 
@@ -241,11 +239,12 @@ public class MainController implements Initializable {
                 serverDirList.add(0, "ServerFiles");
             }
             String serverSelection = serverView.getSelectionModel().getSelectedItem();
-            System.out.println("selected file on server: " + serverSelection);
 
-            if (serverSelection.contains(".txt")) {
-                System.out.println("Selected is a .txt file");
-            }
+            //TODO
+//            if (serverSelection.contains(".txt")) {
+//                System.out.println("Selected is a .txt file");
+//            }
+            // TODO
             serverDirList.add(serverSelection);
             String[] serverDirsArray = Arrays.copyOf(serverDirList.toArray(), serverDirList.size(), String[].class);
             serverDirs = Arrays.toString(serverDirsArray);
@@ -256,7 +255,6 @@ public class MainController implements Initializable {
             serverFileTreeDir = Path.of(serverDirs);
             System.out.println(serverFileTreeDir);
             String serverTree = String.valueOf(serverFileTreeDir);
-            System.out.println("serverTree: " + serverTree);
             // sending the path needed to the server
             net.write(new directoryMessage(serverTree));
         }
@@ -271,7 +269,6 @@ public class MainController implements Initializable {
         serverDirs = serverDirs.replace("[", "");
         serverDirs = serverDirs.replace("]", "");
         serverFileTreeDir = Path.of(serverDirs);
-        System.out.println("return to: " + serverFileTreeDir);
         String serverTreeReturn = String.valueOf(serverFileTreeDir);
         net.write(new directoryMessage(serverTreeReturn));
 
@@ -317,17 +314,14 @@ public class MainController implements Initializable {
                 }
 
                 if (message instanceof FileMessage file) {
-                    System.out.println("received file to be downloaded: " + file.getName());
                     Files.write(clientDir.resolve(file.getName()), file.getBytes());
                     reloadList();
                 }
 
                 if (message instanceof AuthMessage authMessage) {
                     String authData = authMessage.getAuthData();
-                    System.out.println("AuthData: " + authData);
-                    log.info("received authentication status: " + authData);
+                    log.info("received authentication status");
                     String[] authDATA = authData.split("#");
-                    System.out.println(Arrays.toString(authDATA));
                     String status = authDATA[1];
                     String nick = authDATA[0];
                     if (status.equals("OK")) {
@@ -376,8 +370,6 @@ public class MainController implements Initializable {
                                             String clientTXTIcon = String.valueOf(clientFileTreeDir);
 
                                             if (clientTXTIcon.contains(".txt") && countClientClick >= 1) {
-                                                System.out.println("clicker: " + countClientClick);
-                                                System.out.println("Opened .txt test icon TEST TEST");
                                                 localImageView.setImage(TEXT);
                                                 localImageView.setFitWidth(20);
                                                 localImageView.setFitHeight(20);
@@ -419,8 +411,6 @@ public class MainController implements Initializable {
                                             String serverTXTIcon = String.valueOf(serverFileTreeDir);
 
                                             if (serverTXTIcon.contains(".txt") && countServerClick >= 1) {
-                                                System.out.println("clicker: " + countServerClick);
-                                                System.out.println("Opened .txt test icon TEST TEST");
                                                 serverImageView.setImage(TEXT);
                                                 serverImageView.setFitWidth(20);
                                                 serverImageView.setFitHeight(20);
@@ -592,7 +582,6 @@ public class MainController implements Initializable {
                         });
                     } else {
                         log.info("user used wrong password or login...");
-                        System.out.println("Wrong login or password");
                         // upload image
                         InputStream streamRobot = new FileInputStream("C:\\Java\\gb-cloud\\AuthPicture\\sad_robot.jpg");
                         Image robotImage = new Image(streamRobot);
@@ -646,7 +635,6 @@ public class MainController implements Initializable {
 
     public void delete(ActionEvent actionEvent) throws IOException {
         String fileToDeleteOnServer = serverView.getSelectionModel().getSelectedItem();
-        System.out.println("sent request to delete a file: " + fileToDeleteOnServer);
         String deleteFileDir = serverFileTreeDir + "%" + fileToDeleteOnServer;
         if (serverFileTreeDir == null) {
             net.write(new DeleteMessage("null" + "%" + fileToDeleteOnServer));
@@ -737,7 +725,7 @@ public class MainController implements Initializable {
                     boolean successFileNameChange = originalFile.renameTo(newFile);
 
                     if (!successFileNameChange) {
-                        System.out.println("Something went wrong, cannot rename a file");
+                        log.info("Something went wrong, cannot rename a file");
                     }
                     changeFileNamePane.setVisible(false);
                     newFileNameField.clear();
@@ -750,19 +738,19 @@ public class MainController implements Initializable {
                 File newFile = new File(String.valueOf(clientFileTreeDir), newFileName);
                 if (localFileToRename != null ) {
                     if (newFile.exists()) {
-                        System.out.println("file exists already");
+                        log.info("file exists already");
                     }
                     boolean successFileNameChange = originalFile.renameTo(newFile);
 
                     if (!successFileNameChange) {
-                        System.out.println("Something went wrong, cannot rename a file");
+                        log.info("Something went wrong, cannot rename a file");
                     }
                     changeFileNamePane.setVisible(false);
                     newFileNameField.clear();
                     clientView.getItems().clear();
                     clientView.getItems().addAll(Files.list(clientFileTreeDir).map(Path::getFileName).map(Path::toString).toList());
                 } else {
-                    System.out.println("no data given");
+                    log.info("no data given");
                 }
             }
         }
@@ -798,7 +786,7 @@ public class MainController implements Initializable {
         String newFolderName = newFolderNameField.getText();
 
         if (serverSideSelected == null && localSideSelected == null) {
-            System.out.println("Non of the sides has been selected to create a folder");
+            // Non of the sides has been selected to create a folder
             newFolderNameField.clear();
             createNewFolderPane.setVisible(false);
             confirmFileNameChange(actionEvent);
@@ -814,9 +802,9 @@ public class MainController implements Initializable {
 
                 boolean bool = newFolder.mkdir();
                 if(bool){
-                    System.out.println("Folder is created successfully");
+                    log.info("Folder is created successfully");
                 }else{
-                    System.out.println("Something went wrong. Could not create a directory");
+                    log.info("Something went wrong. Could not create a directory");
                 }
                 newFolderNameField.clear();
                 createNewFolderPane.setVisible(false);
@@ -830,15 +818,14 @@ public class MainController implements Initializable {
                     buttonBACK(actionEvent);
                 }
 
-                System.out.println("Create new folder, serverside = null, clientFree != null");
                 String toCreateFolder = clientFileTreeDir + "/" + newFolderName;
                 File newFolder = new File(toCreateFolder);
 
                 boolean bool = newFolder.mkdir();
                 if(bool){
-                    System.out.println("Folder is created successfully");
+                    log.info("Folder is created successfully");
                 }else{
-                    System.out.println("Something went wrong. Could not create a directory");
+                    log.info("Something went wrong. Could not create a directory");
                 }
                 newFolderNameField.clear();
                 createNewFolderPane.setVisible(false);
@@ -877,8 +864,6 @@ public class MainController implements Initializable {
         // getting the directories of files before move
         initialLocalDir = String.valueOf(clientFileTreeDir);
         initialServerDir = String.valueOf(serverFileTreeDir);
-       // confirmMoveButton.setVisible(true);
-//        moveButton.setVisible(false);
         MIMOVE.setVisible(false);
         MIMove.setVisible(false);
         MIMOVEHERE.setVisible(true);
@@ -920,7 +905,6 @@ public class MainController implements Initializable {
             }
 
             if (initialLocalDir == null) {
-                System.out.println("FROM LOCALFILES: " + "LocalFiles" + "/" + localFileToMove);
                 File localFile1 = new File("LocalFiles" + "/" + localFileToMove);
                 localFile1.renameTo(new File(localFinalDir));
                 reloadList();
@@ -930,7 +914,6 @@ public class MainController implements Initializable {
                 MIMOVEHERE.setVisible(false);
             } else {
                 if (localFirstDir.contains("null")) {
-                    System.out.println("localFirstDir contains null: " + localFirstDir);
                     File localFile1 = new File("LocalFiles" + "/" + localFileToMove);
                     localFile1.renameTo(new File(localFinalDir));
                     clientView.getItems().clear();
@@ -956,7 +939,6 @@ public class MainController implements Initializable {
         if (localFileToMove == null) {
 
             if (serverFinalDir.contains(".txt")) {
-                System.out.println("moving .txt into .txt");
                 if (serverFirstDir.contains("null")) {
                     MIMOVE.setVisible(true);
                     MIMOVEHERE.setVisible(false);
@@ -992,13 +974,5 @@ public class MainController implements Initializable {
                 MIMoveHere.setVisible(true);
             }
         }
-    }
-
-    public void localContextMenuRequested(ContextMenuEvent contextMenuEvent) {
-        System.out.println("OMAGAD LOCAL CONTEXT MENU REQUESTED");
-    }
-
-    public void serverContextMenuRequested(ContextMenuEvent contextMenuEvent) {
-        System.out.println("OMAGAD SERVER CONTEXT MENU REQUESTED");
     }
 }
