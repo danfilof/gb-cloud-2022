@@ -5,6 +5,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 import ru.gb.cloud.model.AbstractMessage;
 import ru.gb.cloud.model.FileMessage;
+import ru.gb.cloud.model.ListMessage;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -16,7 +18,7 @@ public class LocalFileHandler extends SimpleChannelInboundHandler<AbstractMessag
     private final Path localDir = Path.of("LocalFiles");
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, AbstractMessage msg) throws Exception {
-        log.info("received: {} message", msg.getMessageType().getName());
+        log.info("RECEIVED: {} message", msg.getMessageType().getName());
         if (msg instanceof FileMessage file) {
             Files.write(localDir.resolve(file.getName()), file.getBytes());
             mainController.reloadList();
